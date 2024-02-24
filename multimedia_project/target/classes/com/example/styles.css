@@ -1,0 +1,41 @@
+/* Apply styles to the root node */
+.root {
+    display: block;
+    -fx-background-color: linear-gradient(#8ca1a5, #569cac);
+}
+
+/* Styles for the main navigation button */
+.mainpagenavButton {
+    -fx-min-width: 20px;
+    -fx-min-height: 20px;
+    -fx-background-color: #FFFFFF; /* White background */
+    -fx-effect: dropshadow(three-pass-box, rgba(161, 6, 6, 0.6), 5, 0.0, 0, 1); /* Red drop shadow effect */
+}
+
+/* Styles for labels */
+.label {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333; /* Dark gray text */
+    -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 0.5), 0, 0, 0, 1); /* White drop shadow effect */
+}
+
+/* Styles for the scene title */
+#scenetitle {
+    -fx-font-size: 32px;
+    -fx-font-family: "Arial Black";
+    -fx-fill: #818181; /* Light gray fill color */
+    -fx-effect: innershadow(three-pass-box, rgba(0, 0, 0, 0.7), 6, 0.0, 0, 2); /* Inner shadow effect */
+}
+
+/* Styles for action target */
+#actiontarget {
+    -fx-fill: FIREBRICK; /* Red fill color */
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 0.5), 0, 0, 0, 1); /* White drop shadow effect */
+}
+
+/* Button hover effect */
+.button:hover {
+    -fx-background-color: linear-gradient(#2A5058, #61a2b1); /* Gradient background on hover */
+}
