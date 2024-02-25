@@ -16,8 +16,18 @@ public class MyBooksPage {
         VBox searchContent = new VBox();
         List<Book> books = Serialize.readAllBooks();
         if(!books.isEmpty() &&currentUser!=null) {
-        for (int i = 0; i < currentUser.number_of_borrowed_books(); i++) {
-            Book book = currentUser.getBorrowedBooks().get(i);
+        String username = currentUser.getusername();
+        User currentuser=null;
+        List<User> users = Serialize.readAllUsers();
+        for(User u: users){
+            if(u.getusername().equals(username)) {
+                currentuser=u;
+                break;
+            }
+        }
+
+        for (int i = 0; i < currentuser.number_of_borrowed_books(); i++) {
+            Book book = currentuser.getBorrowedBooks().get(i);
             VBox bookContainer = new VBox(); // VBox for each book
             Label booktitleLabel = new Label("Title: "+ book.getTitle());
             Label bookwriterLabel = new Label("Writer: "+ book.getWriter());

@@ -29,8 +29,6 @@ public class ReturnTime extends Thread {
                       TextField searchbar, TextField searchbar_writer, TextField searchbar_year
 ) {
         super("ReturnTimeThread");
-        this.users = users;
-        this.books = books;
         this.maingrid = maingrid;
         this.primaryStage = primaryStage;
         this.searchbar = searchbar;
@@ -40,54 +38,66 @@ public class ReturnTime extends Thread {
 
         this.loginScene=loginScene;
     }
-
+    AdminReturnTime returnTime;
     @Override
 public void run() {
     while (running) {
         try {
-            Thread.sleep(5000); // Sleep for 60 seconds
-
+            Thread.sleep(60000);//run check every minute
+            
+            
+    try {
+        returnTime = Serialize.readreturntime();
+    } catch (IOException | ClassNotFoundException e) {
+        e.printStackTrace();
+        returnTime = new AdminReturnTime(5 * 86400);
+    }
+            List<User> users = Serialize.readAllUsers();
+            System.out.println("Read from serialized and got "+ returnTime.getdate());
             if (users != null) {
                 LocalDateTime currentDate = LocalDateTime.now();
-
+                
+                
                 for (User u : users) {
                     List<LocalDateTime> borrowingDates = u.getBorrowingDates();
                     List<Book> borrowedBooks = u.getBorrowedBooks();
-
+                    List<Book> books = Serialize.readAllBooks();
+                    
                     for (int i = 0; i < borrowingDates.size(); i++) {
                         LocalDateTime borrowingDate = borrowingDates.get(i);
-
-                        if (currentDate.minusSeconds(5).isAfter(borrowingDate)) {
-
+                        
+                        if (currentDate.minusSeconds(returnTime.getdate()).isAfter(borrowingDate)) {
+                            
 
                             Book returnedBook = borrowedBooks.remove(i);
                             returnedBook.setNumberofBooks(returnedBook.getNumberofBooks() + 1);
                             borrowingDates.remove(i);
-
-                            // Lock only the critical section
-
+                            
+                            
                             try {
                                 Platform.runLater(() -> {
                                     String storedUsername = SessionManager.getInstance().getStoredUsername();
                                     currentUser = Serialize.findUserByUsername(users, storedUsername);
 
                                     if(currentUser.getusername().equals(u.getusername())) {
+                                    if(!currentUser.getusername().equals("Admin")) {
                                     primaryStage.setScene(loginScene);
+                                    }
                                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                                     alert.setTitle("Information Dialog");
                                     alert.setHeaderText(null);
                                     alert.setContentText("Book: "+returnedBook.getTitle()+" will be returned shortly");
                                     alert.showAndWait();
-
-                                    //MainPage.updateMainGrid(maingrid, books, primaryStage, loginscene, currentUser, searchbar,searchbar_writer,searchbar_year, mainScene);
-
+                                    
+                                    //MainPage.updateMainGrid(maingrid, books, primaryStage, loginScene, currentUser, searchbar,searchbar_writer,searchbar_year, mainScene);
+                                    
                                     }
                                     System.out.println("Book returned due to time limit exceeded: " + returnedBook);
                                 });
                             } finally {
-
+                                
                             }
-
+                            
                             try {
                                 Serialize.writeAllBooks(books);
                                 Serialize.writeAllUsers(users);
@@ -97,10 +107,11 @@ public void run() {
                         }
                     }
                 }
-
+               
                 System.out.println("Checking borrowing dates...");
-
-
+                System.out.println("Current return date set to "+ returnTime.getdate()+" seconds");
+ 
+                
             }
         } catch (InterruptedException e) {
             e.printStackTrace();
