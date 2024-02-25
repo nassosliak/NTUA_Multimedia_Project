@@ -34,6 +34,16 @@
     -fx-font-weight: bold;
     -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 0.5), 0, 0, 0, 1); /* White drop shadow effect */
 }
+#usernameexists {
+    -fx-fill: FIREBRICK; /* Red fill color */
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 0.5), 0, 0, 0, 1); /* White drop shadow effect */
+}
+#emailexists {
+    -fx-fill: FIREBRICK; /* Red fill color */
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 0.5), 0, 0, 0, 1); /* White drop shadow effect */
+}
 
 /* Button hover effect */
 .button:hover {

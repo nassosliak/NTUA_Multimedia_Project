@@ -130,21 +130,21 @@ public class AdminPage {
         Button savebookButton = new Button("Add Book");
         addbookgrid.add(savebookButton,3,4);
 
-    
+        
         Scene addbookScene = new Scene(addbookgrid, 1000, 500);
         addbookScene.getStylesheets().add(App.class.getResource("styles.css").toExternalForm());
 
          //editbook page
-         GridPane editbookgrid =new GridPane();
-         Text editbookpagetitle=new Text("Edit book Page");
-         editbookgrid.add(editbookpagetitle,2,1);
-         
+        GridPane editbookgrid =new GridPane();
+        Text editbookpagetitle=new Text("Edit book Page");
+        editbookgrid.add(editbookpagetitle,2,1);
         
-         TextField editbooktitle = new TextField();
-         editbookgrid.add(editbooktitle,2,4);
-         
-          TextField editbookwriter = new TextField("Writer");
-         editbookgrid.add(editbookwriter,2,6);
+        
+        TextField editbooktitle = new TextField();
+        editbookgrid.add(editbooktitle,2,4);
+        
+        TextField editbookwriter = new TextField("Writer");
+        editbookgrid.add(editbookwriter,2,6);
  
          TextField editbookpublisher = new TextField("Publisher");
          editbookgrid.add(editbookpublisher,2,8);
@@ -316,7 +316,7 @@ editreturntimeScene.getStylesheets().add(App.class.getResource("styles.css").toE
         savebookButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent s) {
-
+                boolean valid=true;
                 String bookTitle;
                 bookTitle=booktitle.getText();
                 System.out.println(bookTitle);
@@ -334,10 +334,15 @@ editreturntimeScene.getStylesheets().add(App.class.getResource("styles.css").toE
                 System.out.println(year_of_publish);
                 String bookCategory;
                 bookCategory=comboBox.getValue();
+                if(bookCategory.equals(null)) {
+                    valid=false;
+                    System.out.println("Null category");
+                }
                 System.out.println(bookCategory);
                 int numberofbooks;
                 numberofbooks=Integer.parseInt(numberofbooksfield.getText());
                 System.out.println(numberofbooks);
+                if(valid) {
                 Book b = new Book(bookTitle, bookWriter, bookPublisher, bookISBN, year_of_publish, bookCategory,numberofbooks);
                 System.out.println(b.getNumberofBooks());
                 try {
@@ -353,7 +358,7 @@ editreturntimeScene.getStylesheets().add(App.class.getResource("styles.css").toE
                 }
                 loadadminPage(admingrid, primaryStage, adminScene);
                 primaryStage.setScene(adminScene);
-
+            }
             }
         });
 

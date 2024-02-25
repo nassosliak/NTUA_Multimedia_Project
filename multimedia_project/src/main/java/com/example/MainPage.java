@@ -98,8 +98,8 @@ maingrid.getChildren().clear();
     maingrid.add(yearText, 0, 4+RowIndex);
     maingrid.add(categoryText, 0, 5+RowIndex);
     maingrid.add(numberofbooksText,0,6+RowIndex);
-    Ratingfx rating = new Ratingfx(5); // Assuming a maximum rating of 5 stars
-    maingrid.add(rating, 1, 6 + RowIndex);
+    //Ratingfx rating = new Ratingfx(5); // Assuming a maximum rating of 5 stars
+    //maingrid.add(rating, 1, 6 + RowIndex);
     if (book.bookcomments != null && !book.bookcomments.isEmpty()) {
         for(Comment c: book.bookcomments) {
             Text com = new Text(c.toString());

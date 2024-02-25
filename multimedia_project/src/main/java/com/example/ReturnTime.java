@@ -7,34 +7,22 @@ import java.util.concurrent.locks.ReentrantLock;
 import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
 public class ReturnTime extends Thread {
     private volatile boolean running = true;
-    private List<User> users;
-    private List<Book> books;
-    private GridPane maingrid;
+
     private Stage primaryStage;
     private Scene loginScene;
     private User currentUser;
-    private TextField searchbar;
-    private TextField searchbar_writer;
-    private TextField searchbar_year;
-    private Scene mainScene;
+
     private final ReentrantLock lock = new ReentrantLock();
 
-    public ReturnTime(List<User> users, List<Book> books, GridPane maingrid, Stage primaryStage, Scene loginScene,Scene mainScene,
-                      TextField searchbar, TextField searchbar_writer, TextField searchbar_year
-) {
+    public ReturnTime(Stage primaryStage, Scene loginScene) {
         super("ReturnTimeThread");
-        this.maingrid = maingrid;
+
         this.primaryStage = primaryStage;
-        this.searchbar = searchbar;
-        this.searchbar_writer = searchbar_writer;
-        this.searchbar_year = searchbar_year;
-        this.mainScene = mainScene;
+
 
         this.loginScene=loginScene;
     }
@@ -53,7 +41,7 @@ public void run() {
         returnTime = new AdminReturnTime(5 * 86400);
     }
             List<User> users = Serialize.readAllUsers();
-            System.out.println("Read from serialized and got "+ returnTime.getdate());
+            //System.out.println("Read from serialized and got "+ returnTime.getdate());
             if (users != null) {
                 LocalDateTime currentDate = LocalDateTime.now();
                 
