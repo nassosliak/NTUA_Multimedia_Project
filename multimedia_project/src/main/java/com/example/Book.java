@@ -1,4 +1,5 @@
 package com.example;
+
 //Class for Books
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -135,15 +136,15 @@ public class Book implements Serializable{
     @Override
     public String toString() {
         return "Book{" +
-                "title='" + Title + '\'' +
-                ", writer='" + Writer + '\'' +
-                ", publisher='" + Publisher + '\'' +
-                ", ISBN='" + ISBN + '\'' +
+                "title=" + Title + '\'' +
+                ", writer=" + Writer + '\'' +
+                ", publisher=" + Publisher + '\'' +
+                ", ISBN=" + ISBN + '\'' +
                 ", yearOfPublish=" + Year_of_Publish +
-                ", category='" + Category + '\'' +
-                ", number of books='" + Number_of_Books + '\'' +
-                ", comments='" +  bookcomments+ '\'' +
-                ", ratings='" +  bookratings+ '\'' +
+                ", category=" + Category + '\'' +
+                ", number of books=" + Number_of_Books + '\'' +
+                ", comments=" +  bookcomments+ '\'' +
+                ", ratings=" +  bookratings+ '\'' +
                 '}'+'\n';
     }
 }

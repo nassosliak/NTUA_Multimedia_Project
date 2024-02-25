@@ -7,8 +7,8 @@ public class UserWrapper {
         return user;
     }
 
-    public static void setUser(User newUser) {
-        user = newUser;
+    public static void setUser(User currentuser, User newUser) {
+        currentuser = newUser;
     }
 }
 

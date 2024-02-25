@@ -53,18 +53,23 @@ public class AdminBorrowPage {
         System.out.println("Clicked on user: " + user.getusername());
         
         GridPane handleUserGrid = new GridPane();
+        for(int i=0; i<user.number_of_borrowed_books(); i++) {
+            final int key = i;
+            Text c = new Text(Integer.toString(user.getBorrowedBooks().get(i).getISBN()) +
+            " Return date: " +
+            user.getBorrowingDates().get(i));
         Button endBorrowButton = new Button("End borrow");
-        handleUserGrid.add(endBorrowButton, 0, 3);
-
+        handleUserGrid.add(endBorrowButton, 2, i+1);
+        handleUserGrid.add(c, 1, i+1);
         endBorrowButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 List<User> users = Serialize.readAllUsers();
                 for(User u: users) {
                     if(u.getusername().equals(user.getusername())) {
-                System.out.println("removed book "+user.getBorrowedBooks().get(0).getISBN());
-                u.getBorrowedBooks().remove(0);
-                u.getBorrowingDates().remove(0);
+                System.out.println("removed book "+user.getBorrowedBooks().get(key).getISBN());
+                u.getBorrowedBooks().remove(key);
+                u.getBorrowingDates().remove(key);
                 try {
                     Serialize.writeAllUsers(users);
                 } catch (IOException e) {
@@ -78,6 +83,10 @@ public class AdminBorrowPage {
         loadAdminBorrowPage(primaryStage);
             }
         });
+        }
+        
+
+        
 
         Scene handleUserScene = new Scene(handleUserGrid, 1000, 500);
         handleUserScene.getStylesheets().add(App.class.getResource("styles.css").toExternalForm());

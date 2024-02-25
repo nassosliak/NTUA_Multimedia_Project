@@ -1,5 +1,7 @@
 package com.example;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import javafx.scene.Scene;
@@ -12,11 +14,21 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.stage.Stage;
 public class SearchPage {
+    public static class BookTitleComparator implements Comparator<Book> {
+
+        @Override
+        public int compare(Book book1, Book book2) {
+            // Compare books based on their titles
+            return book1.getTitle().compareToIgnoreCase(book2.getTitle());
+        }
+    }
+
     public static void loadsearchPage(TextField searchbar, TextField searchbar_writer, TextField searchbar_year,Stage primaryStage,VBox root,User currentUser,GridPane maingrid, Scene loginscene, Scene mainScene) {
        //search page
         // Create a VBox to hold the content for the search section
         VBox searchContent = new VBox();
         List<Book> books = Serialize.readAllBooks();
+         Collections.sort(books, new BookTitleComparator());
         List<Book> searchbooks = new ArrayList<>();
         if(searchbar.getText().isEmpty() && searchbar_writer.getText().isEmpty() && searchbar_year.getText().isEmpty()) {
             searchbooks=books;

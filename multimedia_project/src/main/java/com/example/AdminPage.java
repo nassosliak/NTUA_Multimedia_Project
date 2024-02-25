@@ -1,4 +1,6 @@
 package com.example;
+import static javafx.geometry.HPos.*;
+
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +20,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
@@ -129,10 +132,33 @@ public class AdminPage {
         
         Button savebookButton = new Button("Add Book");
         addbookgrid.add(savebookButton,3,4);
-
+        final Text nullcategory = new Text("");
+        addbookgrid.add(nullcategory, 4, 14);
+        addbookgrid.setColumnSpan(nullcategory, 2);
+        addbookgrid.setHalignment(nullcategory, RIGHT);
+        nullcategory.setId("nullcategory");
         
+        final Text invalidyear = new Text("");
+        addbookgrid.add(invalidyear, 4, 12);
+        addbookgrid.setColumnSpan(invalidyear, 2);
+        addbookgrid.setHalignment(invalidyear, RIGHT);
+        invalidyear.setId("invalidyear");
+
+        final Text invalidisbn = new Text("");
+        addbookgrid.add(invalidisbn, 4, 10);
+        addbookgrid.setColumnSpan(invalidisbn, 2);
+        addbookgrid.setHalignment(invalidisbn, RIGHT);
+        invalidisbn.setId("invalidisbn");
+
+        final Text invalidbooks = new Text("");
+        addbookgrid.add(invalidbooks, 4, 16);
+        addbookgrid.setColumnSpan(invalidbooks, 2);
+        addbookgrid.setHalignment(invalidbooks, RIGHT);
+        invalidbooks.setId("invalidbooks");
+
         Scene addbookScene = new Scene(addbookgrid, 1000, 500);
         addbookScene.getStylesheets().add(App.class.getResource("styles.css").toExternalForm());
+
 
          //editbook page
         GridPane editbookgrid =new GridPane();
@@ -329,14 +355,33 @@ editreturntimeScene.getStylesheets().add(App.class.getResource("styles.css").toE
                 int bookISBN;
                 bookISBN=Integer.parseInt(bookisbn.getText());
                 System.out.println(bookISBN);
-                int year_of_publish;
-                year_of_publish=Integer.parseInt(book_year_of_publish.getText());
+                int year_of_publish=0;
+                try {
+                    year_of_publish = Integer.parseInt(book_year_of_publish.getText());
+                    if (year_of_publish < 0 || year_of_publish > 2024) {
+                        invalidyear.setFill(Color.FIREBRICK);
+                        invalidyear.setText("Invalid Year of Publish");
+                        valid = false;
+                    }
+                    else {
+                        invalidyear.setText("");
+                    }
+                } catch (NumberFormatException e) {
+                    invalidyear.setFill(Color.FIREBRICK);
+                    invalidyear.setText("Invalid Year of Publish");
+                    valid = false;
+                }
+                
                 System.out.println(year_of_publish);
                 String bookCategory;
                 bookCategory=comboBox.getValue();
-                if(bookCategory.equals(null)) {
+                if(bookCategory==(null)) {
+                    nullcategory.setFill(Color.FIREBRICK);
+                    nullcategory.setText("Please Create a Category First");
                     valid=false;
-                    System.out.println("Null category");
+                }
+                else {
+                    nullcategory.setText("");
                 }
                 System.out.println(bookCategory);
                 int numberofbooks;
@@ -456,6 +501,7 @@ editreturntimeScene.getStylesheets().add(App.class.getResource("styles.css").toE
                 for (Category cate : categories) {
                  System.out.println(cate);
                 }
+        loadadminPage(admingrid, primaryStage, adminScene);
         primaryStage.setScene(adminScene);
 
             }

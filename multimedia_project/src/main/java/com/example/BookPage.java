@@ -1,4 +1,6 @@
 package com.example;
+import static javafx.geometry.HPos.*;
+
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -53,7 +55,7 @@ public class BookPage {
         Button addcommentButton = new Button("Add comment");
         Button addratingButton = new Button("Add Rating");
         boolean bookcontained =false;
-        if(currentUser.getBorrowedBooks()!=null) {
+        if(currentUser.number_of_borrowed_books()!=0) {
         for(Book book: currentUser.getBorrowedBooks()) {
             if(book.getISBN()==b.getISBN()) {
 bookcontained=true;
@@ -67,10 +69,15 @@ break;
         }
         Button lendbookButton = new Button("Borrow");
         final Text lendlimit = new Text();
-        bookpagegrid.add(lendlimit, 0, 6);
+        bookpagegrid.add(lendlimit, 7, 7);
         bookpagegrid.setColumnSpan(lendlimit, 2);
-        //bookpagegrid.setHalignment(lendlimit, RIGHT);
+        bookpagegrid.setHalignment(lendlimit, RIGHT);
         lendlimit.setId("lendlimit");
+        final Text unavbooks = new Text();
+        bookpagegrid.add(unavbooks, 7, 7);
+        bookpagegrid.setColumnSpan(unavbooks, 2);
+        bookpagegrid.setHalignment(unavbooks, RIGHT);
+        unavbooks.setId("avbooks");
         Button returnbookButton = new Button("Return");
         
         
@@ -189,8 +196,11 @@ break;
             @Override
             public void handle(ActionEvent a) {
                 List<Book> books = Serialize.readAllBooks();
-                        
+                        unavbooks.setText("");
+                        lendlimit.setText("");
+                        boolean limitreached=false;
                         boolean bookFound = false;
+                        boolean avbooks=true;
                         if(currentUser!=null) {
                         for (Book book : books) {
                             if(book.getISBN()==b.getISBN()) {
@@ -237,11 +247,16 @@ break;
                                 }
                                 else {
                                     System.out.println("Unavailable books");
+                                    unavbooks.setFill(Color.FIREBRICK);
+                                    unavbooks.setText("Sorry this book is out of copies");
+                                    avbooks=false;
                                 }
                                 } else {
                                     System.out.println("Borrow limit Reached(2)");
                                     lendlimit.setFill(Color.FIREBRICK);
                                     lendlimit.setText("Borrow limit Reached (2)");
+                                    limitreached=true;
+                                    break;
                                 }
                                 loadbookpage(b, bookpagegrid, primaryStage, currentUser, maingrid, loginscene, searchbar, searchbar_writer, searchbar_year, mainScene);
                                 break;
@@ -259,8 +274,10 @@ break;
                             System.out.println(borrowedBook);
                         }
                         System.out.println("Number of borrowed books: "+currentUser.number_of_borrowed_books());
+                        if(!limitreached && avbooks) {
                         MainPage.updateMainGrid(maingrid, books, primaryStage, loginscene, currentUser, searchbar,searchbar_writer,searchbar_year, mainScene);
                         primaryStage.setScene(mainScene);
+                        }
                         }
                     }
                         
