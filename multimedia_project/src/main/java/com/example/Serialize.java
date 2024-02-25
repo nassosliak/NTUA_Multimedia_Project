@@ -246,7 +246,7 @@ public static List<User> readAllUsers() {
 }
 private static String getFilePath(String relativePath) {
     String currentDirectory = System.getProperty("user.dir");
-    return currentDirectory +   File.separator+"Project" +File.separator + relativePath;
+    return currentDirectory +   File.separator+"multimedia_project" +File.separator + relativePath;
 }
 private static void createMedialabFolderIfNotExists() {
         String medialabFolderPath = getFilePath("medialab");

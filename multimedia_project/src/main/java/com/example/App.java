@@ -308,8 +308,6 @@ public class App extends Application {
         
         Stage.setScene(scene);
     }
-    
-
 
 
 public static void main(String[] args) {
