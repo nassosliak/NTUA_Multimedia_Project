@@ -41,9 +41,8 @@ public class AdminPage {
         admingrid.add(addcatButton, 3, 5);
         TextField deletebookisbn = new TextField();
         admingrid.add(deletebookisbn, 3, 1);
-        TextField deleteuserfield = new TextField("username to delete/edit");
-        admingrid.add(deleteuserfield, 3, 2);
-        
+        Button searchbyisbn = new Button("Search");
+        admingrid.add(searchbyisbn,4,1);
         Button deleteButton = new Button("Delete Book");
         Button editButton = new Button("Edit Book");
         Button editreturntimeButton = new Button("Edit Return Time");
@@ -59,13 +58,14 @@ public class AdminPage {
 
         // Create a VBox to hold the content of books and categories
         VBox content = new VBox();
-
+        VBox categorycontent = new VBox();
         // Iterate over each category
         for (String category : groupedBooks.keySet()) {
             // Add category label to the VBox
             Text categoryText = new Text("Category: " + category);
             content.getChildren().add(categoryText);
-
+            Text categoryTextForCategoryContent = new Text("Category: " + category);
+            categorycontent.getChildren().add(categoryTextForCategoryContent);
             // Iterate over books in the current category
             for (Book book : groupedBooks.get(category)) {
                 // Add book title to the VBox
@@ -76,21 +76,23 @@ public class AdminPage {
 
         // Create a ScrollPane and add the VBox to it
         ScrollPane scrollPane = new ScrollPane(content);
-
+        ScrollPane categoryScrollPane = new ScrollPane(categorycontent);
         // Set adjustable height and width for the ScrollPane
         scrollPane.setPrefHeight(200);
         scrollPane.setPrefWidth(300);
 
         // Add the ScrollPane to the GridPane
-        admingrid.add(scrollPane, 0, 10, 10, 1);
+        admingrid.add(categoryScrollPane, 0, 10, 10, 1);
 
-       
+        categoryScrollPane.setPrefHeight(200);
+        categoryScrollPane.setPrefWidth(300);
+
+        // Add the ScrollPane to the GridPane
+        admingrid.add(scrollPane, 10, 10, 10, 1);
         //addbook page
         GridPane addbookgrid =new GridPane();
         Text addbooktitle=new Text("Add book Page");
         addbookgrid.add(addbooktitle,2,1);
-        
-        
         
         TextField booktitle = new TextField();
         addbookgrid.add(booktitle,2,4);
