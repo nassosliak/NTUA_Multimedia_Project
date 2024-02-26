@@ -24,7 +24,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class AdminPage {
-    public static void loadadminPage(GridPane admingrid, Stage primaryStage, Scene adminScene) {
+    public static void loadadminPage(GridPane admingrid, Stage primaryStage, Scene adminScene, Scene loginScene) {
         
         Text title_admin = new Text("Admin Page");
         admingrid.add(title_admin, 2, 1);
@@ -39,19 +39,15 @@ public class AdminPage {
         admingrid.add(usersButton, 3, 7);
         Button addcatButton = new Button("Add Category");
         admingrid.add(addcatButton, 3, 5);
-        TextField deletebookisbn = new TextField();
-        admingrid.add(deletebookisbn, 3, 1);
+        TextField searchField = new TextField();
+        admingrid.add(searchField, 3, 1);
         Button searchbyisbn = new Button("Search");
         admingrid.add(searchbyisbn,4,1);
-        Button deleteButton = new Button("Delete Book");
-        Button editButton = new Button("Edit Book");
         Button editreturntimeButton = new Button("Edit Return Time");
         admingrid.add(editreturntimeButton, 1, 7);
-        HBox hdeleteButton = new HBox(10);
-        hdeleteButton.setAlignment(Pos.BOTTOM_RIGHT);
-        hdeleteButton.getChildren().add(deleteButton);
-        admingrid.add(deleteButton, 1, 4);
-        admingrid.add(editButton, 2, 4);
+       
+        Button signoutButton = new Button("Sign out");
+        admingrid.add(signoutButton,10,2);
         // Create a Map of books grouped by category (assuming you have this method)
         List<Book> books = Serialize.readAllBooks();
         Map<String, List<Book>> groupedBooks = Book.groupBooksByCategory(books);
@@ -155,38 +151,6 @@ public class AdminPage {
         Scene addbookScene = new Scene(addbookgrid, 1000, 500);
         addbookScene.getStylesheets().add(App.class.getResource("styles.css").toExternalForm());
 
-
-         //editbook page
-        GridPane editbookgrid =new GridPane();
-        Text editbookpagetitle=new Text("Edit book Page");
-        editbookgrid.add(editbookpagetitle,2,1);
-        
-        
-        TextField editbooktitle = new TextField();
-        editbookgrid.add(editbooktitle,2,4);
-        
-        TextField editbookwriter = new TextField("Writer");
-        editbookgrid.add(editbookwriter,2,6);
- 
-         TextField editbookpublisher = new TextField("Publisher");
-         editbookgrid.add(editbookpublisher,2,8);
- 
-         TextField editbookisbn = new TextField("ISBN");
-         editbookgrid.add(editbookisbn,2,10);
- 
-         TextField editbook_year_of_publish = new TextField("Year of Publish");
-         editbookgrid.add(editbook_year_of_publish,2,12);
- 
-         TextField editcategory = new TextField("Category");
-         editbookgrid.add(editcategory,2,14);
-         TextField editnumberofbooksfield = new TextField("# of books");
-         editbookgrid.add(editnumberofbooksfield,2,16);
-         Button editbookButton = new Button("Edit Book");
-         editbookgrid.add(editbookButton,3,4);
-         
-         Scene editbookScene = new Scene(editbookgrid, 1000, 500);
-         editbookScene.getStylesheets().add(App.class.getResource("styles.css").toExternalForm());
-
         //add category page
         GridPane addcategorygrid = new GridPane();
         TextField categorytitle = new TextField();
@@ -229,8 +193,10 @@ editreturnGridPane.add(savereturntimeButton, 6, 0);
 
 Scene editreturntimeScene = new Scene(editreturnGridPane, 1000, 500);
 editreturntimeScene.getStylesheets().add(App.class.getResource("styles.css").toExternalForm());
-
-
+//searchpage admin
+VBox root = new VBox();
+      Scene searchScene = new Scene(root, 1000, 500);
+      searchScene.getStylesheets().add(App.class.getResource("styles.css").toExternalForm());
 
         addButton.setOnAction(new EventHandler<ActionEvent>() {
 
@@ -238,6 +204,16 @@ editreturntimeScene.getStylesheets().add(App.class.getResource("styles.css").toE
             public void handle(ActionEvent a) {
                 
                 primaryStage.setScene(addbookScene);
+            }
+        });
+        searchbyisbn.setOnAction(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent a) {
+                List<User> users = Serialize.readAllUsers();
+                User currentUser=Serialize.findUserByUsername(users, "Admin");
+                SearchPage.loadsearchPage(null,null,null,primaryStage,root,currentUser,admingrid,loginScene,adminScene,searchField,adminScene);
+                primaryStage.setScene(searchScene);
             }
         });
 
@@ -263,19 +239,12 @@ editreturntimeScene.getStylesheets().add(App.class.getResource("styles.css").toE
             
             @Override
             public void handle(ActionEvent e) {
-                AdminUsersPage.loadadminuserspage(primaryStage,adminScene,admingrid);
+                AdminUsersPage.loadadminuserspage(primaryStage,adminScene,admingrid,loginScene);
             }
         });
 
         
-        editButton.setOnAction(new EventHandler<ActionEvent>() {
-
-            @Override
-            public void handle(ActionEvent a) {
-                
-                primaryStage.setScene(editbookScene);
-            }
-        });
+        
 
         
 
@@ -369,51 +338,13 @@ editreturntimeScene.getStylesheets().add(App.class.getResource("styles.css").toE
                     // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
-                loadadminPage(admingrid, primaryStage, adminScene);
+                loadadminPage(admingrid, primaryStage, adminScene,loginScene);
                 primaryStage.setScene(adminScene);
             }
             }
         });
 
-        editbookButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent s) {
-
-                String bookTitle;
-                bookTitle=editbooktitle.getText();
-                System.out.println(bookTitle);
-                String bookWriter;
-                bookWriter=editbookwriter.getText();
-                System.out.println(bookWriter);
-                String bookPublisher;
-                bookPublisher=editbookpublisher.getText();
-                System.out.println(bookPublisher);
-                int bookISBN;
-                bookISBN=Integer.parseInt(editbookisbn.getText());
-                System.out.println(bookISBN);
-                int year_of_publish;
-                year_of_publish=Integer.parseInt(editbook_year_of_publish.getText());
-                System.out.println(year_of_publish);
-                String bookCategory;
-                bookCategory=editcategory.getText();
-                System.out.println(bookCategory);
-                int numberofbooks;
-                numberofbooks=Integer.parseInt(editnumberofbooksfield.getText());
-                System.out.println(numberofbooks);
-                
-                try {
-                Serialize.editBook(bookISBN, bookTitle, bookPublisher, bookWriter, year_of_publish, bookCategory,numberofbooks);
-                System.out.println("Book editted succesfully");
-                }
-                catch (IOException e) {
-                    System.out.println("Error saving book: " + e.getMessage());
-    e.printStackTrace();
-                }
-                
-        primaryStage.setScene(adminScene);
-
-            }
-        });
+        
 
         
 
@@ -442,7 +373,7 @@ editreturntimeScene.getStylesheets().add(App.class.getResource("styles.css").toE
                 for (Category cate : categories) {
                  System.out.println(cate);
                 }
-        loadadminPage(admingrid, primaryStage, adminScene);
+        loadadminPage(admingrid, primaryStage, adminScene,loginScene);
         primaryStage.setScene(adminScene);
 
             }
@@ -477,32 +408,7 @@ editreturntimeScene.getStylesheets().add(App.class.getResource("styles.css").toE
 
         
 
-        deleteButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent s) {
-                
-                int ISBN;
-                ISBN=Integer.parseInt(deletebookisbn.getText());
-                System.out.println(ISBN);
-                try {
-                Serialize.deleteBook(ISBN);
-                System.out.println("Book deleted succesfully");
-                }
-                catch (IOException e) {
-                    System.out.println("Error deleting book: " + e.getMessage());
-    e.printStackTrace();
-                }
-                
-                List<Book> books = Serialize.readAllBooks();
         
-                for (Book b : books) {
-                 System.out.println(b);
-                }
-                
-        primaryStage.setScene(adminScene);
-
-            }
-        });
 
         editcategoryButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -527,6 +433,15 @@ editreturntimeScene.getStylesheets().add(App.class.getResource("styles.css").toE
                 }
         primaryStage.setScene(adminScene);
 
+            }
+        });
+        signoutButton.setOnAction(new EventHandler<ActionEvent>() {
+
+
+            @Override
+            public void handle(ActionEvent ev) {
+                
+                primaryStage.setScene(loginScene);
             }
         });
     }

@@ -23,13 +23,28 @@ public class SearchPage {
         }
     }
 
-    public static void loadsearchPage(TextField searchbar, TextField searchbar_writer, TextField searchbar_year,Stage primaryStage,VBox root,User currentUser,GridPane maingrid, Scene loginscene, Scene mainScene) {
+    public static void loadsearchPage(TextField searchbar, TextField searchbar_writer, TextField searchbar_year,Stage primaryStage,VBox root,User currentUser,GridPane maingrid, Scene loginscene, Scene mainScene, TextField isbnfield, Scene adminScene) {
        //search page
         // Create a VBox to hold the content for the search section
         VBox searchContent = new VBox();
         List<Book> books = Serialize.readAllBooks();
          Collections.sort(books, new BookTitleComparator());
         List<Book> searchbooks = new ArrayList<>();
+        if(currentUser.getusername().equals("Admin")) {
+            if(isbnfield.getText().isEmpty()) {
+                searchbooks=books;
+            }
+            else {
+                for (Book b : books) {
+                    int isbn = Integer.parseInt(isbnfield.getText()); // Convert ISBN to int
+                    if (String.valueOf(b.getISBN()).contains(String.valueOf(isbn)) && (!searchbooks.contains(b))) {
+                        searchbooks.add(b);
+                    }
+                }
+                
+        }
+    }
+        else {
         if(searchbar.getText().isEmpty() && searchbar_writer.getText().isEmpty() && searchbar_year.getText().isEmpty()) {
             searchbooks=books;
             System.out.println("Empty search");
@@ -65,7 +80,7 @@ public class SearchPage {
                 }
             }
         }
-
+    }
         // Add content for each book
         if(!searchbooks.isEmpty()) {
         for (int i = 0; i < searchbooks.size(); i++) {
@@ -99,7 +114,7 @@ public class SearchPage {
 
  GridPane bookpagegrid = new GridPane();
  
- BookPage.loadbookpage(book,bookpagegrid,primaryStage,currentUser,maingrid,loginscene,searchbar,searchbar_writer,searchbar_year,mainScene);
+ BookPage.loadbookpage(book,bookpagegrid,primaryStage,currentUser,maingrid,loginscene,searchbar,searchbar_writer,searchbar_year,mainScene,adminScene);
  Scene bookpageScene = new Scene(bookpagegrid, 1000, 500);
  bookpageScene.getStylesheets().add(App.class.getResource("styles.css").toExternalForm());
  //end book  page

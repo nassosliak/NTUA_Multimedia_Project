@@ -92,7 +92,7 @@ public class App extends Application {
         GridPane admingrid = new GridPane();
         Scene adminScene = new Scene(admingrid, 1000, 500);
         adminScene.getStylesheets().add(App.class.getResource("styles.css").toExternalForm());
-        AdminPage.loadadminPage(admingrid,primaryStage,adminScene);
+        AdminPage.loadadminPage(admingrid,primaryStage,adminScene,loginscene);
 
         //mainpage
         GridPane maingrid = new GridPane();
@@ -104,7 +104,7 @@ public class App extends Application {
         maingrid.add(searchbar_year,1,4);
         Scene mainScene = new Scene(maingrid, 1000, 500);
         mainScene.getStylesheets().add(App.class.getResource("styles.css").toExternalForm());
-        MainPage.updateMainGrid(maingrid, books, primaryStage, loginscene, currentUser, searchbar,searchbar_writer,searchbar_year, mainScene);
+        MainPage.updateMainGrid(maingrid, books, primaryStage, loginscene, currentUser, searchbar,searchbar_writer,searchbar_year, mainScene,adminScene);
         Register.loadregisterpage(registergrid, primaryStage, loginscene);
 
         registerbtn.setOnAction(new EventHandler<ActionEvent>() {
@@ -124,8 +124,9 @@ public class App extends Application {
                 List<User> users = Serialize.readAllUsers();
                 String username = userTextFieldlogin.getText();
                 String password = pwBoxlogin.getText();
+                boolean adminmode=false;
                 if(username.equals("medialab") && password.equals("medialab_2024")) {
-                    
+                    adminmode=true;
                     boolean foundadmin=false;
                     for(User u:users) {
                         if(u.getusername().equals("Admin")) {
@@ -165,7 +166,7 @@ public class App extends Application {
                     
                 }
 
-                if (Serialize.isValidUser(username, password)) {
+                if (Serialize.isValidUser(username, password) && !adminmode) {
                     // Create a new User object and set its username
                     System.out.println("valid");
                     User newUser = new User();
@@ -197,12 +198,14 @@ public class App extends Application {
                     else {
                         System.out.println("No username");
                     }
-                    MainPage.updateMainGrid(maingrid,books,primaryStage,loginscene,currentUser,searchbar,searchbar_writer,searchbar_year,mainScene);
+                    MainPage.updateMainGrid(maingrid,books,primaryStage,loginscene,currentUser,searchbar,searchbar_writer,searchbar_year,mainScene,adminScene);
                     primaryStage.setScene(mainScene);
                     primaryStage.show();
                 } else {
+                    if(!adminmode) {
                     actiontarget.setFill(Color.FIREBRICK);
                     actiontarget.setText("Invalid username or password");
+                    }
                 }
                 if(currentUser!=null) {
                 System.out.println("Current username: "+ currentUser.getusername());

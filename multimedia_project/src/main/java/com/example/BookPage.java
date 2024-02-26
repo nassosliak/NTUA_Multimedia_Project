@@ -8,6 +8,7 @@ import java.util.List;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -15,12 +16,13 @@ import javafx.scene.control.Spinner;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class BookPage {
-    public static void loadbookpage(Book b,GridPane bookpagegrid, Stage primaryStage, User currentUser, GridPane maingrid, Scene loginscene, TextField searchbar, TextField searchbar_writer, TextField searchbar_year, Scene mainScene) {
+    public static void loadbookpage(Book b,GridPane bookpagegrid, Stage primaryStage, User currentUser, GridPane maingrid, Scene loginscene, TextField searchbar, TextField searchbar_writer, TextField searchbar_year, Scene mainScene, Scene adminScene) {
         List<Book> books = Serialize.readAllBooks();
     Text booktexttitle= new Text(b.getTitle());
         bookpagegrid.add(booktexttitle,0,0);
@@ -79,17 +81,28 @@ break;
         bookpagegrid.setHalignment(unavbooks, RIGHT);
         unavbooks.setId("avbooks");
         Button returnbookButton = new Button("Return");
+        Button deleteButton = new Button("Delete Book");
+        Button editButton = new Button("Edit Book");
+    
+        HBox hdeleteButton = new HBox(10);
+        hdeleteButton.setAlignment(Pos.BOTTOM_RIGHT);
+        hdeleteButton.getChildren().add(deleteButton);
         
-        
+        if(currentUser.getusername().equals("Admin")) {
+            bookpagegrid.add(deleteButton, 7, 2);
+        bookpagegrid.add(editButton, 7, 4);
+        }
+        else {
         if (currentUser != null && currentUser.getBorrowedBooks() != null && bookcontained) {
-            bookpagegrid.getChildren().remove(lendbookButton); // Remove lendbookButton if it exists
-            bookpagegrid.add(returnbookButton, 4, 7); // Add returnbookButton at the specified position
+            bookpagegrid.getChildren().remove(lendbookButton);
+            bookpagegrid.add(returnbookButton, 4, 7);
         }
         
         if (currentUser != null && currentUser.getBorrowedBooks() != null && !bookcontained)  {
         bookpagegrid.getChildren().remove(returnbookButton);
         bookpagegrid.add(lendbookButton,4,7);
         }
+    }
         //addcomment page
         GridPane commentgrid = new GridPane();
         Text commentTitle = new Text("Add a comment");
@@ -117,7 +130,36 @@ break;
         Scene addratingScene = new Scene(ratinggrid, 1000, 500);
         addratingScene.getStylesheets().add(App.class.getResource("styles.css").toExternalForm());
 
+        //editbook page
+        GridPane editbookgrid =new GridPane();
+        Text editbookpagetitle=new Text("Edit book Page");
+        editbookgrid.add(editbookpagetitle,2,1);
         
+        
+        TextField editbooktitle = new TextField();
+        editbookgrid.add(editbooktitle,2,4);
+        
+        TextField editbookwriter = new TextField("Writer");
+        editbookgrid.add(editbookwriter,2,6);
+ 
+         TextField editbookpublisher = new TextField("Publisher");
+         editbookgrid.add(editbookpublisher,2,8);
+ 
+         TextField editbookisbn = new TextField("ISBN");
+         editbookgrid.add(editbookisbn,2,10);
+ 
+         TextField editbook_year_of_publish = new TextField("Year of Publish");
+         editbookgrid.add(editbook_year_of_publish,2,12);
+ 
+         TextField editcategory = new TextField("Category");
+         editbookgrid.add(editcategory,2,14);
+         TextField editnumberofbooksfield = new TextField("# of books");
+         editbookgrid.add(editnumberofbooksfield,2,16);
+         Button editbookButton = new Button("Edit Book");
+         editbookgrid.add(editbookButton,3,4);
+         
+         Scene editbookScene = new Scene(editbookgrid, 1000, 500);
+         editbookScene.getStylesheets().add(App.class.getResource("styles.css").toExternalForm());
         addcommentButton.setOnAction(new EventHandler<ActionEvent>() {
 
             @Override
@@ -156,7 +198,7 @@ break;
                     
                 
                 System.out.println("Comment added from "+ currentUser.getusername()+' '+commentfield.getText());
-                MainPage.updateMainGrid(maingrid,books,primaryStage,loginscene,currentUser,searchbar,searchbar_writer,searchbar_year,mainScene);
+                MainPage.updateMainGrid(maingrid,books,primaryStage,loginscene,currentUser,searchbar,searchbar_writer,searchbar_year,mainScene,adminScene);
                 primaryStage.setScene(mainScene);
                 
             }
@@ -187,8 +229,83 @@ break;
                    
                 
                 System.out.println("Rating added from "+ currentUser.getusername()+' '+bookrating);
-                MainPage.updateMainGrid(maingrid,books,primaryStage,loginscene,currentUser,searchbar,searchbar_writer,searchbar_year,mainScene);
+                MainPage.updateMainGrid(maingrid,books,primaryStage,loginscene,currentUser,searchbar,searchbar_writer,searchbar_year,mainScene,adminScene);
                 primaryStage.setScene(mainScene);
+
+            }
+        });
+        deleteButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent s) {
+                
+                int ISBN;
+                ISBN=(b.getISBN());
+                System.out.println(ISBN);
+                try {
+                Serialize.deleteBook(ISBN);
+                System.out.println("Book deleted succesfully");
+                }
+                catch (IOException e) {
+                    System.out.println("Error deleting book: " + e.getMessage());
+    e.printStackTrace();
+                }
+                
+                List<Book> books = Serialize.readAllBooks();
+        
+                for (Book b : books) {
+                 System.out.println(b);
+                }
+        AdminPage.loadadminPage(maingrid, primaryStage, adminScene, loginscene);
+        primaryStage.setScene(adminScene);
+
+            }
+        });
+        editButton.setOnAction(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent a) {
+                
+         
+
+                primaryStage.setScene(editbookScene);
+            }
+        });
+        editbookButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent s) {
+
+                String bookTitle;
+                bookTitle=editbooktitle.getText();
+                System.out.println(bookTitle);
+                String bookWriter;
+                bookWriter=editbookwriter.getText();
+                System.out.println(bookWriter);
+                String bookPublisher;
+                bookPublisher=editbookpublisher.getText();
+                System.out.println(bookPublisher);
+                int bookISBN;
+                bookISBN=Integer.parseInt(editbookisbn.getText());
+                System.out.println(bookISBN);
+                int year_of_publish;
+                year_of_publish=Integer.parseInt(editbook_year_of_publish.getText());
+                System.out.println(year_of_publish);
+                String bookCategory;
+                bookCategory=editcategory.getText();
+                System.out.println(bookCategory);
+                int numberofbooks;
+                numberofbooks=Integer.parseInt(editnumberofbooksfield.getText());
+                System.out.println(numberofbooks);
+                
+                try {
+                Serialize.editBook(bookISBN, bookTitle, bookPublisher, bookWriter, year_of_publish, bookCategory,numberofbooks);
+                System.out.println("Book editted succesfully");
+                }
+                catch (IOException e) {
+                    System.out.println("Error saving book: " + e.getMessage());
+    e.printStackTrace();
+                }
+        AdminPage.loadadminPage(maingrid, primaryStage, adminScene, loginscene);
+        primaryStage.setScene(adminScene);
 
             }
         });
@@ -258,7 +375,7 @@ break;
                                     limitreached=true;
                                     break;
                                 }
-                                loadbookpage(b, bookpagegrid, primaryStage, currentUser, maingrid, loginscene, searchbar, searchbar_writer, searchbar_year, mainScene);
+                                loadbookpage(b, bookpagegrid, primaryStage, currentUser, maingrid, loginscene, searchbar, searchbar_writer, searchbar_year, mainScene,adminScene);
                                 break;
                             }
                         }
@@ -275,7 +392,7 @@ break;
                         }
                         System.out.println("Number of borrowed books: "+currentUser.number_of_borrowed_books());
                         if(!limitreached && avbooks) {
-                        MainPage.updateMainGrid(maingrid, books, primaryStage, loginscene, currentUser, searchbar,searchbar_writer,searchbar_year, mainScene);
+                        MainPage.updateMainGrid(maingrid, books, primaryStage, loginscene, currentUser, searchbar,searchbar_writer,searchbar_year, mainScene,adminScene);
                         primaryStage.setScene(mainScene);
                         }
                         }
@@ -328,12 +445,12 @@ break;
                                                     } catch (ClassNotFoundException | IOException e) {
                                                         e.printStackTrace();
                                                     }
-                                                    loadbookpage(b, bookpagegrid, primaryStage, currentUser, maingrid, loginscene, searchbar, searchbar_writer, searchbar_year, mainScene);
+                                                    loadbookpage(b, bookpagegrid, primaryStage, currentUser, maingrid, loginscene, searchbar, searchbar_writer, searchbar_year, mainScene,adminScene);
                                                     break; // Exit the loop after finding and returning the book
                                                 }
                                             }
                                         }
-                                        MainPage.updateMainGrid(maingrid, books, primaryStage, loginscene, currentUser, searchbar,searchbar_writer,searchbar_year, mainScene);
+                                        MainPage.updateMainGrid(maingrid, books, primaryStage, loginscene, currentUser, searchbar,searchbar_writer,searchbar_year, mainScene,adminScene);
                                         primaryStage.setScene(mainScene);
                                     }
                                 }

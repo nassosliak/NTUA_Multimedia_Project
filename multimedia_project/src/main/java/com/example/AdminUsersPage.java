@@ -21,7 +21,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class AdminUsersPage {
-    public static void loadadminuserspage(Stage primaryStage, Scene adminScene, GridPane admingrid) {
+    public static void loadadminuserspage(Stage primaryStage, Scene adminScene, GridPane admingrid, Scene loginScene) {
         GridPane adminusersgrid = new GridPane();
         List<User> users = Serialize.readAllUsers();
         int rowindex = 1;
@@ -116,7 +116,7 @@ public class AdminUsersPage {
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
-                            AdminPage.loadadminPage(admingrid, primaryStage, adminScene);
+                            AdminPage.loadadminPage(admingrid, primaryStage, adminScene,loginScene);
                             primaryStage.setScene(adminScene);
                         }
                     });

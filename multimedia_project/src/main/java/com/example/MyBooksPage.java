@@ -12,7 +12,7 @@ import javafx.scene.shape.Line;
 import javafx.stage.Stage;
 
 public class MyBooksPage {
-    public static void loadmybookspage(User currentUser, GridPane mybooksgrid, Stage primaryStage, Scene mybooksScene, Scene loginscene, TextField searchbar, TextField searchbar_writer, TextField searchbar_year, Scene mainScene, GridPane maingrid) {
+    public static void loadmybookspage(User currentUser, GridPane mybooksgrid, Stage primaryStage, Scene mybooksScene, Scene loginscene, TextField searchbar, TextField searchbar_writer, TextField searchbar_year, Scene mainScene, GridPane maingrid,Scene adminScene) {
         VBox searchContent = new VBox();
         List<Book> books = Serialize.readAllBooks();
         if(!books.isEmpty() &&currentUser!=null) {
@@ -56,7 +56,7 @@ public class MyBooksPage {
 
                 GridPane bookpagegrid = new GridPane();
  
- BookPage.loadbookpage(book,bookpagegrid,primaryStage,currentUser,maingrid,loginscene,searchbar,searchbar_writer,searchbar_year,mainScene);
+ BookPage.loadbookpage(book,bookpagegrid,primaryStage,currentUser,maingrid,loginscene,searchbar,searchbar_writer,searchbar_year,mainScene,adminScene);
  Scene bookpageScene = new Scene(bookpagegrid, 1000, 500);
  bookpageScene.getStylesheets().add(App.class.getResource("styles.css").toExternalForm());
  primaryStage.setScene(bookpageScene);

@@ -27,7 +27,7 @@ public class MainPage {
     }
 }
     public static void updateMainGrid(GridPane maingrid, List<Book> updatedBooks, Stage primaryStage,Scene loginscene, User currentUser,
-    TextField searchbar,TextField searchbar_writer, TextField searchbar_year, Scene mainScene) {
+    TextField searchbar,TextField searchbar_writer, TextField searchbar_year, Scene mainScene, Scene adminScene) {
         
 // Assuming maingrid is your GridPane
 List<Book> books=Serialize.readAllBooks();
@@ -127,7 +127,7 @@ maingrid.getChildren().clear();
         
         Scene mybooksScene = new Scene(mybooksgrid,1000,500);
         mybooksScene.getStylesheets().add(App.class.getResource("styles.css").toExternalForm());
-        MyBooksPage.loadmybookspage(currentUser,mybooksgrid,primaryStage,mybooksScene,loginscene,searchbar,searchbar_writer,searchbar_year,mainScene,maingrid);
+        MyBooksPage.loadmybookspage(currentUser,mybooksgrid,primaryStage,mybooksScene,loginscene,searchbar,searchbar_writer,searchbar_year,mainScene,maingrid,adminScene);
 
         //end my books page
        
@@ -158,8 +158,8 @@ signoutButton.setOnAction(new EventHandler<ActionEvent>() {
 
             @Override
             public void handle(ActionEvent a) {
-                updateMainGrid(maingrid, updatedBooks, primaryStage, loginscene, currentUser,searchbar,searchbar_writer,searchbar_year,mainScene);
-                SearchPage.loadsearchPage(searchbar,searchbar_writer,searchbar_year,primaryStage,root,currentUser,maingrid,loginscene,mainScene);
+                updateMainGrid(maingrid, updatedBooks, primaryStage, loginscene, currentUser,searchbar,searchbar_writer,searchbar_year,mainScene,adminScene);
+                SearchPage.loadsearchPage(searchbar,searchbar_writer,searchbar_year,primaryStage,root,currentUser,maingrid,loginscene,mainScene,null,adminScene);
                 Navigator(primaryStage,searchScene);
             }
         });
