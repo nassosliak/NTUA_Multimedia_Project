@@ -14,15 +14,12 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -46,10 +43,7 @@ public class AdminPage {
         admingrid.add(deletebookisbn, 3, 1);
         TextField deleteuserfield = new TextField("username to delete/edit");
         admingrid.add(deleteuserfield, 3, 2);
-        Button deleteuserButton = new Button("Delete User");
-        admingrid.add(deleteuserButton, 1, 5);
-        Button edituserButton = new Button("Edit User");
-        admingrid.add(edituserButton, 1, 6);
+        
         Button deleteButton = new Button("Delete Book");
         Button editButton = new Button("Edit Book");
         Button editreturntimeButton = new Button("Edit Return Time");
@@ -206,28 +200,7 @@ public class AdminPage {
         Scene addCategoryScene = new Scene(addcategorygrid, 1000, 500);
         addCategoryScene.getStylesheets().add(App.class.getResource("styles.css").toExternalForm());
 
-        //edit user page
-        GridPane editusergrid = new GridPane();
-        editusergrid.setAlignment(Pos.CENTER);
-        Text editusertitle = new Text("Edit User Information");
-        editusertitle.setFont(Font.font("Roboto", FontWeight.NORMAL, 20));
-        editusergrid.add(editusertitle, 0, 0, 2, 1);
-        TextField editusernamefield = new TextField("username");
-        editusergrid.add(editusernamefield, 1, 1);
-        PasswordField editpasswordfield = new PasswordField();
-        editusergrid.add(editpasswordfield, 1, 2);
-        TextField editfirstnamefield = new TextField("firstname");
-        editusergrid.add(editfirstnamefield,1,3);
-        TextField editlastnamefield = new TextField("lastname");
-        editusergrid.add(editlastnamefield,1,4);
-        TextField editemailField = new TextField("email");
-        editusergrid.add(editemailField,1,5);
-        TextField editIDField = new TextField("ID");
-        editusergrid.add(editIDField,1,6);
-        Button edituserdataButton = new Button("Edit User");
-        editusergrid.add(edituserdataButton, 3, 4);
-        Scene edituserscene = new Scene(editusergrid, 1000, 500);
-        edituserscene.getStylesheets().add(App.class.getResource("styles.css").toExternalForm());
+        
         //edit return time
         GridPane editreturnGridPane = new GridPane();
 
@@ -266,14 +239,7 @@ editreturntimeScene.getStylesheets().add(App.class.getResource("styles.css").toE
             }
         });
 
-        edituserButton.setOnAction(new EventHandler<ActionEvent>() {
-
-            @Override
-            public void handle(ActionEvent ev) {
-                
-                primaryStage.setScene(edituserscene);
-            }
-        });
+        
         editreturntimeButton.setOnAction(new EventHandler<ActionEvent>() {
 
             @Override
@@ -295,7 +261,7 @@ editreturntimeScene.getStylesheets().add(App.class.getResource("styles.css").toE
             
             @Override
             public void handle(ActionEvent e) {
-                AdminUsersPage.loadadminuserspage(primaryStage);
+                AdminUsersPage.loadadminuserspage(primaryStage,adminScene,admingrid);
             }
         });
 
@@ -447,34 +413,7 @@ editreturntimeScene.getStylesheets().add(App.class.getResource("styles.css").toE
             }
         });
 
-        edituserdataButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent s) {
-                List <User> users = Serialize.readAllUsers();
-                for(User user:users) {
-                    if(user.getusername().equals(deleteuserfield.getText())) {
-                        user.setUsername(editusernamefield.getText());
-                        user.setPassword(editpasswordfield.getText());
-                        user.setFirstname(editfirstnamefield.getText());
-                        user.setLastname(editlastnamefield.getText());
-                        user.setEmail(editemailField.getText());
-                        user.setId(editIDField.getText());
-                    }
-                }
-                
-                try {
-                Serialize.writeAllUsers(users);
-                System.out.println("User editted succesfully");
-                }
-                catch (IOException e) {
-                    System.out.println("Error saving book: " + e.getMessage());
-    e.printStackTrace();
-                }
-               
-        primaryStage.setScene(adminScene);
-
-            }
-        });
+        
 
         savecategoryButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -534,26 +473,7 @@ editreturntimeScene.getStylesheets().add(App.class.getResource("styles.css").toE
             }
         });
 
-        deleteuserButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent s) {
-                
-                String username;
-                username=deleteuserfield.getText();
-                System.out.println(username);
-                try {
-                Serialize.deleteuser(username);
-                
-                }
-                catch (IOException e) {
-                    System.out.println("Error deleting user: " + e.getMessage());
-    e.printStackTrace();
-                }
         
-        primaryStage.setScene(adminScene);
-
-            }
-        });
 
         deleteButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
