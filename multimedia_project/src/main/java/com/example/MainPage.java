@@ -29,7 +29,7 @@ public class MainPage {
     public static void updateMainGrid(GridPane maingrid, List<Book> updatedBooks, Stage primaryStage,Scene loginscene, User currentUser,
     TextField searchbar,TextField searchbar_writer, TextField searchbar_year, Scene mainScene, Scene adminScene) {
         
-// Assuming maingrid is your GridPane
+
 List<Book> books=Serialize.readAllBooks();
 
 maingrid.getChildren().clear();
@@ -67,11 +67,7 @@ maingrid.getChildren().clear();
 
 
        
-        Button mainpagenavButton = new Button();
-        //Image iconImage = new Image(MainPage.class.getResourceAsStream("/resources/arrow_back_FILL0_wght400_GRAD0_opsz24.png"));
-        //mainpagenavButton.setGraphic(new ImageView(iconImage));
         
-        mainpagenavButton.getStyleClass().add("mainpagenavButton");
 
         Button signoutButton = new Button("Sign out");
         maingrid.add(signoutButton,10,2);
@@ -98,8 +94,9 @@ maingrid.getChildren().clear();
     maingrid.add(yearText, 0, 4+RowIndex);
     maingrid.add(categoryText, 0, 5+RowIndex);
     maingrid.add(numberofbooksText,0,6+RowIndex);
-    //Ratingfx rating = new Ratingfx(5); // Assuming a maximum rating of 5 stars
-    //maingrid.add(rating, 1, 6 + RowIndex);
+    Ratingfx rating = new Ratingfx(5);
+    rating.setRating((int)Math.round(book.averagerating()));
+    maingrid.add(rating, 1, 6 + RowIndex);
     if (book.bookcomments != null && !book.bookcomments.isEmpty()) {
         for(Comment c: book.bookcomments) {
             Text com = new Text(c.toString());
@@ -131,16 +128,14 @@ maingrid.getChildren().clear();
 
         //end my books page
        
-
-
-    
+        
 signoutButton.setOnAction(new EventHandler<ActionEvent>() {
 
 
             @Override
             public void handle(ActionEvent ev) {
                 
-                Navigator(primaryStage,loginscene);
+                primaryStage.setScene(loginscene);
             }
         });
 
@@ -150,7 +145,7 @@ signoutButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent ev) {
                 
-                Navigator(primaryStage,mybooksScene);
+                primaryStage.setScene(mybooksScene);
             }
         });
         
@@ -160,14 +155,11 @@ signoutButton.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent a) {
                 updateMainGrid(maingrid, updatedBooks, primaryStage, loginscene, currentUser,searchbar,searchbar_writer,searchbar_year,mainScene,adminScene);
                 SearchPage.loadsearchPage(searchbar,searchbar_writer,searchbar_year,primaryStage,root,currentUser,maingrid,loginscene,mainScene,null,adminScene);
-                Navigator(primaryStage,searchScene);
+                primaryStage.setScene(searchScene);
             }
         });
 
 }
-private static void Navigator(Stage Stage,Scene scene) {
-        
-    Stage.setScene(scene);
-}
+
 
 }

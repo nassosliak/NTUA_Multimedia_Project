@@ -6,24 +6,35 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class BookPage {
-    public static void loadbookpage(Book b,GridPane bookpagegrid, Stage primaryStage, User currentUser, GridPane maingrid, Scene loginscene, TextField searchbar, TextField searchbar_writer, TextField searchbar_year, Scene mainScene, Scene adminScene) {
+    public static void loadbookpage(Book b,GridPane bookpagegrid, Stage primaryStage, User currentUser, GridPane maingrid, Scene loginscene, TextField searchbar, TextField searchbar_writer, TextField searchbar_year, Scene mainScene, Scene adminScene, Scene bookpageScene) {
         List<Book> books = Serialize.readAllBooks();
+        Button mainpagenavButton = new Button();
+        Image iconImage = new Image(MainPage.class.getResourceAsStream("resources/arrow_back_FILL0_wght400_GRAD0_opsz24.png"));
+        mainpagenavButton.setGraphic(new ImageView(iconImage));
+        mainpagenavButton.getStyleClass().add("mainpagenavButton");
+        bookpagegrid.add(mainpagenavButton,2,0);
     Text booktexttitle= new Text(b.getTitle());
         bookpagegrid.add(booktexttitle,0,0);
         Text booktextwriter= new Text("Writer: " +b.getWriter());
@@ -43,6 +54,9 @@ public class BookPage {
         bookpagegrid.add(bookavText,0,6);
         Text bookrates = new Text("Total User Ratings: "+Integer.toString(b.gettotalratings()));
         bookpagegrid.add(bookrates,0,8);
+        Ratingfx rating = new Ratingfx(5);
+        rating.setRating((int)Math.round(b.averagerating()));
+        bookpagegrid.add(rating, 0, 9);
         int rowindex=2;
         for(int i=0; i<b.bookcomments.size(); i++) {
         String byuser = b.bookcomments.get(i).username;
@@ -50,9 +64,6 @@ public class BookPage {
         Text c = new Text("Comment by "+ byuser + '\n' + data+'\n');
         bookpagegrid.add(c,0,10+rowindex);
         ++rowindex;
-        Ratingfx rating = new Ratingfx(5);
-        rating.setRating((int)Math.round(b.averagerating()));
-        bookpagegrid.add(rating, 0, 9);
         }
         Button addcommentButton = new Button("Add comment");
         Button addratingButton = new Button("Add Rating");
@@ -105,6 +116,11 @@ break;
     }
         //addcomment page
         GridPane commentgrid = new GridPane();
+        Button bookpagenavButton3 = new Button();
+        Image iconImage4 = new Image(MainPage.class.getResourceAsStream("resources/arrow_back_FILL0_wght400_GRAD0_opsz24.png"));
+        bookpagenavButton3.setGraphic(new ImageView(iconImage4));
+        bookpagenavButton3.getStyleClass().add("bookpagenavButton");
+        commentgrid.add(bookpagenavButton3,0,0);
         Text commentTitle = new Text("Add a comment");
         commentgrid.add(commentTitle,1,0);
         TextArea commentfield = new TextArea();
@@ -120,6 +136,11 @@ break;
 
         //add rating page
         GridPane ratinggrid = new GridPane();
+        Button bookpagenavButton = new Button();
+        Image iconImage2 = new Image(MainPage.class.getResourceAsStream("resources/arrow_back_FILL0_wght400_GRAD0_opsz24.png"));
+        bookpagenavButton.setGraphic(new ImageView(iconImage2));
+        bookpagenavButton.getStyleClass().add("bookpagenavButton");
+        ratinggrid.add(bookpagenavButton,0,0);
         Text ratingTitle = new Text("Add a Rating");
         ratinggrid.add(ratingTitle,1,0);
         Spinner<Integer> spinner = new Spinner<>(1, 5, 0);
@@ -132,6 +153,11 @@ break;
 
         //editbook page
         GridPane editbookgrid =new GridPane();
+        Button bookpagenavButton2 = new Button();
+        Image iconImage3 = new Image(MainPage.class.getResourceAsStream("resources/arrow_back_FILL0_wght400_GRAD0_opsz24.png"));
+        bookpagenavButton2.setGraphic(new ImageView(iconImage3));
+        bookpagenavButton2.getStyleClass().add("bookpagenavButton");
+        ratinggrid.add(bookpagenavButton2,0,0);
         Text editbookpagetitle=new Text("Edit book Page");
         editbookgrid.add(editbookpagetitle,2,1);
         
@@ -149,10 +175,19 @@ break;
          editbookgrid.add(editbookisbn,2,10);
  
          TextField editbook_year_of_publish = new TextField("Year of Publish");
-         editbookgrid.add(editbook_year_of_publish,2,12);
- 
-         TextField editcategory = new TextField("Category");
-         editbookgrid.add(editcategory,2,14);
+         editbookgrid.add(editbook_year_of_publish,2,11);
+         ComboBox<String> comboBox = new ComboBox<>();
+ List<Category> categories = Serialize.readAllCategories();
+        ObservableList<String> items =FXCollections.observableArrayList();
+        for(Category cat:categories) {
+        items.add(cat.getTitle());
+        }
+        comboBox.setItems(items);
+
+        comboBox.getSelectionModel().selectFirst();
+
+        VBox category = new VBox(comboBox);
+        editbookgrid.add(category,2,12);
          TextField editnumberofbooksfield = new TextField("# of books");
          editbookgrid.add(editnumberofbooksfield,2,16);
          Button editbookButton = new Button("Edit Book");
@@ -270,6 +305,42 @@ break;
                 primaryStage.setScene(editbookScene);
             }
         });
+        mainpagenavButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                if(currentUser.getusername().equals("Admin")) {
+                    primaryStage.setScene(adminScene);
+                }
+                else {
+            primaryStage.setScene(mainScene);
+                }
+            }
+        });
+        bookpagenavButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                
+                    primaryStage.setScene(bookpageScene);
+              
+            }
+        });
+        bookpagenavButton2.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                
+                    primaryStage.setScene(bookpageScene);
+              
+            }
+        });
+        bookpagenavButton3.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                
+                    primaryStage.setScene(bookpageScene);
+              
+            }
+        });
+
         editbookButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent s) {
@@ -290,14 +361,14 @@ break;
                 year_of_publish=Integer.parseInt(editbook_year_of_publish.getText());
                 System.out.println(year_of_publish);
                 String bookCategory;
-                bookCategory=editcategory.getText();
+                bookCategory=comboBox.getValue();
                 System.out.println(bookCategory);
                 int numberofbooks;
                 numberofbooks=Integer.parseInt(editnumberofbooksfield.getText());
                 System.out.println(numberofbooks);
                 
                 try {
-                Serialize.editBook(bookISBN, bookTitle, bookPublisher, bookWriter, year_of_publish, bookCategory,numberofbooks);
+                Serialize.editBook(b.getISBN(), bookTitle, bookPublisher, bookWriter, year_of_publish, bookCategory,numberofbooks);
                 System.out.println("Book editted succesfully");
                 }
                 catch (IOException e) {
@@ -306,7 +377,6 @@ break;
                 }
         AdminPage.loadadminPage(maingrid, primaryStage, adminScene, loginscene);
         primaryStage.setScene(adminScene);
-
             }
         });
         lendbookButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -375,7 +445,7 @@ break;
                                     limitreached=true;
                                     break;
                                 }
-                                loadbookpage(b, bookpagegrid, primaryStage, currentUser, maingrid, loginscene, searchbar, searchbar_writer, searchbar_year, mainScene,adminScene);
+                                loadbookpage(b, bookpagegrid, primaryStage, currentUser, maingrid, loginscene, searchbar, searchbar_writer, searchbar_year, mainScene,adminScene,bookpageScene);
                                 break;
                             }
                         }
@@ -445,7 +515,7 @@ break;
                                                     } catch (ClassNotFoundException | IOException e) {
                                                         e.printStackTrace();
                                                     }
-                                                    loadbookpage(b, bookpagegrid, primaryStage, currentUser, maingrid, loginscene, searchbar, searchbar_writer, searchbar_year, mainScene,adminScene);
+                                                    loadbookpage(b, bookpagegrid, primaryStage, currentUser, maingrid, loginscene, searchbar, searchbar_writer, searchbar_year, mainScene,adminScene,bookpageScene);
                                                     break; // Exit the loop after finding and returning the book
                                                 }
                                             }

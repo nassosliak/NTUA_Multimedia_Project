@@ -4,10 +4,15 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -113,9 +118,10 @@ public class SearchPage {
                 //book page
 
  GridPane bookpagegrid = new GridPane();
- 
- BookPage.loadbookpage(book,bookpagegrid,primaryStage,currentUser,maingrid,loginscene,searchbar,searchbar_writer,searchbar_year,mainScene,adminScene);
  Scene bookpageScene = new Scene(bookpagegrid, 1000, 500);
+ 
+ BookPage.loadbookpage(book,bookpagegrid,primaryStage,currentUser,maingrid,loginscene,searchbar,searchbar_writer,searchbar_year,mainScene,adminScene,bookpageScene);
+
  bookpageScene.getStylesheets().add(App.class.getResource("styles.css").toExternalForm());
  //end book  page
                 primaryStage.setScene(bookpageScene);
@@ -133,14 +139,25 @@ public class SearchPage {
         searchScrollPane.setFitToHeight(true);
         searchScrollPane.setPrefViewportHeight(200); // Set preferred viewport height
         searchScrollPane.setPrefViewportWidth(500);
-        
+        Button mainpagenavButton = new Button();
+        Image iconImage = new Image(MainPage.class.getResourceAsStream("resources/arrow_back_FILL0_wght400_GRAD0_opsz24.png"));
+        mainpagenavButton.setGraphic(new ImageView(iconImage));
+        mainpagenavButton.getStyleClass().add("mainpagenavButton");
+        root.getChildren().add(mainpagenavButton);
        
         root.getChildren().add(searchScrollPane);
         
-        // Create the scene with the main layout
-        
-        
-        
+         mainpagenavButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                if(currentUser.getusername().equals("Admin")) {
+                    primaryStage.setScene(adminScene);
+                }
+                else {
+            primaryStage.setScene(mainScene);
+                }
+            }
+        });
         //end search page
 }
 

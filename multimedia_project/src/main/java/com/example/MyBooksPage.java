@@ -1,10 +1,15 @@
 package com.example;
 import java.util.List;
 
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -15,6 +20,11 @@ public class MyBooksPage {
     public static void loadmybookspage(User currentUser, GridPane mybooksgrid, Stage primaryStage, Scene mybooksScene, Scene loginscene, TextField searchbar, TextField searchbar_writer, TextField searchbar_year, Scene mainScene, GridPane maingrid,Scene adminScene) {
         VBox searchContent = new VBox();
         List<Book> books = Serialize.readAllBooks();
+        Button mainpagenavButton = new Button();
+        Image iconImage = new Image(MainPage.class.getResourceAsStream("resources/arrow_back_FILL0_wght400_GRAD0_opsz24.png"));
+        mainpagenavButton.setGraphic(new ImageView(iconImage));
+        mainpagenavButton.getStyleClass().add("mainpagenavButton");
+        mybooksgrid.add(mainpagenavButton,0,10);
         if(!books.isEmpty() &&currentUser!=null) {
         String username = currentUser.getusername();
         User currentuser=null;
@@ -55,10 +65,10 @@ public class MyBooksPage {
                 //book page
 
                 GridPane bookpagegrid = new GridPane();
+                Scene bookpageScene = new Scene(bookpagegrid, 1000, 500);
+                bookpageScene.getStylesheets().add(App.class.getResource("styles.css").toExternalForm());
+ BookPage.loadbookpage(book,bookpagegrid,primaryStage,currentUser,maingrid,loginscene,searchbar,searchbar_writer,searchbar_year,mainScene,adminScene,bookpageScene);
  
- BookPage.loadbookpage(book,bookpagegrid,primaryStage,currentUser,maingrid,loginscene,searchbar,searchbar_writer,searchbar_year,mainScene,adminScene);
- Scene bookpageScene = new Scene(bookpagegrid, 1000, 500);
- bookpageScene.getStylesheets().add(App.class.getResource("styles.css").toExternalForm());
  primaryStage.setScene(bookpageScene);
             });
             searchContent.getChildren().add(bookContainer);
@@ -75,10 +85,11 @@ public class MyBooksPage {
        
         mybooksgrid.getChildren().add(searchScrollPane);
         
-        // Create the scene with the main layout
-        
-        
-        
-        //end search page
+        mainpagenavButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                primaryStage.setScene(mainScene);
+            }
+        });
     }
 }
