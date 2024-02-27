@@ -6,17 +6,24 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-
+//see open borrows
 public class AdminBorrowPage {
     
-    public static void loadAdminBorrowPage(Stage primaryStage) {
+    public static void loadAdminBorrowPage(Stage primaryStage, Scene adminScene) {
         GridPane adminBorrowGrid = new GridPane();
-        adminBorrowGrid.getChildren().clear();
+        Button mainpagenavButton = new Button();
+        Image iconImage = new Image(MainPage.class.getResourceAsStream("resources/arrow_back_FILL0_wght400_GRAD0_opsz24.png"));
+        mainpagenavButton.setGraphic(new ImageView(iconImage));
+        mainpagenavButton.getStyleClass().add("mainpagenavButton");
+        adminBorrowGrid.add(mainpagenavButton,0,0);
+        
         List<User> users = Serialize.readAllUsers();
         int rowIndex = 2;
         
@@ -38,7 +45,7 @@ public class AdminBorrowPage {
                 userVBox.setOnMouseClicked(new EventHandler<MouseEvent>() {
                     @Override
                     public void handle(MouseEvent event) {
-                        handleUserClick(user, primaryStage);
+                        handleUserClick(user, primaryStage, adminScene);
                     }
                 });
             }
@@ -47,9 +54,16 @@ public class AdminBorrowPage {
         Scene adminBorrowScene = new Scene(adminBorrowGrid, 1000, 500);
         adminBorrowScene.getStylesheets().add(App.class.getResource("styles.css").toExternalForm());
         primaryStage.setScene(adminBorrowScene);
+
+        mainpagenavButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                primaryStage.setScene(adminScene);
+            }
+        });
     }
     
-    private static void handleUserClick(User user, Stage primaryStage) {
+    private static void handleUserClick(User user, Stage primaryStage, Scene adminScene) {
         System.out.println("Clicked on user: " + user.getusername());
         
         GridPane handleUserGrid = new GridPane();
@@ -80,7 +94,7 @@ public class AdminBorrowPage {
                 
             }
         }
-        loadAdminBorrowPage(primaryStage);
+        loadAdminBorrowPage(primaryStage, adminScene);
             }
         });
         }

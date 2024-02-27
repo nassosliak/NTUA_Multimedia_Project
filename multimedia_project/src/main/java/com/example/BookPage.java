@@ -168,16 +168,16 @@ break;
         TextField editbookwriter = new TextField("Writer");
         editbookgrid.add(editbookwriter,2,6);
  
-         TextField editbookpublisher = new TextField("Publisher");
-         editbookgrid.add(editbookpublisher,2,8);
+        TextField editbookpublisher = new TextField("Publisher");
+        editbookgrid.add(editbookpublisher,2,8);
  
-         TextField editbookisbn = new TextField("ISBN");
-         editbookgrid.add(editbookisbn,2,10);
+        TextField editbookisbn = new TextField("ISBN");
+        editbookgrid.add(editbookisbn,2,10);
  
-         TextField editbook_year_of_publish = new TextField("Year of Publish");
-         editbookgrid.add(editbook_year_of_publish,2,11);
-         ComboBox<String> comboBox = new ComboBox<>();
- List<Category> categories = Serialize.readAllCategories();
+        TextField editbook_year_of_publish = new TextField("Year of Publish");
+        editbookgrid.add(editbook_year_of_publish,2,11);
+        ComboBox<String> comboBox = new ComboBox<>();
+        List<Category> categories = Serialize.readAllCategories();
         ObservableList<String> items =FXCollections.observableArrayList();
         for(Category cat:categories) {
         items.add(cat.getTitle());

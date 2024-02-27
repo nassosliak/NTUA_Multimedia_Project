@@ -6,11 +6,12 @@ import java.util.List;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
@@ -23,6 +24,13 @@ import javafx.stage.Stage;
 public class AdminUsersPage {
     public static void loadadminuserspage(Stage primaryStage, Scene adminScene, GridPane admingrid, Scene loginScene) {
         GridPane adminusersgrid = new GridPane();
+        Button mainpagenavButton = new Button();
+        Image iconImage = new Image(MainPage.class.getResourceAsStream("resources/arrow_back_FILL0_wght400_GRAD0_opsz24.png"));
+        mainpagenavButton.setGraphic(new ImageView(iconImage));
+        mainpagenavButton.getStyleClass().add("mainpagenavButton");
+        adminusersgrid.add(mainpagenavButton,0,0);
+        Scene adminusersScene = new Scene(adminusersgrid, 1000, 500);
+            adminusersScene.getStylesheets().add(App.class.getResource("styles.css").toExternalForm());
         List<User> users = Serialize.readAllUsers();
         int rowindex = 1;
         for (User u : users) {
@@ -36,13 +44,18 @@ public class AdminUsersPage {
             adminusersgrid.add(userfirstnameText, 1, 1 + rowindex);
             adminusersgrid.add(userVBox, 1, rowindex);
             rowindex+=2;
-
+            
             // Edit user page
             GridPane editusergrid = new GridPane();
-            editusergrid.setAlignment(Pos.CENTER);
+            Button userspagenavbutton = new Button();
+            Image iconImage2 = new Image(MainPage.class.getResourceAsStream("resources/arrow_back_FILL0_wght400_GRAD0_opsz24.png"));
+            userspagenavbutton.setGraphic(new ImageView(iconImage2));
+            userspagenavbutton.getStyleClass().add("mainpagenavButton");
+            editusergrid.add(userspagenavbutton,0,0);
+            //editusergrid.setAlignment(Pos.CENTER);
             Text editusertitle = new Text("Edit User Information");
             editusertitle.setFont(Font.font("Roboto", FontWeight.NORMAL, 20));
-            editusergrid.add(editusertitle, 0, 0, 2, 1);
+            editusergrid.add(editusertitle, 1,1, 2, 1);
             TextField editusernamefield = new TextField("username");
             editusergrid.add(editusernamefield, 1, 1);
             PasswordField editpasswordfield = new PasswordField();
@@ -84,6 +97,19 @@ public class AdminUsersPage {
             Scene edituserscene = new Scene(editusergrid, 1000, 500);
             edituserscene.getStylesheets().add(App.class.getResource("styles.css").toExternalForm());
 
+
+            mainpagenavButton.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent e) {
+                    primaryStage.setScene(adminScene);
+                }
+            });
+            userspagenavbutton.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent e) {
+                    primaryStage.setScene(adminusersScene);
+                }
+            });
             userVBox.setOnMouseClicked(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent event) {
@@ -191,8 +217,7 @@ public class AdminUsersPage {
             });
         }
 
-        Scene adminusersScene = new Scene(adminusersgrid, 1000, 500);
-        adminusersScene.getStylesheets().add(App.class.getResource("styles.css").toExternalForm());
+       
         primaryStage.setScene(adminusersScene);
     }
 }

@@ -16,6 +16,8 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -87,6 +89,11 @@ public class AdminPage {
         admingrid.add(scrollPane, 10, 10, 10, 1);
         //addbook page
         GridPane addbookgrid =new GridPane();
+        Button adminpagenavButton = new Button();
+        Image iconImage3 = new Image(MainPage.class.getResourceAsStream("resources/arrow_back_FILL0_wght400_GRAD0_opsz24.png"));
+        adminpagenavButton.setGraphic(new ImageView(iconImage3));
+        adminpagenavButton.getStyleClass().add("bookpagenavButton");
+        addbookgrid.add(adminpagenavButton,0,0);
         Text addbooktitle=new Text("Add book Page");
         addbookgrid.add(addbooktitle,2,1);
         
@@ -153,6 +160,11 @@ public class AdminPage {
 
         //add category page
         GridPane addcategorygrid = new GridPane();
+        Button mainpagenavButton = new Button();
+        Image iconImage = new Image(MainPage.class.getResourceAsStream("resources/arrow_back_FILL0_wght400_GRAD0_opsz24.png"));
+        mainpagenavButton.setGraphic(new ImageView(iconImage));
+        mainpagenavButton.getStyleClass().add("mainpagenavButton");
+        addcategorygrid.add(mainpagenavButton,2,0);
         TextField categorytitle = new TextField();
         addcategorygrid.add(categorytitle,2,4);
         TextField newcategorytitle = new TextField();
@@ -169,7 +181,11 @@ public class AdminPage {
         
         //edit return time
         GridPane editreturnGridPane = new GridPane();
-
+        Button mainpagenavButton2 = new Button();
+        Image iconImage2 = new Image(MainPage.class.getResourceAsStream("resources/arrow_back_FILL0_wght400_GRAD0_opsz24.png"));
+        mainpagenavButton2.setGraphic(new ImageView(iconImage2));
+        mainpagenavButton2.getStyleClass().add("mainpagenavButton2");
+        editreturnGridPane.add(mainpagenavButton2,0,0);
 // TextFields for days, hours, and seconds
 TextField daysTextField = new TextField("5");
 TextField hoursTextField = new TextField("0");
@@ -181,15 +197,15 @@ Label hoursLabel = new Label("Hours:");
 Label minutesLabel = new Label("Minutes:");
 
 // Add labels and text fields to the grid pane
-editreturnGridPane.add(daysLabel, 0, 0);
-editreturnGridPane.add(daysTextField, 1, 0);
-editreturnGridPane.add(hoursLabel, 2, 0);
-editreturnGridPane.add(hoursTextField, 3, 0);
-editreturnGridPane.add(minutesLabel, 4, 0);
-editreturnGridPane.add(minutesTextField, 5, 0);
+editreturnGridPane.add(daysLabel, 1, 0);
+editreturnGridPane.add(daysTextField, 2, 0);
+editreturnGridPane.add(hoursLabel, 3, 0);
+editreturnGridPane.add(hoursTextField, 4, 0);
+editreturnGridPane.add(minutesLabel, 5, 0);
+editreturnGridPane.add(minutesTextField,6, 0);
 
 Button savereturntimeButton = new Button("Save Return Time");
-editreturnGridPane.add(savereturntimeButton, 6, 0);
+editreturnGridPane.add(savereturntimeButton, 7, 0);
 
 Scene editreturntimeScene = new Scene(editreturnGridPane, 1000, 500);
 editreturntimeScene.getStylesheets().add(App.class.getResource("styles.css").toExternalForm());
@@ -231,7 +247,7 @@ VBox root = new VBox();
             
             @Override
             public void handle(ActionEvent e) {
-                AdminBorrowPage.loadAdminBorrowPage(primaryStage);
+                AdminBorrowPage.loadAdminBorrowPage(primaryStage, adminScene);
             }
         });
 
@@ -243,10 +259,25 @@ VBox root = new VBox();
             }
         });
 
-        
-        
+        mainpagenavButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                primaryStage.setScene(adminScene);
+            }
+        });
+        mainpagenavButton2.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                primaryStage.setScene(adminScene);
+            }
+        });
 
-        
+        adminpagenavButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                primaryStage.setScene(adminScene);
+            }
+        });
 
         addcatButton.setOnAction(new EventHandler<ActionEvent>() {
 
