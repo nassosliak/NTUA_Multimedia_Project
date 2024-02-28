@@ -7,12 +7,15 @@ import java.util.List;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -25,33 +28,62 @@ public class Register {
         //register page
         Label userName = new Label("User Name:");
         Label pw = new Label("Password:");
-
+        Label firstname = new Label("First Name: ");
+        Label lastname = new Label("Last Name: ");
+        Label email = new Label("Email: ");
+        Label id = new Label("ID: ");
         registergrid.setAlignment(Pos.CENTER);
         Text registertitle = new Text("Sign Up");
-        registertitle.setFont(Font.font("Roboto", FontWeight.NORMAL, 20));
-        registergrid.add(registertitle, 0, 0, 2, 1);
-        //registergrid.add(userTextField, 1, 1);
-        registergrid.add(userName, 0, 1);
-        registergrid.add(pw, 0, 2);
-        //registergrid.add(pwBox, 1, 2);
+        registertitle.setFont(Font.font("Roboto", FontWeight.NORMAL, 30));
+        registergrid.add(registertitle, 0, 1, 40, 1);
+        GridPane.setMargin(registertitle, new Insets(0, 0, 10, 0));
+        registergrid.add(userName, 0, 2);
+        GridPane.setMargin(userName, new Insets(0, 0, 20, 0));
+        registergrid.add(pw, 0, 3);
+        GridPane.setMargin(pw, new Insets(0, 0, 20, 0));
+        registergrid.add(firstname, 0, 4);
+        GridPane.setMargin(firstname, new Insets(0, 0, 20, 0));
+        registergrid.add(lastname, 0, 5);
+        GridPane.setMargin(lastname, new Insets(0, 0, 20, 0));
+        registergrid.add(email, 0,6);
+        GridPane.setMargin(email, new Insets(0, 0, 20, 0));
+        registergrid.add(id, 0, 7);
+        GridPane.setMargin(id, new Insets(0, 0, 20, 0));
+        Button loginnpagenavbutton = new Button();
+        Image iconImage = new Image(MainPage.class.getResourceAsStream("resources/arrow_back_FILL0_wght400_GRAD0_opsz24.png"));
+        loginnpagenavbutton.setGraphic(new ImageView(iconImage));
+        loginnpagenavbutton.getStyleClass().add("loginnpagenavbutton");
+        registergrid.add(loginnpagenavbutton,0,0);
         TextField usernamefield = new TextField();
-        registergrid.add(usernamefield,1,1);
+        registergrid.add(usernamefield,1,2);
+        GridPane.setMargin(usernamefield, new Insets(0, 0, 20, 0));
         PasswordField passworField = new PasswordField();
-        registergrid.add(passworField,1,2);
-        TextField firstnamefield = new TextField("First name");
-        registergrid.add(firstnamefield,1,3);
-        TextField lastnamefield = new TextField("Last name");
-        registergrid.add(lastnamefield,1,4);
-        TextField emailfield = new TextField("Email");
-        registergrid.add(emailfield,1,5);
-        TextField IDfield = new TextField("ID");
-        registergrid.add(IDfield,1,6);
-        Button signupButton = new Button("Sign Up");
-        registergrid.add(signupButton, 3, 4);
-       // DatePicker birthDatePicker = new DatePicker();
+        registergrid.add(passworField,1,3);
+        GridPane.setMargin(passworField, new Insets(0, 0, 20, 0));
+        TextField firstnamefield = new TextField();
+        registergrid.add(firstnamefield,1,4);
+        GridPane.setMargin(firstnamefield, new Insets(0, 0, 20, 0));
+        TextField lastnamefield = new TextField();
+        registergrid.add(lastnamefield,1,5);
+        GridPane.setMargin(lastnamefield, new Insets(0, 0, 20, 0));
+        TextField emailfield = new TextField();
+        registergrid.add(emailfield,1,6);
+        GridPane.setMargin(emailfield, new Insets(0, 0, 20, 0));
+        TextField IDfield = new TextField();
+        registergrid.add(IDfield,1,7);
+        GridPane.setMargin(IDfield, new Insets(0, 0, 20, 0));
+        Button signupButton = new Button("Sign up");
+        registergrid.add(signupButton, 3, 8);
+        // DatePicker birthDatePicker = new DatePicker();
         //registergrid.add(birthDatePicker, 1 ,7);
+        final Text usernameempty = new Text();
+        registergrid.add(usernameempty, 4, 2);
+        registergrid.setColumnSpan(usernameempty, 2);
+        registergrid.setHalignment(usernameempty, RIGHT);
+        usernameempty.setId("usernameempty");
+
         final Text usernameexists = new Text();
-        registergrid.add(usernameexists, 4, 1);
+        registergrid.add(usernameexists, 4, 2);
         registergrid.setColumnSpan(usernameexists, 2);
         registergrid.setHalignment(usernameexists, RIGHT);
         usernameexists.setId("usernameexists");
@@ -79,9 +111,9 @@ public class Register {
 
         signupButton.setOnAction(new EventHandler<ActionEvent>() {
             
-            
             @Override
             public void handle(ActionEvent s) {
+                usernameempty.setText("");
                 invalidemail.setText("");
                 emailexists.setText("");
                 usernameexists.setText("");
@@ -106,6 +138,11 @@ public class Register {
                 ID=IDfield.getText();
                 System.out.println(ID);
                 boolean isvaliddata=true;
+                if(username.equals("")) {
+                    isvaliddata=false;
+                    usernameempty.setFill(Color.FIREBRICK);
+                    usernameempty.setText("Please Input a Username");
+                }
                 if(!(email).contains("@")) {
                     System.out.println("invalid email");
                     invalidemail.setFill(Color.FIREBRICK);
@@ -171,8 +208,18 @@ public class Register {
         ReturnTime thread = new ReturnTime(primaryStage, loginscene);
         thread.start();
         primaryStage.show();
+
+        loginnpagenavbutton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                
+                    primaryStage.setScene(loginscene);
+              
+            }
+        });
         
     }
+    
 
     //method to switch pages
     private void Navigator(Stage Stage,Scene scene) {

@@ -63,8 +63,9 @@ public class App extends Application {
 
         PasswordField pwBoxlogin = new PasswordField();
         grid.add(pwBoxlogin, 1, 2);
-        Label register = new Label("Dont have an Account?");
+        Label register = new Label("Don't have an Account?");
         grid.add(register, 2, 4);
+        GridPane.setMargin(register, new Insets(0, 0, 0, -50));
         Button registerbtn = new Button("Register");
         grid.add(registerbtn, 3, 4);
         Button signinButton = new Button("Sign in");

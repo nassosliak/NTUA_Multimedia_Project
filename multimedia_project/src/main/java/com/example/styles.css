@@ -1,8 +1,21 @@
 /* Apply styles to the root node */
 .root {
-    display: block;
-    -fx-background-color: linear-gradient(#8ca1a5, #569cac);
+    -fx-background-color: #5386b6;
+    -fx-animation: opacityAnimation 2s infinite alternate;
 }
+
+@keyframes opacityAnimation {
+    0% {
+        -fx-opacity: 1;
+    }
+    50% {
+        -fx-opacity: 0.5;
+    }
+    100% {
+        -fx-opacity: 1;
+    }
+}
+
 
 /* Styles for the main navigation button */
 .mainpagenavButton {
@@ -16,14 +29,15 @@
 .label {
     -fx-font-size: 12px;
     -fx-font-weight: bold;
+    -fx-font-family: "Roboto";
     -fx-text-fill: #333333; /* Dark gray text */
-    -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 0.5), 0, 0, 0, 1); /* White drop shadow effect */
+    /*-fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 0.5), 0, 0, 0, 1); /* White drop shadow effect */
 }
 
-/* Styles for the scene title */
+
 #scenetitle {
     -fx-font-size: 32px;
-    -fx-font-family: "Arial Black";
+    -fx-font-family: "Roboto";
     -fx-fill: #818181; /* Light gray fill color */
     -fx-effect: innershadow(three-pass-box, rgba(0, 0, 0, 0.7), 6, 0.0, 0, 2); /* Inner shadow effect */
 }
@@ -40,12 +54,28 @@
     -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 0.5), 0, 0, 0, 1); /* White drop shadow effect */
 }
 #emailexists {
-    -fx-fill: FIREBRICK; /* Red fill color */
+    -fx-fill: FIREBRICK;
     -fx-font-weight: bold;
     -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 0.5), 0, 0, 0, 1); /* White drop shadow effect */
 }
 
-/* Button hover effect */
-.button:hover {
-    -fx-background-color: linear-gradient(#2A5058, #61a2b1); /* Gradient background on hover */
+.button {
+    -fx-background-color: linear-gradient(#383a3b, #38488e);
+    -fx-background-radius: 5;
+    -fx-border-color: #38488e;
+    -fx-border-radius: 5;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: normal;
+    -fx-padding: 10 10;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 10, 0, 0, 0);
+    -fx-cursor: hand;
+    -fx-transition: all 0.3s;
 }
+
+.button:hover {
+    -fx-background-color: linear-gradient(#38488e, #383a3b);
+    -fx-border-color: #38488e;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.5), 10, 0, 0, 0);
+}
+
