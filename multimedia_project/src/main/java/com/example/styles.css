@@ -1,21 +1,26 @@
-/* Apply styles to the root node */
+
 .root {
-    -fx-background-color: #5386b6;
-    -fx-animation: opacityAnimation 2s infinite alternate;
+    -fx-background-color: linear-gradient(to right, #5386b6, #56ac6c);
+    -fx-animation: colorAnimation 1s infinite alternate;
 }
 
-@keyframes opacityAnimation {
+@keyframes colorAnimation {
     0% {
-        -fx-opacity: 1;
+        -fx-background-color: linear-gradient(to right, #5386b6, #adaf10);
     }
     50% {
-        -fx-opacity: 0.5;
+        -fx-background-color: linear-gradient(to right, #569cac, #228625);
     }
     100% {
-        -fx-opacity: 1;
+        -fx-background-color: linear-gradient(to right, #4CAF50, #5386b6);
     }
 }
 
+#mybookstitle {
+    -fx-font-family: "Roboto";
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+}
 
 /* Styles for the main navigation button */
 .mainpagenavButton {
@@ -59,6 +64,13 @@
     -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 0.5), 0, 0, 0, 1); /* White drop shadow effect */
 }
 
+.scroll-pane {
+    -fx-background-color: linear-gradient(#140d79, #7c2020);
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 10, 0, 0, 0);
+}
+.text {
+    -fx-font-family: "Roboto";
+}
 .button {
     -fx-background-color: linear-gradient(#383a3b, #38488e);
     -fx-background-radius: 5;

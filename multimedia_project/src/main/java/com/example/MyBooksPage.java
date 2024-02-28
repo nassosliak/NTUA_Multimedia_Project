@@ -3,6 +3,8 @@ import java.util.List;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -24,7 +26,11 @@ public class MyBooksPage {
         Image iconImage = new Image(MainPage.class.getResourceAsStream("resources/arrow_back_FILL0_wght400_GRAD0_opsz24.png"));
         mainpagenavButton.setGraphic(new ImageView(iconImage));
         mainpagenavButton.getStyleClass().add("mainpagenavButton");
-        mybooksgrid.add(mainpagenavButton,0,10);
+        mybooksgrid.add(mainpagenavButton,0,0);
+        Label mybookstitle = new Label("Borrowed Books");
+        mybooksgrid.add(mybookstitle,1,0);
+        mybookstitle.setId("mybookstitle");
+        GridPane.setMargin(mybookstitle, new Insets(0, 0, 0, 30));
         if(!books.isEmpty() &&currentUser!=null) {
         String username = currentUser.getusername();
         User currentuser=null;
@@ -58,11 +64,11 @@ public class MyBooksPage {
             bookContainer.getChildren().addAll(booktitleLabel, bookwriterLabel, bookisbnLabel,
                                                 bookavgratingLabel, totalratesLabel, whitespaceLabel);
             searchContent.getChildren().add(line);
-            // Add mouse click event handler to navigate to another page
+            
             bookContainer.setOnMouseClicked(event -> {
-                // Perform navigation action here
+                
                 System.out.println("Clicked on book: " + book.getTitle());
-                //book page
+                
 
                 GridPane bookpagegrid = new GridPane();
                 Scene bookpageScene = new Scene(bookpagegrid, 1000, 500);
@@ -75,7 +81,7 @@ public class MyBooksPage {
         }
     }
     else {
-        System.out.println("No user");
+        ;
     }
         
         ScrollPane searchScrollPane = new ScrollPane(searchContent);
@@ -83,8 +89,8 @@ public class MyBooksPage {
         searchScrollPane.setPrefViewportWidth(500);
         
        
-        mybooksgrid.getChildren().add(searchScrollPane);
-        
+        mybooksgrid.add(searchScrollPane,1,1);
+        mybooksgrid.setAlignment(Pos.CENTER);
         mainpagenavButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {

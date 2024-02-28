@@ -8,7 +8,7 @@ import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -17,7 +17,13 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class MainPage {
-    
+    private static void toggleTextField(GridPane gridPane, int row, boolean addTextField, TextField textField) {
+        if (addTextField) {
+            gridPane.add(textField,2,row);
+        } else {
+            gridPane.getChildren().remove(textField);
+        }
+    }
     public class BookRatingComparator implements Comparator<Book> {
 
     @Override
@@ -36,12 +42,22 @@ maingrid.getChildren().clear();
 
         Text basic =new Text("Main Page");
         maingrid.add(basic,2,1);
-        Label search = new Label("Search:");
-        maingrid.add(search, 0, 2);
-        maingrid.add(searchbar,1,2);
-        maingrid.add(searchbar_writer,1,3);
-        maingrid.add(searchbar_year,1,4);
-        
+        RadioButton checkBoxTitle = new RadioButton("Search by Title");
+        RadioButton checkBoxWriter = new RadioButton("Search by Writer");
+        RadioButton checkBoxYear = new RadioButton("Search by Year");
+
+
+
+        checkBoxTitle.setOnAction(e -> toggleTextField(maingrid, 2, checkBoxTitle.isSelected(), searchbar));
+        checkBoxWriter.setOnAction(e -> toggleTextField(maingrid, 3,checkBoxWriter.isSelected(), searchbar_writer));
+        checkBoxYear.setOnAction(e -> toggleTextField(maingrid, 4,checkBoxYear.isSelected(), searchbar_year));
+
+        maingrid.add(checkBoxTitle,0,2);
+        maingrid.add(checkBoxWriter,0,3);
+        maingrid.add(checkBoxYear,0,4);
+    
+
+    
         Button mybooksButton = new Button("My books");
         maingrid.add(mybooksButton,10,3);
         Text borrowdbooksText = new Text("Borrowed books");
@@ -118,7 +134,7 @@ maingrid.getChildren().clear();
         HBox hsearchButton = new HBox(10);
         hsearchButton.setAlignment(Pos.BOTTOM_RIGHT);
         hsearchButton.getChildren().add(searchButton);
-        maingrid.add(searchButton, 2, 2);
+        maingrid.add(searchButton,3, 2);
         //My books page
         GridPane mybooksgrid = new GridPane();
         

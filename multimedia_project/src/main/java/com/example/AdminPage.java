@@ -2,6 +2,7 @@ package com.example;
 import static javafx.geometry.HPos.*;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -11,6 +12,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.chart.PieChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -175,9 +177,29 @@ public class AdminPage {
         addcategorygrid.add(deletecategoryButton,3,5);
         Button editcategoryButton = new Button("Edit Category Name");
         addcategorygrid.add(editcategoryButton,3,6);
+        Map<String, Integer> categoryCounts = new HashMap<>();
+
+        for (String cat : groupedBooks.keySet()) {
+            int counter=0;
+            for (Book book : groupedBooks.get(cat)) {
+                ++counter;
+            }
+            categoryCounts.put(cat, counter);
+        }
+        
+
+        PieChart pieChart = new PieChart();
+
+        for (String category_1 : categoryCounts.keySet()) {
+            int count = categoryCounts.get(category_1);
+            pieChart.getData().add(new PieChart.Data(category_1, count));
+        }
+
+        // Customize chart appearance (optional)
+        pieChart.setTitle("Book Categories");
+        addcategorygrid.add(pieChart, 3,7);
         Scene addCategoryScene = new Scene(addcategorygrid, 1000, 500);
         addCategoryScene.getStylesheets().add(App.class.getResource("styles.css").toExternalForm());
-
         
         //edit return time
         GridPane editreturnGridPane = new GridPane();
