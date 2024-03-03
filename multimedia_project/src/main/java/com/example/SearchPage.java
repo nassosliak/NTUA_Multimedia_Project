@@ -31,6 +31,7 @@ public class SearchPage {
     public static void loadsearchPage(TextField searchbar, TextField searchbar_writer, TextField searchbar_year,Stage primaryStage,VBox root,User currentUser,GridPane maingrid, Scene loginscene, Scene mainScene, TextField isbnfield, Scene adminScene) {
        //search page
         // Create a VBox to hold the content for the search section
+        root.getChildren().clear();
         VBox searchContent = new VBox();
         List<Book> books = Serialize.readAllBooks();
          Collections.sort(books, new BookTitleComparator());
@@ -144,7 +145,7 @@ public class SearchPage {
         mainpagenavButton.setGraphic(new ImageView(iconImage));
         mainpagenavButton.getStyleClass().add("mainpagenavButton");
         root.getChildren().add(mainpagenavButton);
-       
+
         root.getChildren().add(searchScrollPane);
         
          mainpagenavButton.setOnAction(new EventHandler<ActionEvent>() {

@@ -42,6 +42,7 @@ public class App extends Application {
 
         //login page
         GridPane grid = new GridPane();
+        grid.setId("grid");
         //login page
         grid.setAlignment(Pos.CENTER);
         grid.setHgap(10);
@@ -215,6 +216,7 @@ public class App extends Application {
         
         });
     }
+     
 public static void main(String[] args) {
     launch(args);
 }

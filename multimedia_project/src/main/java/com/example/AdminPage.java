@@ -29,7 +29,7 @@ import javafx.stage.Stage;
 
 public class AdminPage {
     public static void loadadminPage(GridPane admingrid, Stage primaryStage, Scene adminScene, Scene loginScene) {
-        
+        admingrid.getChildren().clear();
         Text title_admin = new Text("Admin Page");
         admingrid.add(title_admin, 2, 1);
         Button addButton = new Button("Add Book");
@@ -250,7 +250,8 @@ VBox root = new VBox();
             public void handle(ActionEvent a) {
                 List<User> users = Serialize.readAllUsers();
                 User currentUser=Serialize.findUserByUsername(users, "Admin");
-                SearchPage.loadsearchPage(null,null,null,primaryStage,root,currentUser,admingrid,loginScene,adminScene,searchField,adminScene);
+                SearchPage.loadsearchPage(null,null,null,primaryStage,root,currentUser,admingrid,loginScene,null,searchField,adminScene);
+            
                 primaryStage.setScene(searchScene);
             }
         });

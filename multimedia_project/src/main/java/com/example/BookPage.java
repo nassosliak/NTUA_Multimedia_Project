@@ -15,6 +15,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -58,13 +59,27 @@ public class BookPage {
         rating.setRating((int)Math.round(b.averagerating()));
         bookpagegrid.add(rating, 0, 9);
         int rowindex=2;
-        for(int i=0; i<b.bookcomments.size(); i++) {
-        String byuser = b.bookcomments.get(i).username;
-        String data = b.bookcomments.get(i).data;
-        Text c = new Text("Comment by "+ byuser + '\n' + data+'\n');
-        bookpagegrid.add(c,0,10+rowindex);
-        ++rowindex;
-        }
+       ScrollPane scrollPane = new ScrollPane();
+scrollPane.setFitToWidth(true); // Allow horizontal scrolling if necessary
+scrollPane.setPrefViewportHeight(200); // Set preferred height for the scroll pane
+
+// Create a VBox to hold the comments
+VBox commentsBox = new VBox();
+commentsBox.setSpacing(10); // Adjust spacing between comments if needed
+
+// Add comments to the VBox
+for (int i = 0; i < b.bookcomments.size(); i++) {
+    String byuser = b.bookcomments.get(i).username;
+    String data = b.bookcomments.get(i).data;
+    Text commentText = new Text("Comment by " + byuser + '\n' + data + '\n');
+    commentsBox.getChildren().add(commentText);
+}
+
+// Set the VBox as the content of the ScrollPane
+scrollPane.setContent(commentsBox);
+
+// Add the ScrollPane to the GridPane
+bookpagegrid.add(scrollPane, 0, 10); // Adjust the row index as needed
         Button addcommentButton = new Button("Add comment");
         Button addratingButton = new Button("Add Rating");
         boolean bookcontained =false;
@@ -132,7 +147,6 @@ break;
         commentgrid.add(publishcommentButton,2,3);
         Scene addcommentScene = new Scene(commentgrid, 1000, 500);
         addcommentScene.getStylesheets().add(App.class.getResource("styles.css").toExternalForm());
-
 
         //add rating page
         GridPane ratinggrid = new GridPane();
@@ -212,7 +226,7 @@ break;
             }
         });
         publishcommentButton.setOnAction(new EventHandler<ActionEvent>() {
-
+            Book newbook;
             @Override
             public void handle(ActionEvent a) {
                 
@@ -220,11 +234,28 @@ break;
                     if(book.getISBN()==b.getISBN()) {
                         book.comment(currentUser.getusername(),commentfield.getText());
                         System.out.println("Book found");
+                        newbook=book;
                         break;
                 }
             }
+            List<User> users = Serialize.readAllUsers();
+            for(User u:users) {
+                if(u.number_of_borrowed_books()!=0) {
+                    for (int i = 0; i < u.getBorrowedBooks().size(); i++) {
+                        Book borrowedBook = u.borrowedbooks.get(i);
+                        if (borrowedBook.getISBN() == b.getISBN()) {
+                            System.out.println("removed "+u.borrowedbooks.get(i));
+                            u.borrowedbooks.remove(i);
+                            
+                            u.borrowedbooks.add(newbook);
+                            System.out.println("added "+u.getBorrowedBooks());
+                            break;
+                }
+            }}
+        }
                         try {
                             Serialize.writeAllBooks(books);
+                            Serialize.writeAllUsers(users);
                             System.out.println("Serialized comment");
                         } catch (IOException e) {
                             // TODO Auto-generated catch block
@@ -233,6 +264,7 @@ break;
                     
                 
                 System.out.println("Comment added from "+ currentUser.getusername()+' '+commentfield.getText());
+                loadbookpage(b, bookpagegrid, primaryStage, currentUser, maingrid, loginscene, searchbar, searchbar_writer, searchbar_year, mainScene, adminScene, bookpageScene);
                 MainPage.updateMainGrid(maingrid,books,primaryStage,loginscene,currentUser,searchbar,searchbar_writer,searchbar_year,mainScene,adminScene);
                 primaryStage.setScene(mainScene);
                 
@@ -240,7 +272,7 @@ break;
         });
         
         publishratingButton.setOnAction(new EventHandler<ActionEvent>() {
-
+            Book newbook;
             @Override
             public void handle(ActionEvent a) {
                 int bookrating = spinner.getValue();
@@ -252,16 +284,28 @@ break;
                         break;
                 }
             }
-                        
+            List<User> users = Serialize.readAllUsers();
+            for(User u:users) {
+                if(u.number_of_borrowed_books()!=0) {
+                    for (int i = 0; i < u.getBorrowedBooks().size(); i++) {
+                        Book borrowedBook = u.borrowedbooks.get(i);
+                        if (borrowedBook.getISBN() == b.getISBN()) {
+                            System.out.println("removed "+u.borrowedbooks.get(i));
+                            u.borrowedbooks.remove(i);
+                            u.borrowedbooks.add(newbook);
+                            System.out.println("added "+u.getBorrowedBooks());
+                            break;
+                }
+            }}
+        }
                         try {
                             Serialize.writeAllBooks(books);
-                            System.out.println("Serialized rating for book "+ b.getISBN());
+                            Serialize.writeAllUsers(users);
+                            System.out.println("Serialized comment");
                         } catch (IOException e) {
                             // TODO Auto-generated catch block
-                            System.out.println("Exception rating for book "+ b.getISBN());
                             e.printStackTrace();
-                        }
-                   
+                        }                
                 
                 System.out.println("Rating added from "+ currentUser.getusername()+' '+bookrating);
                 MainPage.updateMainGrid(maingrid,books,primaryStage,loginscene,currentUser,searchbar,searchbar_writer,searchbar_year,mainScene,adminScene);
@@ -399,12 +443,11 @@ break;
                                         currentUser.borrowedbooks= new ArrayList();
                                       }
                                         if(book.getNumberofBooks()>0) {
-                                            if(currentUser.getBorrowedBooks().size()==2) {
-                                            if(currentUser.borrowedbooks.get(0).getISBN()==book.getISBN() ||
-                                            currentUser.borrowedbooks.get(1).getISBN()==book.getISBN()) {
+                                            if(currentUser.getBorrowedBooks().size()==2 && (currentUser.borrowedbooks.get(0).getISBN()==book.getISBN() ||
+                                            currentUser.borrowedbooks.get(1).getISBN()==book.getISBN())) {
                                                 System.out.println("Book "+book.getISBN()+" already borrowed");
                                                 break;
-                                            }
+                                            
                                         }
                                         if(currentUser.getBorrowedBooks().size()==1) {
                                             if(currentUser.borrowedbooks.get(0).getISBN()==book.getISBN()) {
