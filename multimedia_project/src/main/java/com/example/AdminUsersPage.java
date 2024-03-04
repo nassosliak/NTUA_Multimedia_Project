@@ -115,6 +115,12 @@ public class AdminUsersPage {
                 public void handle(MouseEvent event) {
                     System.out.println("Clicked on user: " + u.getusername());
                     GridPane adminusergrid = new GridPane();
+                    
+                    Button adminuserspageButton = new Button();
+                    Image iconImage3 = new Image(MainPage.class.getResourceAsStream("resources/arrow_back_FILL0_wght400_GRAD0_opsz24.png"));
+                    adminuserspageButton.setGraphic(new ImageView(iconImage3));
+                    adminuserspageButton.getStyleClass().add("mainpagenavButton");
+                    adminusergrid.add(adminuserspageButton, 0, 0);
                     Text username = new Text(u.getusername());
                     adminusergrid.add(username, 0, 2);
                     Button deleteuserButton = new Button("Delete User");
@@ -144,6 +150,12 @@ public class AdminUsersPage {
                             }
                             AdminPage.loadadminPage(admingrid, primaryStage, adminScene,loginScene);
                             primaryStage.setScene(adminScene);
+                        }
+                    });
+                    adminuserspageButton.setOnAction(new EventHandler<ActionEvent>() {
+                        @Override
+                        public void handle(ActionEvent e) {
+                            primaryStage.setScene(adminusersScene);
                         }
                     });
                 }
