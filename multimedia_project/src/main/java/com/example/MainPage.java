@@ -9,6 +9,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -47,7 +48,6 @@ maingrid.getChildren().clear();
         RadioButton checkBoxYear = new RadioButton("Search by Year");
 
 
-
         checkBoxTitle.setOnAction(e -> toggleTextField(maingrid, 2, checkBoxTitle.isSelected(), searchbar));
         checkBoxWriter.setOnAction(e -> toggleTextField(maingrid, 3,checkBoxWriter.isSelected(), searchbar_writer));
         checkBoxYear.setOnAction(e -> toggleTextField(maingrid, 4,checkBoxYear.isSelected(), searchbar_year));
@@ -82,20 +82,20 @@ maingrid.getChildren().clear();
       searchScene.getStylesheets().add(App.class.getResource("styles.css").toExternalForm());
 
 
-       
-        
-
         Button signoutButton = new Button("Sign out");
         maingrid.add(signoutButton,10,2);
         int RowIndex = 10;
         int rowcounter=0;
         MainPage mainPageInstance = new MainPage(); // Create an instance of MainPage
         Collections.sort(books, mainPageInstance.new BookRatingComparator());
-
-
+        VBox bookContainer = new VBox();
+bookContainer.setSpacing(10);
+        
         for (Book book : books) {
         if(rowcounter==5) break;
         rowcounter++;
+        VBox bookVBox = new VBox();
+    bookVBox.setSpacing(5);
         Text titleText = new Text("Title: " + book.getTitle());
         Text writerText = new Text("Writer: " + book.getWriter());
         Text publisherText = new Text("Publisher: " + book.getPublisher());
@@ -113,23 +113,42 @@ maingrid.getChildren().clear();
     Ratingfx rating = new Ratingfx(5);
     rating.setRating((int)Math.round(book.averagerating()));
     maingrid.add(rating, 1, 6 + RowIndex);
+    /*
     if (book.bookcomments != null && !book.bookcomments.isEmpty()) {
         for(Comment c: book.bookcomments) {
             Text com = new Text(c.toString());
             maingrid.add(com,0,7+RowIndex);
         }
     }
+    */
+    
     float averageRating = book.averagerating();
     String avgRatingText = String.format("%.2f", averageRating);
     Text avgRate = new Text(avgRatingText);
-    maingrid.add(avgRate,0,8+RowIndex);
+    //maingrid.add(avgRate,0,8+RowIndex);
     String totalRatingsText = String.format("%d", book.gettotalratings());
     Text totalRatings = new Text(totalRatingsText);
-    maingrid.add(totalRatings,0,9+RowIndex);
+    //maingrid.add(totalRatings,0,9+RowIndex);
     RowIndex+=10;
-    
-}
+    bookVBox.getChildren().addAll(titleText, writerText, publisherText, isbnText, yearText, categoryText,
+                    numberofbooksText, rating,avgRate,totalRatings);
 
+            bookContainer.getChildren().add(bookVBox);
+            bookVBox.setOnMouseClicked(event -> {
+                
+                System.out.println("Clicked on book: " + book.getTitle());
+                GridPane bookpagegrid = new GridPane();
+                Scene bookpageScene = new Scene(bookpagegrid, 1000, 500);
+                bookpageScene.getStylesheets().add(App.class.getResource("styles.css").toExternalForm());
+                BookPage.loadbookpage(book, bookpagegrid, primaryStage, currentUser, maingrid, loginscene, searchbar, searchbar_writer, searchbar_year, mainScene, adminScene, bookpageScene);
+                primaryStage.setScene(bookpageScene);
+
+            });
+}
+ScrollPane scrollPane = new ScrollPane();
+scrollPane.setContent(bookContainer);
+scrollPane.setPrefWidth(300);
+maingrid.add(scrollPane, 0, 10);
         Button searchButton = new Button("Search");
         HBox hsearchButton = new HBox(10);
         hsearchButton.setAlignment(Pos.BOTTOM_RIGHT);
