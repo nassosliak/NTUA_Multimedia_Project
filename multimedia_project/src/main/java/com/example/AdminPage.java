@@ -44,6 +44,7 @@ public class AdminPage {
         Button addcatButton = new Button("Category Management");
         admingrid.add(addcatButton, 3, 5);
         TextField searchField = new TextField();
+        searchField.setPromptText("Search Books by ISBN...");
         admingrid.add(searchField, 3, 1);
         Button searchbyisbn = new Button("Search");
         admingrid.add(searchbyisbn,4,1);
@@ -102,18 +103,23 @@ public class AdminPage {
         addbookgrid.add(addbooktitle,2,1);
         
         TextField booktitle = new TextField();
+        booktitle.setPromptText("Title");
         addbookgrid.add(booktitle,2,4);
         
-        TextField bookwriter = new TextField("Writer");
+        TextField bookwriter = new TextField();
+        bookwriter.setPromptText("Writer");
         addbookgrid.add(bookwriter,2,6);
 
-        TextField bookpublisher = new TextField("Publisher");
+        TextField bookpublisher = new TextField();
+        bookpublisher.setPromptText("Publisher");
         addbookgrid.add(bookpublisher,2,8);
 
-        TextField bookisbn = new TextField("ISBN");
+        TextField bookisbn = new TextField();
+        bookisbn.setPromptText("ISBN");
         addbookgrid.add(bookisbn,2,10);
 
-        TextField book_year_of_publish = new TextField("Year of Publish");
+        TextField book_year_of_publish = new TextField();
+        book_year_of_publish.setPromptText("Year of Publish");
         addbookgrid.add(book_year_of_publish,2,12);
         
         ComboBox<String> comboBox = new ComboBox<>();
@@ -130,7 +136,8 @@ public class AdminPage {
 
         VBox category = new VBox(comboBox);
         addbookgrid.add(category,2,14);
-        TextField numberofbooksfield = new TextField("# of books");
+        TextField numberofbooksfield = new TextField();
+        numberofbooksfield.setPromptText("Number of books");
         addbookgrid.add(numberofbooksfield,2,16);
         
         Button savebookButton = new Button("Add Book");

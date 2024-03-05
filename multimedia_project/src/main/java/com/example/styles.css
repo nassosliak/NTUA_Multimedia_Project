@@ -45,11 +45,10 @@
 #scenetitle {
     -fx-font-size: 32px;
     -fx-font-family: "Roboto";
-    -fx-fill: #818181; /* Light gray fill color */
+    -fx-fill: #818181;
     -fx-effect: innershadow(three-pass-box, rgba(0, 0, 0, 0.7), 6, 0.0, 0, 2); /* Inner shadow effect */
 }
 
-/* Styles for action target */
 #actiontarget {
     -fx-fill: FIREBRICK;
     -fx-font-family: "Roboto";
@@ -66,18 +65,24 @@
     -fx-font-weight: bold;
     -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 0.5), 0, 0, 0, 1); /* White drop shadow effect */
 }
+.vbox {
+    -fx-background-radius: 8;
+}
+.vbox:hover {
+    -fx-effect: innershadow(gaussian, rgba(0,0,0,0.5), 10, 0.5, 0, 0);
+}
 
 .scroll-pane {
     -fx-background-color: linear-gradient(#140d79, #7c2020);
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 10, 0, 0, 0);
+    -fx-background-radius: 8;
 }
 .text {
     -fx-font-family: "Roboto";
 }
 .button {
     -fx-background-color: linear-gradient(to bottom, #dddddd, #bbbbbb);
-    -fx-background-radius: 5;
-    -fx-border-color: #888888;
+    -fx-background-radius: 30;
     -fx-border-radius: 5;
     -fx-text-fill: black;
     -fx-font-size: 13px;
@@ -90,8 +95,8 @@
 
 .button:hover {
     -fx-background-color: linear-gradient(to bottom, #cccccc, #aaaaaa); 
-    -fx-border-color: #888888;
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.5), 10, 0, 0, 0);
+    -fx-effect: innershadow(gaussian, rgba(0,0,0,0.5), 10, 0.5, 0, 0);
 }
 
 

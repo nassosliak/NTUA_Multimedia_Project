@@ -103,7 +103,7 @@ public class Book implements Serializable{
     public float averagerating() {
         float result=0f;
         for(BookRating i:bookratings) {
-            result+=i.getrating();
+            result+=i.getRating();
         }
         if(bookratings.size()>0)
         return result/bookratings.size();

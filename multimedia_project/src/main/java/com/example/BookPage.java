@@ -176,19 +176,18 @@ break;
         editbookgrid.add(editbookpagetitle,2,1);
         
         
-        TextField editbooktitle = new TextField();
+        TextField editbooktitle = new TextField(b.getTitle());
         editbookgrid.add(editbooktitle,2,4);
         
-        TextField editbookwriter = new TextField("Writer");
+        TextField editbookwriter = new TextField(b.getWriter());
         editbookgrid.add(editbookwriter,2,6);
  
-        TextField editbookpublisher = new TextField("Publisher");
+        TextField editbookpublisher = new TextField(b.getPublisher());
         editbookgrid.add(editbookpublisher,2,8);
- 
-        TextField editbookisbn = new TextField("ISBN");
+        TextField editbookisbn = new TextField(Integer.toString(b.getISBN()));
         editbookgrid.add(editbookisbn,2,10);
  
-        TextField editbook_year_of_publish = new TextField("Year of Publish");
+        TextField editbook_year_of_publish = new TextField(b.getPublisher());
         editbookgrid.add(editbook_year_of_publish,2,11);
         ComboBox<String> comboBox = new ComboBox<>();
         List<Category> categories = Serialize.readAllCategories();
@@ -202,7 +201,7 @@ break;
 
         VBox category = new VBox(comboBox);
         editbookgrid.add(category,2,12);
-         TextField editnumberofbooksfield = new TextField("# of books");
+         TextField editnumberofbooksfield = new TextField(Integer.toString(b.getNumberofBooks()));
          editbookgrid.add(editnumberofbooksfield,2,16);
          Button editbookButton = new Button("Edit Book");
          editbookgrid.add(editbookButton,3,4);
