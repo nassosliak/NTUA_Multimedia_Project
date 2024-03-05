@@ -244,11 +244,11 @@ break;
                     for (int i = 0; i < u.getBorrowedBooks().size(); i++) {
                         Book borrowedBook = u.borrowedbooks.get(i);
                         if (borrowedBook.getISBN() == b.getISBN()) {
-                            System.out.println("removed "+u.borrowedbooks.get(i));
+                            //System.out.println("removed "+u.borrowedbooks.get(i));
                             u.borrowedbooks.remove(i);
                             
                             u.borrowedbooks.add(newbook);
-                            System.out.println("added "+u.getBorrowedBooks());
+                            //System.out.println("added "+u.getBorrowedBooks());
                             break;
                 }
             }}
@@ -419,6 +419,27 @@ break;
                     System.out.println("Error saving book: " + e.getMessage());
     e.printStackTrace();
                 }
+                List<User> users = Serialize.readAllUsers();
+                for(User u:users) {
+                    if(u.number_of_borrowed_books()!=0) {
+                        for (int i = 0; i < u.getBorrowedBooks().size(); i++) {
+                            Book borrowedBook = u.borrowedbooks.get(i);
+                            if (borrowedBook.getISBN() == b.getISBN()) {
+                                System.out.println("removed "+u.borrowedbooks.get(i));
+                                u.borrowedbooks.remove(i);
+                                Book newbook = new Book(bookTitle, bookWriter, bookPublisher,b.getISBN(), year_of_publish, bookCategory,numberofbooks);
+                                u.borrowedbooks.add(newbook);
+                                System.out.println("added "+u.getBorrowedBooks());
+                                break;
+                    }
+                }}
+            }
+            try {
+                Serialize.writeAllUsers(users);
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
         AdminPage.loadadminPage(maingrid, primaryStage, adminScene, loginscene);
         primaryStage.setScene(adminScene);
             }

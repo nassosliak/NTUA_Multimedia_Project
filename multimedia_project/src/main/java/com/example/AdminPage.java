@@ -41,7 +41,7 @@ public class AdminPage {
         admingrid.add(openborrowsButton, 3, 6);
         Button usersButton = new Button("See all users");
         admingrid.add(usersButton, 3, 7);
-        Button addcatButton = new Button("Add Category");
+        Button addcatButton = new Button("Category Management");
         admingrid.add(addcatButton, 3, 5);
         TextField searchField = new TextField();
         admingrid.add(searchField, 3, 1);
@@ -64,8 +64,6 @@ public class AdminPage {
             // Add category label to the VBox
             Text categoryText = new Text("Category: " + category);
             content.getChildren().add(categoryText);
-            Text categoryTextForCategoryContent = new Text("Category: " + category);
-            categorycontent.getChildren().add(categoryTextForCategoryContent);
             // Iterate over books in the current category
             for (Book book : groupedBooks.get(category)) {
                 // Add book title to the VBox
@@ -73,7 +71,11 @@ public class AdminPage {
                 content.getChildren().add(bookText);
             }
         }
-
+        List<Category> categories = Serialize.readAllCategories();
+        for(Category cat:categories) {
+            Text categoryTextForCategoryContent = new Text("Category: " + cat.getTitle());
+            categorycontent.getChildren().add(categoryTextForCategoryContent);
+        }
         // Create a ScrollPane and add the VBox to it
         ScrollPane scrollPane = new ScrollPane(content);
         ScrollPane categoryScrollPane = new ScrollPane(categorycontent);
@@ -117,7 +119,7 @@ public class AdminPage {
         ComboBox<String> comboBox = new ComboBox<>();
 
         // Create some items to add to the ComboBox
-        List<Category> categories = Serialize.readAllCategories();
+        
         ObservableList<String> items =FXCollections.observableArrayList();
         for(Category cat:categories) {
         items.add(cat.getTitle());
@@ -160,8 +162,64 @@ public class AdminPage {
         Scene addbookScene = new Scene(addbookgrid, 1000, 500);
         addbookScene.getStylesheets().add(App.class.getResource("styles.css").toExternalForm());
 
-        //add category page
+
+        //edit category
+        GridPane editcategoryGridPane = new GridPane();
+        TextField newcategory = new TextField();
+        editcategoryGridPane.add(newcategory,2,1);
+        Button addcategorypagenavButton = new Button();
+        Image iconImage1 = new Image(MainPage.class.getResourceAsStream("resources/arrow_back_FILL0_wght400_GRAD0_opsz24.png"));
+        addcategorypagenavButton.setGraphic(new ImageView(iconImage1));
+        addcategorypagenavButton.getStyleClass().add("mainpagenavButton");
+        editcategoryGridPane.add(addcategorypagenavButton,0,0);
+        Button editcategoryButton = new Button("Edit Category");
+        editcategoryGridPane.add(editcategoryButton,4,1);
+        ComboBox<String> category_combobox = new ComboBox<>();
+        ObservableList<String> catgory_items =FXCollections.observableArrayList();
+        for(Category cat:categories) {
+            catgory_items.add(cat.getTitle());
+        }
+        category_combobox.setItems(catgory_items);
+
+        category_combobox.getSelectionModel().selectFirst();
+
+        VBox category_Box = new VBox(category_combobox);
+        editcategoryGridPane.add(category_Box,3,1);
+        Scene editcategoryScene = new Scene(editcategoryGridPane, 1000, 500);
+        editcategoryScene.getStylesheets().add(App.class.getResource("styles.css").toExternalForm());
+
+        //delete category
+        GridPane deletecategoryGridPane = new GridPane();
+        Button addcategorypagenavButton1 = new Button();
+        Image iconImage2 = new Image(MainPage.class.getResourceAsStream("resources/arrow_back_FILL0_wght400_GRAD0_opsz24.png"));
+        addcategorypagenavButton1.setGraphic(new ImageView(iconImage2));
+        addcategorypagenavButton1.getStyleClass().add("mainpagenavButton");
+        deletecategoryGridPane.add(addcategorypagenavButton1,0,0);
+        Button deletecategoryButton = new Button("Delete Category");
+        deletecategoryGridPane.add(deletecategoryButton,4,1);
+        ComboBox<String> category_combobox1 = new ComboBox<>();
+        ObservableList<String> catgory_items1 =FXCollections.observableArrayList();
+        for(Category cat:categories) {
+            catgory_items1.add(cat.getTitle());
+        }
+        category_combobox1.setItems(catgory_items1);
+
+        category_combobox1.getSelectionModel().selectFirst();
+
+        VBox category_Box1 = new VBox(category_combobox1);
+        deletecategoryGridPane.add(category_Box1,3,1);
+        Scene deletecategoryScene = new Scene(deletecategoryGridPane, 1000, 500);
+        deletecategoryScene.getStylesheets().add(App.class.getResource("styles.css").toExternalForm());
+
+        //Category management
         GridPane addcategorygrid = new GridPane();
+        final Text actiontarget = new Text();
+        addcategorygrid.add(actiontarget, 0, 6);
+        addcategorygrid.setColumnSpan(actiontarget, 2);
+        addcategorygrid.setHalignment(actiontarget, RIGHT);
+        actiontarget.setId("actiontarget");
+        Text addnewcat = new Text("Add new Category");
+        addcategorygrid.add(addnewcat,1,0);
         Button mainpagenavButton = new Button();
         Image iconImage = new Image(MainPage.class.getResourceAsStream("resources/arrow_back_FILL0_wght400_GRAD0_opsz24.png"));
         mainpagenavButton.setGraphic(new ImageView(iconImage));
@@ -169,14 +227,12 @@ public class AdminPage {
         addcategorygrid.add(mainpagenavButton,2,0);
         TextField categorytitle = new TextField();
         addcategorygrid.add(categorytitle,2,4);
-        TextField newcategorytitle = new TextField();
-        addcategorygrid.add(newcategorytitle,4,4);
         Button savecategoryButton = new Button("Add Category");
         addcategorygrid.add(savecategoryButton,3,4);
-        Button deletecategoryButton = new Button("Delete Category");
-        addcategorygrid.add(deletecategoryButton,3,5);
-        Button editcategoryButton = new Button("Edit Category Name");
-        addcategorygrid.add(editcategoryButton,3,6);
+        Button deletecategorynavButton = new Button("Delete Category");
+        addcategorygrid.add(deletecategorynavButton,3,5);
+        Button editcategorynavButton = new Button("Edit Category Name");
+        addcategorygrid.add(editcategorynavButton,3,6);
         Map<String, Integer> categoryCounts = new HashMap<>();
 
         for (String cat : groupedBooks.keySet()) {
@@ -204,8 +260,8 @@ public class AdminPage {
         //edit return time
         GridPane editreturnGridPane = new GridPane();
         Button mainpagenavButton2 = new Button();
-        Image iconImage2 = new Image(MainPage.class.getResourceAsStream("resources/arrow_back_FILL0_wght400_GRAD0_opsz24.png"));
-        mainpagenavButton2.setGraphic(new ImageView(iconImage2));
+        Image iconImage4= new Image(MainPage.class.getResourceAsStream("resources/arrow_back_FILL0_wght400_GRAD0_opsz24.png"));
+        mainpagenavButton2.setGraphic(new ImageView(iconImage4));
         mainpagenavButton2.getStyleClass().add("mainpagenavButton2");
         editreturnGridPane.add(mainpagenavButton2,0,0);
 // TextFields for days, hours, and seconds
@@ -285,12 +341,14 @@ VBox root = new VBox();
         mainpagenavButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
+                loadadminPage(admingrid, primaryStage, adminScene, loginScene);
                 primaryStage.setScene(adminScene);
             }
         });
         mainpagenavButton2.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
+                loadadminPage(admingrid, primaryStage, adminScene, loginScene);
                 primaryStage.setScene(adminScene);
             }
         });
@@ -298,16 +356,48 @@ VBox root = new VBox();
         adminpagenavButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
+                loadadminPage(admingrid, primaryStage, adminScene, loginScene);
                 primaryStage.setScene(adminScene);
             }
         });
+        addcategorypagenavButton.setOnAction(new EventHandler<ActionEvent>() {
 
+            @Override
+            public void handle(ActionEvent a) {
+                loadadminPage(admingrid, primaryStage, adminScene, loginScene);
+                primaryStage.setScene(addCategoryScene);
+            }
+        });
+        addcategorypagenavButton1.setOnAction(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent a) {
+                loadadminPage(admingrid, primaryStage, adminScene, loginScene);
+                primaryStage.setScene(addCategoryScene);
+            }
+        });
+        deletecategorynavButton.setOnAction(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent a) {
+                loadadminPage(admingrid, primaryStage, adminScene, loginScene);
+                primaryStage.setScene(deletecategoryScene);
+            }
+        });
         addcatButton.setOnAction(new EventHandler<ActionEvent>() {
 
             @Override
             public void handle(ActionEvent a) {
-                
+                loadadminPage(admingrid, primaryStage, adminScene, loginScene);
                 primaryStage.setScene(addCategoryScene);
+            }
+        });
+        editcategorynavButton.setOnAction(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent a) {
+                loadadminPage(admingrid, primaryStage, adminScene, loginScene);
+                primaryStage.setScene(editcategoryScene);
             }
         });
         savereturntimeButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -410,6 +500,14 @@ VBox root = new VBox();
                 Category=categorytitle.getText();
                 System.out.println(Category);
                 Category cat = new Category(Category);
+                boolean valid=true;
+                for(Category c: categories) {
+                    if(c.getTitle().equals(Category)) {
+                        valid=false;
+                        break;
+                    }
+                }
+                if(!Category.equals("") && valid) {
                 try {
                 Serialize.saveCategory(cat);
                 System.out.println("Category added succesfully");
@@ -429,7 +527,15 @@ VBox root = new VBox();
                 }
         loadadminPage(admingrid, primaryStage, adminScene,loginScene);
         primaryStage.setScene(adminScene);
-
+            }
+            if(!valid) {
+                actiontarget.setFill(Color.FIREBRICK);
+                actiontarget.setText("Category Already Exists");
+            }
+            else {
+                actiontarget.setFill(Color.FIREBRICK);
+                actiontarget.setText("Please Enter a Valid Category Name");
+            }
             }
         });
 
@@ -438,7 +544,7 @@ VBox root = new VBox();
             public void handle(ActionEvent s) {
                 
                 String Category;
-                Category=categorytitle.getText();
+                Category=category_combobox1.getValue();
                 System.out.println(Category);
                 try {
                 Serialize.deleteCategory(Category);
@@ -454,7 +560,7 @@ VBox root = new VBox();
                 for (Category cate : categories) {
                  System.out.println(cate);
                 }
-               
+        loadadminPage(admingrid, primaryStage, adminScene, loginScene);
         primaryStage.setScene(adminScene);
 
             }
@@ -469,22 +575,54 @@ VBox root = new VBox();
             public void handle(ActionEvent s) {
                 
                 String Category;
-                Category=categorytitle.getText();
+                Category=category_combobox.getValue();
                 System.out.println(Category);
                 try {
-                Serialize.editCategory(Category, newcategorytitle.getText());
+                Serialize.editCategory(Category, newcategory.getText());
                 
                 }
                 catch (IOException e) {
                     System.out.println("Error saving category: " + e.getMessage());
     e.printStackTrace();
                 }
-                
+                for(Book b: books) {
+                    if(b.getCategory().equals(Category)) {
+                    b.setCategory(newcategory.getText());
+                    }
+                }
+                try {
+                    Serialize.writeAllBooks(books);
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+                List<User> users = Serialize.readAllUsers();
+                for(User u:users) {
+                    if(u.number_of_borrowed_books()!=0) {
+                        for (int i = 0; i < u.getBorrowedBooks().size(); i++) {
+                            Book borrowedBook = u.borrowedbooks.get(i);
+                            if (borrowedBook.getCategory().equals(Category)) {
+                                System.out.println("removed "+u.borrowedbooks.get(i));
+                                u.borrowedbooks.remove(i);
+                                Book newbook = new Book(borrowedBook.getTitle(), borrowedBook.getTitle(), borrowedBook.getPublisher(),borrowedBook.getISBN(), borrowedBook.getYear_of_Publish(), newcategory.getText(),borrowedBook.getNumberofBooks());
+                                u.borrowedbooks.add(newbook);
+                                System.out.println("added "+u.getBorrowedBooks());
+                                break;
+                    }
+                }}
+            }
+            try {
+                Serialize.writeAllUsers(users);
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
                 List<Category> categories = Serialize.readAllCategories();
         
                 for (Category cate : categories) {
                  System.out.println(cate);
                 }
+        loadadminPage(admingrid, primaryStage, adminScene, loginScene);
         primaryStage.setScene(adminScene);
 
             }

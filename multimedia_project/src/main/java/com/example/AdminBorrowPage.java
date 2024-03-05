@@ -26,7 +26,8 @@ public class AdminBorrowPage {
         
         List<User> users = Serialize.readAllUsers();
         int rowIndex = 2;
-        
+        Scene adminBorrowScene = new Scene(adminBorrowGrid, 1000, 500);
+        adminBorrowScene.getStylesheets().add(App.class.getResource("styles.css").toExternalForm());
         for (User user : users) {
             if (!user.getBorrowedBooks().isEmpty()) {
                 Text userText = new Text("User " + user.getusername() + " has Borrowed:");
@@ -45,14 +46,13 @@ public class AdminBorrowPage {
                 userVBox.setOnMouseClicked(new EventHandler<MouseEvent>() {
                     @Override
                     public void handle(MouseEvent event) {
-                        handleUserClick(user, primaryStage, adminScene);
+                        handleUserClick(user, primaryStage, adminScene, adminBorrowScene);
                     }
                 });
             }
         }
         
-        Scene adminBorrowScene = new Scene(adminBorrowGrid, 1000, 500);
-        adminBorrowScene.getStylesheets().add(App.class.getResource("styles.css").toExternalForm());
+        
         primaryStage.setScene(adminBorrowScene);
 
         mainpagenavButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -63,7 +63,7 @@ public class AdminBorrowPage {
         });
     }
     
-    private static void handleUserClick(User user, Stage primaryStage, Scene adminScene) {
+    private static void handleUserClick(User user, Stage primaryStage, Scene adminScene, Scene adminBorrowScene) {
         System.out.println("Clicked on user: " + user.getusername());
         
         GridPane handleUserGrid = new GridPane();
@@ -72,6 +72,11 @@ public class AdminBorrowPage {
             Text c = new Text(Integer.toString(user.getBorrowedBooks().get(i).getISBN()) +
             " Return date: " +
             user.getBorrowingDates().get(i));
+            Button adminpagenavButton = new Button();
+            Image iconImage3 = new Image(MainPage.class.getResourceAsStream("resources/arrow_back_FILL0_wght400_GRAD0_opsz24.png"));
+            adminpagenavButton.setGraphic(new ImageView(iconImage3));
+            adminpagenavButton.getStyleClass().add("bookpagenavButton");
+            handleUserGrid.add(adminpagenavButton,0,0);
         Button endBorrowButton = new Button("End borrow");
         handleUserGrid.add(endBorrowButton, 2, i+1);
         handleUserGrid.add(c, 1, i+1);
@@ -95,6 +100,13 @@ public class AdminBorrowPage {
             }
         }
         loadAdminBorrowPage(primaryStage, adminScene);
+            }
+        });
+        adminpagenavButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+
+                primaryStage.setScene(adminBorrowScene);
             }
         });
         }
