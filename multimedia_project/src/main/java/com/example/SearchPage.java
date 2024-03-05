@@ -138,7 +138,7 @@ public class SearchPage {
         // Create a ScrollPane for the search section
         ScrollPane searchScrollPane = new ScrollPane(searchContent);
         searchScrollPane.setFitToHeight(true);
-        searchScrollPane.setPrefViewportHeight(200); // Set preferred viewport height
+        searchScrollPane.setPrefViewportHeight(400);
         searchScrollPane.setPrefViewportWidth(500);
         Button mainpagenavButton = new Button();
         Image iconImage = new Image(MainPage.class.getResourceAsStream("resources/arrow_back_FILL0_wght400_GRAD0_opsz24.png"));

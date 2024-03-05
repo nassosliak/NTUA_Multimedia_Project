@@ -63,7 +63,7 @@ public class User implements Serializable{
         return username;
     }
 
-    public String getpassword() {
+    protected String getpassword() {
         return password;
     }
 

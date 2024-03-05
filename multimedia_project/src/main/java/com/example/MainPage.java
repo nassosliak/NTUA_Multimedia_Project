@@ -40,9 +40,10 @@ public class MainPage {
 List<Book> books=Serialize.readAllBooks();
 
 maingrid.getChildren().clear();
-
-        Text basic =new Text("Main Page");
+        if(currentUser!=null) {
+        Text basic =new Text("Hi "+ currentUser.getusername());
         maingrid.add(basic,2,1);
+        }
         RadioButton checkBoxTitle = new RadioButton("Search by Title");
         RadioButton checkBoxWriter = new RadioButton("Search by Writer");
         RadioButton checkBoxYear = new RadioButton("Search by Year");
@@ -103,6 +104,7 @@ bookContainer.setSpacing(10);
         Text yearText = new Text("Year of Publish: " + book.getYear_of_Publish());
         Text categoryText = new Text("Category: " + book.getCategory());
         Text numberofbooksText = new Text("Available books: " + book.getNumberofBooks());
+        
         maingrid.add(titleText, 0, 0+RowIndex);
         maingrid.add(writerText, 0, 1+RowIndex);
         maingrid.add(publisherText, 0, 2+RowIndex);
@@ -124,14 +126,14 @@ bookContainer.setSpacing(10);
     
     float averageRating = book.averagerating();
     String avgRatingText = String.format("%.2f", averageRating);
-    Text avgRate = new Text(avgRatingText);
-    //maingrid.add(avgRate,0,8+RowIndex);
+    Text avgRate = new Text("Average Rating: "+avgRatingText);
+    //maingrid.add(avgRate,2,6+RowIndex);
     String totalRatingsText = String.format("%d", book.gettotalratings());
-    Text totalRatings = new Text(totalRatingsText);
+    Text totalRatings = new Text("Total Ratings: "+totalRatingsText);
     //maingrid.add(totalRatings,0,9+RowIndex);
     RowIndex+=10;
     bookVBox.getChildren().addAll(titleText, writerText, publisherText, isbnText, yearText, categoryText,
-                    numberofbooksText, rating,avgRate,totalRatings);
+                    numberofbooksText,avgRate,rating,totalRatings);
 
             bookContainer.getChildren().add(bookVBox);
             bookVBox.setOnMouseClicked(event -> {

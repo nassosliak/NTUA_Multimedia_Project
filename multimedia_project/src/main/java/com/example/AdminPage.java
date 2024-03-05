@@ -30,8 +30,10 @@ import javafx.stage.Stage;
 public class AdminPage {
     public static void loadadminPage(GridPane admingrid, Stage primaryStage, Scene adminScene, Scene loginScene) {
         admingrid.getChildren().clear();
-        Text title_admin = new Text("Admin Page");
-        admingrid.add(title_admin, 2, 1);
+        Text title_admin = new Text("Welcome Admin");
+        title_admin.setId("title_admin");
+        admingrid.add(title_admin, 0, 0);
+
         Button addButton = new Button("Add Book");
         HBox haddButton = new HBox(10);
         haddButton.setAlignment(Pos.BOTTOM_RIGHT);
@@ -288,7 +290,7 @@ editreturnGridPane.add(hoursLabel, 3, 0);
 editreturnGridPane.add(hoursTextField, 4, 0);
 editreturnGridPane.add(minutesLabel, 5, 0);
 editreturnGridPane.add(minutesTextField,6, 0);
-
+editreturnGridPane.setAlignment(Pos.CENTER);
 Button savereturntimeButton = new Button("Save Return Time");
 editreturnGridPane.add(savereturntimeButton, 7, 0);
 

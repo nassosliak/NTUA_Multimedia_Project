@@ -35,39 +35,39 @@ public class BookPage {
         Image iconImage = new Image(MainPage.class.getResourceAsStream("resources/arrow_back_FILL0_wght400_GRAD0_opsz24.png"));
         mainpagenavButton.setGraphic(new ImageView(iconImage));
         mainpagenavButton.getStyleClass().add("mainpagenavButton");
-        bookpagegrid.add(mainpagenavButton,2,0);
-    Text booktexttitle= new Text(b.getTitle());
-        bookpagegrid.add(booktexttitle,0,0);
+        bookpagegrid.add(mainpagenavButton,0,0);
+        Text booktexttitle= new Text("Book Title: " +b.getTitle());
+        booktexttitle.setId("booktexttitle");
+        bookpagegrid.add(booktexttitle,1,0);
         Text booktextwriter= new Text("Writer: " +b.getWriter());
-        bookpagegrid.add(booktextwriter,0,1);
+        bookpagegrid.add(booktextwriter,1,1);
         Text booktextpublisher= new Text("Publisher: " + b.getPublisher());
-        bookpagegrid.add(booktextpublisher,0,2);
+        bookpagegrid.add(booktextpublisher,1,2);
         Text booktextcategory= new Text("Category: " + b.getCategory());
-        bookpagegrid.add(booktextcategory,0,3);
-        Text booktextisbn= new Text(Integer.toString(b.getISBN()));
-        bookpagegrid.add(booktextisbn,0,4);
-        Text booktextyear= new Text(Integer.toString(b.getYear_of_Publish()));
-        bookpagegrid.add(booktextyear,0,5);
+        bookpagegrid.add(booktextcategory,1,3);
+        Text booktextisbn= new Text("ISBN: "+Integer.toString(b.getISBN()));
+        bookpagegrid.add(booktextisbn,1,4);
+        Text booktextyear= new Text("Year of Publish: "+Integer.toString(b.getYear_of_Publish()));
+        bookpagegrid.add(booktextyear,1,5);
         String avgRatingText = String.format("%.2f", b.averagerating());
         Text bookavgrateText = new Text("Average User Rating: "+avgRatingText);
-        bookpagegrid.add(bookavgrateText,0,7);
+        bookpagegrid.add(bookavgrateText,1,7);
         Text bookavText = new Text("Available books: "+Integer.toString(b.getNumberofBooks()));
-        bookpagegrid.add(bookavText,0,6);
+        bookpagegrid.add(bookavText,1,6);
         Text bookrates = new Text("Total User Ratings: "+Integer.toString(b.gettotalratings()));
-        bookpagegrid.add(bookrates,0,8);
+        bookpagegrid.add(bookrates,1,8);
         Ratingfx rating = new Ratingfx(5);
         rating.setRating((int)Math.round(b.averagerating()));
-        bookpagegrid.add(rating, 0, 9);
+        bookpagegrid.add(rating, 1, 9);
         int rowindex=2;
        ScrollPane scrollPane = new ScrollPane();
-scrollPane.setFitToWidth(true); // Allow horizontal scrolling if necessary
-scrollPane.setPrefViewportHeight(200); // Set preferred height for the scroll pane
+scrollPane.setFitToWidth(true);
+scrollPane.setPrefViewportHeight(300);
 
-// Create a VBox to hold the comments
+if(!b.bookcomments.isEmpty()) {
 VBox commentsBox = new VBox();
-commentsBox.setSpacing(10); // Adjust spacing between comments if needed
+commentsBox.setSpacing(10);
 
-// Add comments to the VBox
 for (int i = 0; i < b.bookcomments.size(); i++) {
     String byuser = b.bookcomments.get(i).username;
     String data = b.bookcomments.get(i).data;
@@ -75,11 +75,14 @@ for (int i = 0; i < b.bookcomments.size(); i++) {
     commentsBox.getChildren().add(commentText);
 }
 
-// Set the VBox as the content of the ScrollPane
 scrollPane.setContent(commentsBox);
 
-// Add the ScrollPane to the GridPane
-bookpagegrid.add(scrollPane, 0, 10); // Adjust the row index as needed
+bookpagegrid.add(scrollPane, 1, 10);
+    }
+    else {
+        Text nocomments = new Text("No comments have been added to this book yet");
+        bookpagegrid.add(nocomments, 1, 10);
+    }
         Button addcommentButton = new Button("Add comment");
         Button addratingButton = new Button("Add Rating");
         boolean bookcontained =false;
@@ -92,8 +95,8 @@ break;
         }
     }
         if(currentUser!=null && currentUser.getBorrowedBooks() != null && bookcontained){
-        bookpagegrid.add(addcommentButton,4,4);
-        bookpagegrid.add(addratingButton,4,5);
+        bookpagegrid.add(addcommentButton,2,11);
+        bookpagegrid.add(addratingButton,3,11);
         }
         Button lendbookButton = new Button("Borrow");
         final Text lendlimit = new Text();
@@ -115,18 +118,18 @@ break;
         hdeleteButton.getChildren().add(deleteButton);
         
         if(currentUser.getusername().equals("Admin")) {
-            bookpagegrid.add(deleteButton, 7, 2);
-        bookpagegrid.add(editButton, 7, 4);
+            bookpagegrid.add(deleteButton, 1, 11);
+        bookpagegrid.add(editButton, 2, 11);
         }
         else {
         if (currentUser != null && currentUser.getBorrowedBooks() != null && bookcontained) {
             bookpagegrid.getChildren().remove(lendbookButton);
-            bookpagegrid.add(returnbookButton, 4, 7);
+            bookpagegrid.add(returnbookButton, 1, 11);
         }
         
         if (currentUser != null && currentUser.getBorrowedBooks() != null && !bookcontained)  {
         bookpagegrid.getChildren().remove(returnbookButton);
-        bookpagegrid.add(lendbookButton,4,7);
+        bookpagegrid.add(lendbookButton,1,11);
         }
     }
         //addcomment page
