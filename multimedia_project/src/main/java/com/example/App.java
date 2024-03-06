@@ -43,7 +43,6 @@ public class App extends Application {
         //login page
         GridPane grid = new GridPane();
         grid.setId("grid");
-        //login page
         grid.setAlignment(Pos.CENTER);
         grid.setHgap(10);
         grid.setVgap(10);

@@ -47,7 +47,11 @@ public class AdminPage {
         admingrid.add(addcatButton, 3, 5);
         TextField searchField = new TextField();
         searchField.setPromptText("Search Books by ISBN...");
-        admingrid.add(searchField, 3, 1);
+        Image icon = new Image(AdminPage.class.getResourceAsStream("resources/search_FILL0_wght400_GRAD0_opsz24.png"));
+        ImageView iconView = new ImageView(icon);
+        HBox hbox = new HBox(5); // 5 pixels spacing
+        hbox.getChildren().addAll(iconView, searchField);
+        admingrid.add(hbox, 3, 1);
         Button searchbyisbn = new Button("Search");
         admingrid.add(searchbyisbn,4,1);
         Button editreturntimeButton = new Button("Edit Return Time");
@@ -64,12 +68,9 @@ public class AdminPage {
         VBox categorycontent = new VBox();
         // Iterate over each category
         for (String category : groupedBooks.keySet()) {
-            // Add category label to the VBox
             Text categoryText = new Text("Category: " + category);
             content.getChildren().add(categoryText);
-            // Iterate over books in the current category
             for (Book book : groupedBooks.get(category)) {
-                // Add book title to the VBox
                 Text bookText = new Text("  Book Title: " + book.getTitle() + " ISBN: " + book.getISBN());
                 content.getChildren().add(bookText);
             }

@@ -8,6 +8,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -31,6 +32,10 @@ public class AdminUsersPage {
         Scene adminusersScene = new Scene(adminusersgrid, 1000, 500);
             adminusersScene.getStylesheets().add(App.class.getResource("styles.css").toExternalForm());
         List<User> users = Serialize.readAllUsers();
+        VBox usersContainer = new VBox();
+        usersContainer.setSpacing(10);
+
+        
         int rowindex = 1;
         for (User u : users) {
             if (u.getusername().equals("Admin")) {
@@ -38,10 +43,10 @@ public class AdminUsersPage {
             }
             VBox userVBox = new VBox();
             Text userText = new Text("User: " + u.getusername() + "\n");
-            adminusersgrid.add(userText, 1, rowindex);
+            //adminusersgrid.add(userText, 1, rowindex);
             Text userfirstnameText = new Text("First Name: " + u.getfirstname() + "\n");
-            adminusersgrid.add(userfirstnameText, 1, 1 + rowindex);
-            adminusersgrid.add(userVBox, 1, rowindex);
+            userVBox.getChildren().addAll(userText,userfirstnameText);
+            //adminusersgrid.add(userVBox, 1, rowindex);
             rowindex+=2;
             
             // Edit user page
@@ -226,8 +231,13 @@ public class AdminUsersPage {
                     }
                 }
             });
-        }
+            usersContainer.getChildren().add(userVBox);
 
+        }
+        ScrollPane scrollpane = new ScrollPane(usersContainer);
+        scrollpane.setPrefHeight(300);
+        scrollpane.setPrefWidth(400);
+        adminusersgrid.add(scrollpane,0,2);
        
         primaryStage.setScene(adminusersScene);
     }

@@ -6,6 +6,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -26,12 +27,14 @@ public class AdminBorrowPage {
         
         List<User> users = Serialize.readAllUsers();
         int rowIndex = 2;
+        VBox borrowContainer = new VBox();
+        borrowContainer.setSpacing(10);
         Scene adminBorrowScene = new Scene(adminBorrowGrid, 1000, 500);
         adminBorrowScene.getStylesheets().add(App.class.getResource("styles.css").toExternalForm());
         for (User user : users) {
             if (!user.getBorrowedBooks().isEmpty()) {
                 Text userText = new Text("User " + user.getusername() + " has Borrowed:");
-                adminBorrowGrid.add(userText, 1, rowIndex++);
+                //adminBorrowGrid.add(userText, 1, rowIndex++);
                 VBox userVBox = new VBox(); // Create a VBox for each user
                 for (int i = 0; i < user.getBorrowedBooks().size(); i++) {
                     Text bookText = new Text(
@@ -39,9 +42,9 @@ public class AdminBorrowPage {
                                     " and has to be returned at " +
                                     user.getBorrowingDates().get(i)
                     );
-                    userVBox.getChildren().add(bookText);
+                    userVBox.getChildren().addAll(userText,bookText);
                 }
-                adminBorrowGrid.add(userVBox, 1, rowIndex++);
+                borrowContainer.getChildren().addAll(userVBox);
                 
                 userVBox.setOnMouseClicked(new EventHandler<MouseEvent>() {
                     @Override
@@ -49,10 +52,14 @@ public class AdminBorrowPage {
                         handleUserClick(user, primaryStage, adminScene, adminBorrowScene);
                     }
                 });
+                
             }
+
         }
-        
-        
+        ScrollPane scrollpane = new ScrollPane(borrowContainer);
+        scrollpane.setPrefHeight(300);
+        scrollpane.setPrefWidth(400);
+        adminBorrowGrid.add(scrollpane, 1, rowIndex++);
         primaryStage.setScene(adminBorrowScene);
 
         mainpagenavButton.setOnAction(new EventHandler<ActionEvent>() {
