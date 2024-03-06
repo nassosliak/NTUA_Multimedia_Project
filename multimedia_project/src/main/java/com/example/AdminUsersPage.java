@@ -7,7 +7,9 @@ import java.util.List;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -128,12 +130,7 @@ public class AdminUsersPage {
             edituserscene.getStylesheets().add(App.class.getResource("styles.css").toExternalForm());
 
 
-            mainpagenavButton.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent e) {
-                    primaryStage.setScene(adminScene);
-                }
-            });
+           
             userspagenavbutton.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent e) {
@@ -170,19 +167,43 @@ public class AdminUsersPage {
                     });
 
                     deleteuserButton.setOnAction(new EventHandler<ActionEvent>() {
-                        @Override
-                        public void handle(ActionEvent s) {
-                            String username = u.getusername();
-                            System.out.println(username);
-                            try {
-                                Serialize.deleteuser(username);
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                            AdminPage.loadadminPage(admingrid, primaryStage, adminScene,loginScene);
-                            primaryStage.setScene(adminScene);
-                        }
-                    });
+    @Override
+    public void handle(ActionEvent s) {
+        String username = u.getusername();
+        
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmation Dialog");
+        alert.setHeaderText("Delete User");
+        alert.setContentText("Are you sure you want to delete this user?");
+        
+        // Add buttons to the alert
+        ButtonType buttonTypeYes = new ButtonType("Yes");
+        ButtonType buttonTypeNo = new ButtonType("No");
+        alert.getButtonTypes().setAll(buttonTypeYes, buttonTypeNo);
+        
+        // Show the alert and wait for user response
+        alert.showAndWait().ifPresent(buttonType -> {
+            if (buttonType == buttonTypeYes) {
+                // User clicked Yes, proceed with deletion
+                System.out.println(username);
+                try {
+                    Serialize.deleteuser(username);
+                    System.out.println("User deleted successfully");
+                } catch (IOException e) {
+                    System.out.println("Error deleting user: " + e.getMessage());
+                    e.printStackTrace();
+                }
+                
+                // Reload admin page after deletion
+                AdminPage.loadadminPage(admingrid, primaryStage, adminScene, loginScene);
+                primaryStage.setScene(adminScene);
+            } else {
+                // User clicked No, do nothing
+                System.out.println("Delete operation canceled");
+            }
+        });
+    }
+});
                     adminuserspageButton.setOnAction(new EventHandler<ActionEvent>() {
                         @Override
                         public void handle(ActionEvent e) {
@@ -303,6 +324,12 @@ public class AdminUsersPage {
             usersContainer.getChildren().add(userVBox);
 
         }
+        mainpagenavButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                primaryStage.setScene(adminScene);
+            }
+        });
         ScrollPane scrollpane = new ScrollPane(usersContainer);
         scrollpane.setPrefHeight(300);
         scrollpane.setPrefWidth(400);

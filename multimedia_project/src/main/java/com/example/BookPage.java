@@ -14,6 +14,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Spinner;
@@ -353,30 +354,44 @@ break;
             }
         });
         deleteButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent s) {
-                
-                String ISBN;
-                ISBN=(b.getISBN());
+    @Override
+    public void handle(ActionEvent s) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmation Dialog");
+        alert.setHeaderText("Delete Book");
+        alert.setContentText("Are you sure you want to delete this book?");
+
+        ButtonType buttonTypeYes = new ButtonType("Yes");
+        ButtonType buttonTypeNo = new ButtonType("No");
+        alert.getButtonTypes().setAll(buttonTypeYes, buttonTypeNo);
+
+        alert.showAndWait().ifPresent(buttonType -> {
+            if (buttonType == buttonTypeYes) {
+                // User clicked Yes, proceed with deletion
+                String ISBN = b.getISBN();
                 System.out.println(ISBN);
                 try {
-                Serialize.deleteBook(ISBN);
-                System.out.println("Book deleted succesfully");
-                }
-                catch (IOException e) {
+                    Serialize.deleteBook(ISBN);
+                    System.out.println("Book deleted successfully");
+                } catch (IOException e) {
                     System.out.println("Error deleting book: " + e.getMessage());
-    e.printStackTrace();
+                    e.printStackTrace();
                 }
-                
+
+                // Reload admin page after deletion
                 List<Book> books = Serialize.readAllBooks();
-        
                 for (Book b : books) {
-                 System.out.println(b);
+                    System.out.println(b);
                 }
-        AdminPage.loadadminPage(maingrid, primaryStage, adminScene, loginscene);
-        primaryStage.setScene(adminScene);
-          }
+                AdminPage.loadadminPage(maingrid, primaryStage, adminScene, loginscene);
+                primaryStage.setScene(adminScene);
+            } else {
+                // User clicked No, do nothing
+                System.out.println("Delete operation canceled");
+            }
         });
+    }
+});
         editButton.setOnAction(new EventHandler<ActionEvent>() {
 
             @Override

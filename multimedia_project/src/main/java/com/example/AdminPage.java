@@ -13,7 +13,9 @@ import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.chart.PieChart;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -641,31 +643,47 @@ VBox root = new VBox();
         });
 
         deletecategoryButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent s) {
-                
-                String Category;
-                Category=category_combobox1.getValue();
-                System.out.println(Category);
+    @Override
+    public void handle(ActionEvent s) {
+        String category = category_combobox1.getValue();
+        
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmation Dialog");
+        alert.setHeaderText("Delete Category");
+        alert.setContentText("Are you sure you want to delete this category \n and all the books that belong to it?");
+        
+        // Add buttons to the alert
+        ButtonType buttonTypeYes = new ButtonType("Yes");
+        ButtonType buttonTypeNo = new ButtonType("No");
+        alert.getButtonTypes().setAll(buttonTypeYes, buttonTypeNo);
+        
+        // Show the alert and wait for user response
+        alert.showAndWait().ifPresent(buttonType -> {
+            if (buttonType == buttonTypeYes) {
+                // User clicked Yes, proceed with deletion
+                System.out.println(category);
                 try {
-                Serialize.deleteCategory(Category);
-                
+                    Serialize.deleteCategory(category);
+                    System.out.println("Category deleted successfully");
+                } catch (IOException e) {
+                    System.out.println("Error deleting category: " + e.getMessage());
+                    e.printStackTrace();
                 }
-                catch (IOException e) {
-                    System.out.println("Error saving category: " + e.getMessage());
-    e.printStackTrace();
-                }
                 
+                // Reload admin page after deletion
                 List<Category> categories = Serialize.readAllCategories();
-                
                 for (Category cate : categories) {
-                 System.out.println(cate);
+                    System.out.println(cate);
                 }
-        loadadminPage(admingrid, primaryStage, adminScene, loginScene);
-        primaryStage.setScene(adminScene);
-
+                loadadminPage(admingrid, primaryStage, adminScene, loginScene);
+                primaryStage.setScene(adminScene);
+            } else {
+                // User clicked No, do nothing
+                System.out.println("Delete operation canceled");
             }
         });
+    }
+});
 
         
 
