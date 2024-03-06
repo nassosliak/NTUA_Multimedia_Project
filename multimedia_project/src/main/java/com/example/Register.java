@@ -78,34 +78,52 @@ public class Register {
         //registergrid.add(birthDatePicker, 1 ,7);
         final Text usernameempty = new Text();
         registergrid.add(usernameempty, 4, 2);
-        registergrid.setColumnSpan(usernameempty, 2);
         registergrid.setHalignment(usernameempty, RIGHT);
-        usernameempty.setId("usernameempty");
+
+        usernameempty.setId("usernameexists");
+
+        final Text emptypassword = new Text();
+        registergrid.add(emptypassword, 4, 3);
+        registergrid.setHalignment(emptypassword, RIGHT);
+        emptypassword.setId("usernameexists");
+
+        final Text firstnameinvalid = new Text();
+        registergrid.add(firstnameinvalid, 4, 4);
+        registergrid.setHalignment(firstnameinvalid, RIGHT);
+        firstnameinvalid.setId("usernameexists");
+        final Text lastnameinvalid = new Text();
+        registergrid.add(lastnameinvalid, 4, 5);
+        registergrid.setHalignment(lastnameinvalid, RIGHT);
+        lastnameinvalid.setId("usernameexists");
 
         final Text usernameexists = new Text();
         registergrid.add(usernameexists, 4, 2);
-        registergrid.setColumnSpan(usernameexists, 2);
         registergrid.setHalignment(usernameexists, RIGHT);
         usernameexists.setId("usernameexists");
 
         final Text emailexists = new Text();
-        registergrid.add(emailexists, 4, 5);
-        registergrid.setColumnSpan(emailexists, 2);
+        registergrid.add(emailexists, 4, 6);
+    
         registergrid.setHalignment(emailexists, RIGHT);
-        emailexists.setId("emailexists");
+        emailexists.setId("usernameexists");
 
         final Text invalidemail = new Text();
-        registergrid.add(invalidemail, 4, 5);
-        registergrid.setColumnSpan(invalidemail, 2);
-        registergrid.setHalignment(invalidemail, RIGHT);
-        invalidemail.setId("emailexists");
+        registergrid.add(invalidemail, 4, 6);
 
-        
+        registergrid.setHalignment(invalidemail, RIGHT);
+        invalidemail.setId("usernameexists");
+
         final Text idexists = new Text();
-        registergrid.add(idexists, 4, 6);
-        registergrid.setColumnSpan(idexists, 2);
+        registergrid.add(idexists, 4, 7);
+
         registergrid.setHalignment(idexists, RIGHT);
-        idexists.setId("idexists");
+        idexists.setId("usernameexists");
+
+        final Text idempty = new Text();
+        registergrid.add(idempty, 4, 7);
+
+        registergrid.setHalignment(idempty, RIGHT);
+        idempty.setId("usernameexists");
 
 
 
@@ -113,11 +131,15 @@ public class Register {
             
             @Override
             public void handle(ActionEvent s) {
+                firstnameinvalid.setText("");
                 usernameempty.setText("");
                 invalidemail.setText("");
                 emailexists.setText("");
                 usernameexists.setText("");
                 idexists.setText("");
+                emptypassword.setText("");
+                lastnameinvalid.setText("");
+                idempty.setText("");
                 List<User> users = Serialize.readAllUsers();
                 String username;
                 username=usernamefield.getText();
@@ -141,15 +163,42 @@ public class Register {
                 if(username.equals("")) {
                     isvaliddata=false;
                     usernameempty.setFill(Color.FIREBRICK);
-                    usernameempty.setText("Please Input a Username");
+                    usernameempty.setText("Please Enter a Username");
                 }
+
+                if(password.equals("")) {
+                    isvaliddata=false;
+                    emptypassword.setFill(Color.FIREBRICK);
+                    emptypassword.setText("Please Enter a Passoword");
+                }
+
                 if(!(email).contains("@")) {
                     System.out.println("invalid email");
                     invalidemail.setFill(Color.FIREBRICK);
-                    invalidemail.setText("Invalid Email");
+                    invalidemail.setText("Invalid Email (Must contain @)");
                     isvaliddata=false;
                 }
-                
+
+                if(firstname.equals("") || firstname.matches(".*\\d.*")) {
+                    System.out.println("invalid firstname");
+                    firstnameinvalid.setFill(Color.FIREBRICK);
+                    firstnameinvalid.setText("Invalid First Name (Make sure it does not contain numbers)");
+                    isvaliddata=false;
+                }
+
+                if(lastname.equals("") || lastname.matches(".*\\d.*")) {
+                    System.out.println("invalid firstname");
+                    lastnameinvalid.setFill(Color.FIREBRICK);
+                    lastnameinvalid.setText("Invalid Last Name (Make sure it does not contain numbers)");
+                    isvaliddata=false;
+                }
+                if(ID.equals("")) {
+                    System.out.println("invalid firstname");
+                    idempty.setFill(Color.FIREBRICK);
+                    idempty.setText("Please Enter a Valid Id");
+                    isvaliddata=false;
+                }
+                if(isvaliddata) {
                 for(User u:users) {
                     if(u.getusername().equals(username)) {
                         System.out.println("Username Exists");
@@ -179,6 +228,7 @@ public class Register {
                         break;
                     }
                 }
+            }
                 if(isvaliddata) {
                 User user = new User(firstname, lastname, username, password, email, ID,null);
                 System.out.println("Number of Users: "+user.getNumberofUsers());

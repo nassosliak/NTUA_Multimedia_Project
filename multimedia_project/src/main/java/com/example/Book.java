@@ -10,14 +10,14 @@ public class Book implements Serializable{
     private String Title;
     private String Writer;
     private String Publisher;
-    private int ISBN;
+    private String ISBN;
     private int Year_of_Publish;
     private String Category;
     public  int Number_of_Books;
     public List<Comment> bookcomments;
     public List<BookRating> bookratings;
-    Book(int ISBN) {this.ISBN=ISBN; this.bookcomments = new ArrayList<>(); this.bookratings=new ArrayList<>();}
-    Book(String Title,String Writer,String Publisher,int ISBN, int Year_of_Publish, String Category,int Number_of_Books) {
+    Book(String ISBN) {this.ISBN=ISBN; this.bookcomments = new ArrayList<>(); this.bookratings=new ArrayList<>();}
+    Book(String Title,String Writer,String Publisher,String ISBN, int Year_of_Publish, String Category,int Number_of_Books) {
         this.Title=Title;
         this.Writer=Writer;
         this.Publisher=Publisher;
@@ -38,7 +38,7 @@ public class Book implements Serializable{
     public String getPublisher() {
         return Publisher;
     }
-    public int getISBN() {
+    public String getISBN() {
         return ISBN;
     }
     public int getYear_of_Publish() {

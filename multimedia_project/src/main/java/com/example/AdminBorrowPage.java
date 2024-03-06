@@ -38,7 +38,7 @@ public class AdminBorrowPage {
                 VBox userVBox = new VBox(); // Create a VBox for each user
                 for (int i = 0; i < user.getBorrowedBooks().size(); i++) {
                     Text bookText = new Text(
-                            Integer.toString(user.getBorrowedBooks().get(i).getISBN()) +
+                            user.getBorrowedBooks().get(i).getISBN() +
                                     " and has to be returned at " +
                                     user.getBorrowingDates().get(i)
                     );
@@ -76,7 +76,7 @@ public class AdminBorrowPage {
         GridPane handleUserGrid = new GridPane();
         for(int i=0; i<user.number_of_borrowed_books(); i++) {
             final int key = i;
-            Text c = new Text(Integer.toString(user.getBorrowedBooks().get(i).getISBN()) +
+            Text c = new Text((user.getBorrowedBooks().get(i).getISBN()) +
             " Return date: " +
             user.getBorrowingDates().get(i));
             Button adminpagenavButton = new Button();

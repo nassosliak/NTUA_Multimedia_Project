@@ -47,7 +47,7 @@ public class MyBooksPage {
             VBox bookContainer = new VBox(); // VBox for each book
             Label booktitleLabel = new Label("Title: "+ book.getTitle());
             Label bookwriterLabel = new Label("Writer: "+ book.getWriter());
-            Label bookisbnLabel = new Label("ISBN: " + Integer.toString(book.getISBN()));
+            Label bookisbnLabel = new Label("ISBN: " + (book.getISBN()));
             String avgRatingText = String.format("%.2f", book.averagerating());
             Label bookavgratingLabel = new Label("User Rating: "+ avgRatingText);
             Label totalratesLabel = new Label("Total Ratings:"  + Integer.toString(book.gettotalratings()));

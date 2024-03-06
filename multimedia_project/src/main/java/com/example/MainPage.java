@@ -42,6 +42,7 @@ List<Book> books=Serialize.readAllBooks();
 maingrid.getChildren().clear();
         if(currentUser!=null) {
         Text basic =new Text("Hi "+ currentUser.getusername());
+        basic.setId("mainpagetitle");
         maingrid.add(basic,2,1);
         }
         RadioButton checkBoxTitle = new RadioButton("Search by Title");

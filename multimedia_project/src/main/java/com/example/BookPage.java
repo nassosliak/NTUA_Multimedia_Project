@@ -30,6 +30,7 @@ import javafx.stage.Stage;
 
 public class BookPage {
     public static void loadbookpage(Book b,GridPane bookpagegrid, Stage primaryStage, User currentUser, GridPane maingrid, Scene loginscene, TextField searchbar, TextField searchbar_writer, TextField searchbar_year, Scene mainScene, Scene adminScene, Scene bookpageScene) {
+        //bookpagegrid.getChildren().clear();
         List<Book> books = Serialize.readAllBooks();
         Button mainpagenavButton = new Button();
         Image iconImage = new Image(MainPage.class.getResourceAsStream("resources/arrow_back_FILL0_wght400_GRAD0_opsz24.png"));
@@ -45,7 +46,7 @@ public class BookPage {
         bookpagegrid.add(booktextpublisher,1,2);
         Text booktextcategory= new Text("Category: " + b.getCategory());
         bookpagegrid.add(booktextcategory,1,3);
-        Text booktextisbn= new Text("ISBN: "+Integer.toString(b.getISBN()));
+        Text booktextisbn= new Text("ISBN: "+(b.getISBN()));
         bookpagegrid.add(booktextisbn,1,4);
         Text booktextyear= new Text("Year of Publish: "+Integer.toString(b.getYear_of_Publish()));
         bookpagegrid.add(booktextyear,1,5);
@@ -174,10 +175,9 @@ break;
         Image iconImage3 = new Image(MainPage.class.getResourceAsStream("resources/arrow_back_FILL0_wght400_GRAD0_opsz24.png"));
         bookpagenavButton2.setGraphic(new ImageView(iconImage3));
         bookpagenavButton2.getStyleClass().add("bookpagenavButton");
-        ratinggrid.add(bookpagenavButton2,0,0);
+        editbookgrid.add(bookpagenavButton2,0,0);
         Text editbookpagetitle=new Text("Edit book Page");
         editbookgrid.add(editbookpagetitle,2,1);
-        
         
         TextField editbooktitle = new TextField(b.getTitle());
         editbookgrid.add(editbooktitle,2,4);
@@ -187,10 +187,10 @@ break;
  
         TextField editbookpublisher = new TextField(b.getPublisher());
         editbookgrid.add(editbookpublisher,2,8);
-        TextField editbookisbn = new TextField(Integer.toString(b.getISBN()));
+        Text editbookisbn = new Text((b.getISBN()));
         editbookgrid.add(editbookisbn,2,10);
  
-        TextField editbook_year_of_publish = new TextField(b.getPublisher());
+        TextField editbook_year_of_publish = new TextField(Integer.toString(b.getYear_of_Publish()));
         editbookgrid.add(editbook_year_of_publish,2,11);
         ComboBox<String> comboBox = new ComboBox<>();
         List<Category> categories = Serialize.readAllCategories();
@@ -208,7 +208,44 @@ break;
          editbookgrid.add(editnumberofbooksfield,2,16);
          Button editbookButton = new Button("Edit Book");
          editbookgrid.add(editbookButton,3,4);
-         
+         final Text nullcategory = new Text("");
+         editbookgrid.add(nullcategory, 4, 14);
+         editbookgrid.setColumnSpan(nullcategory, 2);
+         editbookgrid.setHalignment(nullcategory, RIGHT);
+        nullcategory.setId("nullcategory");
+        
+        final Text invalidyear = new Text("");
+        editbookgrid.add(invalidyear, 4, 12);
+
+        editbookgrid.setHalignment(invalidyear, RIGHT);
+        invalidyear.setId("invalidyear");
+
+        final Text invalidisbn = new Text("");
+        editbookgrid.add(invalidisbn, 4, 10);
+
+        editbookgrid.setHalignment(invalidisbn, RIGHT);
+        editbookgrid.setId("invalidisbn");
+
+        final Text invalidbooks = new Text("");
+        editbookgrid.add(invalidbooks, 4, 16);
+
+        editbookgrid.setHalignment(invalidbooks, RIGHT);
+        invalidbooks.setId("invalidbooks");
+
+        final Text emptytitle = new Text();
+        editbookgrid.add(emptytitle, 7, 8);
+        editbookgrid.setHalignment(emptytitle, RIGHT);
+        emptytitle.setId("lendlimit");
+
+        final Text emptywriter = new Text();
+        editbookgrid.add(emptywriter, 7, 9);
+        editbookgrid.setHalignment(emptywriter, RIGHT);
+        emptywriter.setId("lendlimit");
+
+        final Text emptypublisher = new Text();
+        editbookgrid.add(emptypublisher, 7, 6);
+        editbookgrid.setHalignment(emptypublisher, RIGHT);
+        emptypublisher.setId("lendlimit");
          Scene editbookScene = new Scene(editbookgrid, 1000, 500);
          editbookScene.getStylesheets().add(App.class.getResource("styles.css").toExternalForm());
         addcommentButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -307,7 +344,7 @@ break;
                         } catch (IOException e) {
                             // TODO Auto-generated catch block
                             e.printStackTrace();
-                        }                
+                        }
                 
                 System.out.println("Rating added from "+ currentUser.getusername()+' '+bookrating);
                 MainPage.updateMainGrid(maingrid,books,primaryStage,loginscene,currentUser,searchbar,searchbar_writer,searchbar_year,mainScene,adminScene);
@@ -319,7 +356,7 @@ break;
             @Override
             public void handle(ActionEvent s) {
                 
-                int ISBN;
+                String ISBN;
                 ISBN=(b.getISBN());
                 System.out.println(ISBN);
                 try {
@@ -338,15 +375,12 @@ break;
                 }
         AdminPage.loadadminPage(maingrid, primaryStage, adminScene, loginscene);
         primaryStage.setScene(adminScene);
-
-            }
+          }
         });
         editButton.setOnAction(new EventHandler<ActionEvent>() {
 
             @Override
             public void handle(ActionEvent a) {
-                
-         
 
                 primaryStage.setScene(editbookScene);
             }
@@ -391,30 +425,99 @@ break;
             @Override
             public void handle(ActionEvent s) {
 
-                String bookTitle;
-                bookTitle=editbooktitle.getText();
-                System.out.println(bookTitle);
-                String bookWriter;
-                bookWriter=editbookwriter.getText();
-                System.out.println(bookWriter);
-                String bookPublisher;
-                bookPublisher=editbookpublisher.getText();
-                System.out.println(bookPublisher);
-                int bookISBN;
-                bookISBN=Integer.parseInt(editbookisbn.getText());
-                System.out.println(bookISBN);
-                int year_of_publish;
-                year_of_publish=Integer.parseInt(editbook_year_of_publish.getText());
-                System.out.println(year_of_publish);
+
+              
+                
+                int year_of_publish=0;
                 String bookCategory;
                 bookCategory=comboBox.getValue();
                 System.out.println(bookCategory);
-                int numberofbooks;
-                numberofbooks=Integer.parseInt(editnumberofbooksfield.getText());
-                System.out.println(numberofbooks);
+                
+                
+                
+                boolean valid=true;
+                
+                
                 
                 try {
-                Serialize.editBook(b.getISBN(), bookTitle, bookPublisher, bookWriter, year_of_publish, bookCategory,numberofbooks);
+                    year_of_publish = Integer.parseInt(editbook_year_of_publish.getText());
+                    if (year_of_publish < 0 || year_of_publish > 2024) {
+                        invalidyear.setFill(Color.FIREBRICK);
+                        invalidyear.setText("Invalid Year of Publish");
+                        valid = false;
+                    }
+                    else {
+                        invalidyear.setText("");
+                    }
+                } catch (NumberFormatException e) {
+                    invalidyear.setFill(Color.FIREBRICK);
+                    invalidyear.setText("Invalid Year of Publish");
+                    valid = false;
+                }
+                
+                System.out.println(year_of_publish);
+                if(editbooktitle.getText().equals("")) {
+                    emptytitle.setFill(Color.FIREBRICK);
+                    emptytitle.setText("Please Enter a Book Title");
+                    valid=false;
+                    
+                }
+                else {
+                    emptytitle.setText("");
+                }
+
+                if(editbookwriter.getText().equals("")) {
+                    emptywriter.setFill(Color.FIREBRICK);
+                    emptywriter.setText("Please Enter a Writer");
+                    valid=false;
+                    
+                }
+                else {
+                    emptywriter.setText("");
+                }
+
+                if(editbookpublisher.getText().equals("")) {
+                    emptypublisher.setFill(Color.FIREBRICK);
+                    emptypublisher.setText("Please Enter a Publisher");
+                    valid=false;
+                    
+                }
+                else {
+
+                    emptypublisher.setText("");
+                }
+
+                bookCategory=comboBox.getValue();
+                if(bookCategory==(null)) {
+                    nullcategory.setFill(Color.FIREBRICK);
+                    nullcategory.setText("Please Create a Category First");
+                    valid=false;
+                }
+                else {
+                    nullcategory.setText("");
+                }
+                System.out.println(bookCategory);
+                int numberofbooks=0;
+                try {
+                numberofbooks=Integer.parseInt(editnumberofbooksfield.getText());
+                if(numberofbooks<0) {
+                    invalidbooks.setFill(Color.FIREBRICK);
+                    invalidbooks.setText("Please Enter a Valid Number of Books");
+                    valid=false;
+                }
+                else {
+                    invalidbooks.setText("");
+                }
+                }
+                catch (NumberFormatException e){
+                    invalidbooks.setFill(Color.FIREBRICK);
+                    invalidbooks.setText("Please Enter a Valid Number of Books");
+                    valid=false;
+                }
+                System.out.println(numberofbooks);
+                if(valid) {
+                try {
+                Serialize.editBook(b.getISBN(), editbooktitle.getText(), editbookwriter.getText(), editbookpublisher.getText(), year_of_publish, bookCategory,numberofbooks);
                 System.out.println("Book editted succesfully");
                 }
                 catch (IOException e) {
@@ -429,7 +532,7 @@ break;
                             if (borrowedBook.getISBN() == b.getISBN()) {
                                 System.out.println("removed "+u.borrowedbooks.get(i));
                                 u.borrowedbooks.remove(i);
-                                Book newbook = new Book(bookTitle, bookWriter, bookPublisher,b.getISBN(), year_of_publish, bookCategory,numberofbooks);
+                                Book newbook = new Book(editbooktitle.getText(), editbookwriter.getText(), editbookpublisher.getText(),b.getISBN(), year_of_publish, bookCategory,numberofbooks);
                                 u.borrowedbooks.add(newbook);
                                 System.out.println("added "+u.getBorrowedBooks());
                                 break;
@@ -445,6 +548,10 @@ break;
         AdminPage.loadadminPage(maingrid, primaryStage, adminScene, loginscene);
         primaryStage.setScene(adminScene);
             }
+            else {
+                AdminPage.loadadminPage(maingrid, primaryStage, adminScene, loginscene);
+            }
+        }
         });
         lendbookButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -503,13 +610,15 @@ break;
                                     unavbooks.setFill(Color.FIREBRICK);
                                     unavbooks.setText("Sorry this book is out of copies");
                                     avbooks=false;
+                                    return;
+                                    
                                 }
                                 } else {
                                     System.out.println("Borrow limit Reached(2)");
                                     lendlimit.setFill(Color.FIREBRICK);
                                     lendlimit.setText("Borrow limit Reached (2)");
                                     limitreached=true;
-                                    break;
+                                    return;
                                 }
                                 loadbookpage(b, bookpagegrid, primaryStage, currentUser, maingrid, loginscene, searchbar, searchbar_writer, searchbar_year, mainScene,adminScene,bookpageScene);
                                 break;

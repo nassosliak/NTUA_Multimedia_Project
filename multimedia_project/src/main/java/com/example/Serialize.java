@@ -70,7 +70,7 @@ public static void writeAllBooks(List<Book> books) throws IOException {
     }
 }
 
-public static void deleteBook(int ISBN) throws IOException {
+public static void deleteBook(String ISBN) throws IOException {
     // Read all categories from the file
     List<Book> books = Serialize.readAllBooks();
 
@@ -110,7 +110,7 @@ public static void deleteBook(int ISBN) throws IOException {
             }
         }
         }
-        if (b.getISBN()==(ISBN)) {
+        if (b.getISBN().equals(ISBN)) {
             
             iterator.remove();
             System.out.println("Book deleted successfully: " + ISBN);
@@ -121,13 +121,13 @@ public static void deleteBook(int ISBN) throws IOException {
     Serialize.writeAllBooks(books);
 }
 
-public static void editBook(int ISBN, String title, String Publisher, String Writer,int year_of_publish, String Category,int numberofbooks) throws IOException {
+public static void editBook(String ISBN, String title, String Publisher, String Writer,int year_of_publish, String Category,int numberofbooks) throws IOException {
     // Read all categories from the file
     List<Book> books = Serialize.readAllBooks();
 
     // Iterate through the categories to find the one to edit
     for (Book b : books) {
-        if (b.getISBN()==(ISBN)) {
+        if (b.getISBN().equals(ISBN)) {
             b.setTitle(title);
             b.setCategory(Category);
             b.setWriter(Writer);

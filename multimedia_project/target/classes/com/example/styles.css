@@ -56,12 +56,12 @@
     
 }
 #usernameexists {
-    -fx-fill: FIREBRICK; /* Red fill color */
+    -fx-fill: Red;
     -fx-font-weight: bold;
-    -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 0.5), 0, 0, 0, 1); /* White drop shadow effect */
+  
 }
 #emailexists {
-    -fx-fill: FIREBRICK;
+    -fx-fill: rgb(255, 0, 0);
     -fx-font-weight: bold;
     -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 0.5), 0, 0, 0, 1); /* White drop shadow effect */
 }
@@ -83,12 +83,16 @@
 #booktexttitle{
     -fx-font-size: 16px;
 }
+#mainpagetitle {
+    -fx-font-size: 16px;
+    -fx-font-family: "Roboto";
+}
 #title_admin {
     -fx-font-size: 18px;
 }
 .button {
     -fx-background-color: linear-gradient(to bottom, #dddddd, #bbbbbb);
-    -fx-background-radius: 30;
+    -fx-background-radius: 15;
     -fx-border-radius: 5;
     -fx-text-fill: black;
     -fx-font-size: 13px;

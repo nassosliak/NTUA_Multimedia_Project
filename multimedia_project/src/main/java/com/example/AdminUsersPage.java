@@ -42,10 +42,11 @@ public class AdminUsersPage {
                 continue;
             }
             VBox userVBox = new VBox();
-            Text userText = new Text("User: " + u.getusername() + "\n");
+            Text userText = new Text("Username: " + u.getusername() + "\n"+
+            "First Name: "+ u.getfirstname()+ "\n"+ "Last Name: "+u.getlastname()+"\n"+ "Email: "+ u.getemail()+ "\n"+"ID: " + u.getID());
             //adminusersgrid.add(userText, 1, rowindex);
-            Text userfirstnameText = new Text("First Name: " + u.getfirstname() + "\n");
-            userVBox.getChildren().addAll(userText,userfirstnameText);
+            //Text userfirstnameText = new Text("First Name: " + u.getfirstname() + "\n");
+            userVBox.getChildren().addAll(userText);
             //adminusersgrid.add(userVBox, 1, rowindex);
             rowindex+=2;
             
@@ -74,29 +75,54 @@ public class AdminUsersPage {
             editusergrid.add(editIDField, 1, 6);
             Button edituserdataButton = new Button("Edit User");
             editusergrid.add(edituserdataButton, 3, 4);
-            final Text usernameexists = new Text();
-            editusergrid.add(usernameexists, 4, 1);
-            editusergrid.setColumnSpan(usernameexists, 2);
-            editusergrid.setHalignment(usernameexists, RIGHT);
-            usernameexists.setId("usernameexists");
+            final Text usernameempty = new Text();
+            editusergrid.add(usernameempty, 4, 2);
+            editusergrid.setHalignment(usernameempty, RIGHT);
 
-            final Text emailexists = new Text();
-            editusergrid.add(emailexists, 4, 5);
-            editusergrid.setColumnSpan(emailexists, 2);
-            editusergrid.setHalignment(emailexists, RIGHT);
-            emailexists.setId("emailexists");
+        usernameempty.setId("usernameexists");
 
-            final Text idexists = new Text();
-            editusergrid.add(idexists, 4, 6);
-            editusergrid.setColumnSpan(idexists, 2);
-            editusergrid.setHalignment(idexists, RIGHT);
-            idexists.setId("idexists");
+        final Text emptypassword = new Text();
+        editusergrid.add(emptypassword, 4, 3);
+        editusergrid.setHalignment(emptypassword, RIGHT);
+        emptypassword.setId("usernameexists");
 
-            final Text invalidemail = new Text();
-            editusergrid.add(invalidemail, 4, 5);
-            editusergrid.setColumnSpan(invalidemail, 2);
-            editusergrid.setHalignment(invalidemail, RIGHT);
-            invalidemail.setId("invalidemail");
+        final Text firstnameinvalid = new Text();
+        editusergrid.add(firstnameinvalid, 4, 4);
+        editusergrid.setHalignment(firstnameinvalid, RIGHT);
+        firstnameinvalid.setId("usernameexists");
+        final Text lastnameinvalid = new Text();
+        editusergrid.add(lastnameinvalid, 4, 5);
+        editusergrid.setHalignment(lastnameinvalid, RIGHT);
+        lastnameinvalid.setId("usernameexists");
+
+        final Text usernameexists = new Text();
+        editusergrid.add(usernameexists, 4, 2);
+        editusergrid.setHalignment(usernameexists, RIGHT);
+        usernameexists.setId("usernameexists");
+
+        final Text emailexists = new Text();
+        editusergrid.add(emailexists, 4, 6);
+    
+        editusergrid.setHalignment(emailexists, RIGHT);
+        emailexists.setId("usernameexists");
+
+        final Text invalidemail = new Text();
+        editusergrid.add(invalidemail, 4, 6);
+
+        editusergrid.setHalignment(invalidemail, RIGHT);
+        invalidemail.setId("usernameexists");
+
+        final Text idexists = new Text();
+        editusergrid.add(idexists, 4, 7);
+
+        editusergrid.setHalignment(idexists, RIGHT);
+        idexists.setId("usernameexists");
+
+        final Text idempty = new Text();
+        editusergrid.add(idempty, 4, 7);
+
+        editusergrid.setHalignment(idempty, RIGHT);
+        idempty.setId("usernameexists");
 
             Scene edituserscene = new Scene(editusergrid, 1000, 500);
             edituserscene.getStylesheets().add(App.class.getResource("styles.css").toExternalForm());
@@ -125,7 +151,8 @@ public class AdminUsersPage {
                     adminuserspageButton.setGraphic(new ImageView(iconImage3));
                     adminuserspageButton.getStyleClass().add("mainpagenavButton");
                     adminusergrid.add(adminuserspageButton, 0, 0);
-                    Text username = new Text(u.getusername());
+                    Text username = new Text("Username: " + u.getusername() + "\n"+
+                    "First Name: "+ u.getfirstname()+ "\n"+ "Last Name: "+u.getlastname()+"\n"+ "Email: "+ u.getemail()+ "\n"+"ID: " + u.getID());
                     adminusergrid.add(username, 0, 2);
                     Button deleteuserButton = new Button("Delete User");
                     adminusergrid.add(deleteuserButton, 1, 5);
@@ -168,46 +195,55 @@ public class AdminUsersPage {
             edituserdataButton.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent s) {
-                    boolean isvalid = true;
-                    invalidemail.setText("");
-                    emailexists.setText("");
-                    usernameexists.setText("");
-                    idexists.setText("");
+                    boolean isvaliddata = true;
+                    firstnameinvalid.setText("");
+                usernameempty.setText("");
+                invalidemail.setText("");
+                emailexists.setText("");
+                usernameexists.setText("");
+                idexists.setText("");
+                emptypassword.setText("");
+                lastnameinvalid.setText("");
+                idempty.setText("");
                     List<User> users = Serialize.readAllUsers();
-                    if (!(editemailField.getText()).contains("@")) {
+                    
+                    if(editusernamefield.getText().equals("")) {
+                        isvaliddata=false;
+                        usernameempty.setFill(Color.FIREBRICK);
+                        usernameempty.setText("Please Enter a Username");
+                    }
+    
+                    if(editpasswordfield.equals("")) {
+                        isvaliddata=false;
+                        emptypassword.setFill(Color.FIREBRICK);
+                        emptypassword.setText("Please Enter a Passoword");
+                    }
+    
+                    if(!(editemailField).getText().contains("@")) {
                         System.out.println("invalid email");
                         invalidemail.setFill(Color.FIREBRICK);
-                        invalidemail.setText("Invalid Email");
-                        isvalid = false;
+                        invalidemail.setText("Invalid Email (Must contain @)");
+                        isvaliddata=false;
                     }
-
-                    for (User us : users) {
-                        if(us.getusername().equals(u.getusername())) {continue;}
-                        if (us.getusername().equals(editusernamefield.getText())) {
-                            System.out.println("Username Exists");
-                            usernameexists.setFill(Color.FIREBRICK);
-                            usernameexists.setText("Username Exists");
-                            isvalid = false;
-                            break;
-                        } else {
-                            usernameexists.setText("");
-                        }
-                        if (us.getemail().equals(editemailField.getText())) {
-                            System.out.println("Email Exists");
-                            emailexists.setFill(Color.FIREBRICK);
-                            emailexists.setText("Email Exists");
-                            isvalid = false;
-                            break;
-                        } else {
-                            emailexists.setText("");
-                        }
-                        if (us.getID().equals(editIDField.getText())) {
-                            System.out.println("ID Exists");
-                            idexists.setFill(Color.FIREBRICK);
-                            idexists.setText("ID Exists");
-                            isvalid = false;
-                            break;
-                        }
+    
+                    if(editfirstnamefield.getText().equals("") || editfirstnamefield.getText().matches(".*\\d.*")) {
+                        System.out.println("invalid firstname");
+                        firstnameinvalid.setFill(Color.FIREBRICK);
+                        firstnameinvalid.setText("Invalid First Name (Make sure it does not contain numbers)");
+                        isvaliddata=false;
+                    }
+    
+                    if(editlastnamefield.getText().equals("") || editlastnamefield.getText().matches(".*\\d.*")) {
+                        System.out.println("invalid firstname");
+                        lastnameinvalid.setFill(Color.FIREBRICK);
+                        lastnameinvalid.setText("Invalid Last Name (Make sure it does not contain numbers)");
+                        isvaliddata=false;
+                    }
+                    if(editIDField.getText().equals("")) {
+                        System.out.println("invalid firstname");
+                        idempty.setFill(Color.FIREBRICK);
+                        idempty.setText("Please Enter a Valid Id");
+                        isvaliddata=false;
                     }
                     for (User user : users) {
                         if (user.getusername().equals(u.getusername())) {
@@ -219,7 +255,40 @@ public class AdminUsersPage {
                             user.setId(editIDField.getText());
                         }
                     }
-                    if (isvalid) {
+                    if(isvaliddata) {
+                    for(User user:users) {
+                        if(user.getusername().equals(u.getusername())) {continue;}
+                        if(user.getID().equals(u.getID())) {continue;}
+                        if(user.getusername().equals(editusernamefield.getText())) {
+                            System.out.println("Username Exists");
+                            usernameexists.setFill(Color.FIREBRICK);
+                            usernameexists.setText("Username Exists");
+                            isvaliddata=false;
+                            break;
+                        }
+                        else {
+                            usernameexists.setText("");
+                        }
+                        if(user.getemail().equals(editemailField.getText())) {
+                            System.out.println("Email Exists");
+                            emailexists.setFill(Color.FIREBRICK);
+                            emailexists.setText("Email Exists");
+                            isvaliddata=false;
+                            break;
+                        }
+                        else{
+                            emailexists.setText("");
+                        }
+                        if(user.getID().equals(editIDField.getText())) {
+                            System.out.println("ID Exists");
+                            idexists.setFill(Color.FIREBRICK);
+                            idexists.setText("ID Exists");
+                            isvaliddata=false;
+                            break;
+                        }
+                    }
+                }
+                    if (isvaliddata) {
                         try {
                             Serialize.writeAllUsers(users);
                             System.out.println("User edited successfully");

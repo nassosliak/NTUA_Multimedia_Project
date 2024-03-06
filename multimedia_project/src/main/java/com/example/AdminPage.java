@@ -153,21 +153,44 @@ public class AdminPage {
         
         final Text invalidyear = new Text("");
         addbookgrid.add(invalidyear, 4, 12);
-        addbookgrid.setColumnSpan(invalidyear, 2);
+
         addbookgrid.setHalignment(invalidyear, RIGHT);
         invalidyear.setId("invalidyear");
 
         final Text invalidisbn = new Text("");
         addbookgrid.add(invalidisbn, 4, 10);
-        addbookgrid.setColumnSpan(invalidisbn, 2);
+
         addbookgrid.setHalignment(invalidisbn, RIGHT);
         invalidisbn.setId("invalidisbn");
 
+        final Text isbnexists = new Text("");
+        addbookgrid.add(isbnexists, 4, 10);
+
+        addbookgrid.setHalignment(isbnexists, RIGHT);
+        isbnexists.setId("invalidisbn");
+
         final Text invalidbooks = new Text("");
         addbookgrid.add(invalidbooks, 4, 16);
-        addbookgrid.setColumnSpan(invalidbooks, 2);
+
         addbookgrid.setHalignment(invalidbooks, RIGHT);
         invalidbooks.setId("invalidbooks");
+
+        final Text emptytitle = new Text();
+        addbookgrid.add(emptytitle, 7, 8);
+        addbookgrid.setHalignment(emptytitle, RIGHT);
+        emptytitle.setId("lendlimit");
+
+        final Text emptywriter = new Text();
+        addbookgrid.add(emptywriter, 7, 9);
+        addbookgrid.setHalignment(emptywriter, RIGHT);
+        emptywriter.setId("lendlimit");
+
+        final Text emptypublisher = new Text();
+        addbookgrid.add(emptypublisher, 7, 6);
+        addbookgrid.setHalignment(emptypublisher, RIGHT);
+        emptypublisher.setId("lendlimit");
+
+       
 
         Scene addbookScene = new Scene(addbookgrid, 1000, 500);
         addbookScene.getStylesheets().add(App.class.getResource("styles.css").toExternalForm());
@@ -443,9 +466,32 @@ VBox root = new VBox();
                 String bookPublisher;
                 bookPublisher=bookpublisher.getText();
                 System.out.println(bookPublisher);
-                int bookISBN;
-                bookISBN=Integer.parseInt(bookisbn.getText());
+                String bookISBN;
+                
+                bookISBN=bookisbn.getText();
+                String isbnText = bookisbn.getText();
+                if (isbnText.isEmpty() || !isbnText.matches(".*\\d.*") || !isbnText.contains("-")) {
+                    invalidisbn.setText("Invalid ISBN Format");
+                    invalidisbn.setFill(Color.FIREBRICK);
+                    valid = false;
+                }
+                else {
+                    invalidisbn.setText("");
+                }
                 System.out.println(bookISBN);
+                boolean validisbn=true;
+                for(Book b: books) {
+                    if(b.getISBN().equals(isbnText)) {
+                    isbnexists.setText("ISBN exists");
+                    isbnexists.setFill(Color.FIREBRICK);
+                    valid = false;
+                    validisbn=false;
+                    break;
+                    }
+                }
+                if(validisbn) {
+                isbnexists.setText("");
+                }
                 int year_of_publish=0;
                 try {
                     year_of_publish = Integer.parseInt(book_year_of_publish.getText());
@@ -465,6 +511,37 @@ VBox root = new VBox();
                 
                 System.out.println(year_of_publish);
                 String bookCategory;
+                if(booktitle.getText().equals("")) {
+                    emptytitle.setFill(Color.FIREBRICK);
+                    emptytitle.setText("Please Enter a Book Title");
+                    valid=false;
+                    
+                }
+                else {
+                    emptytitle.setText("");
+                }
+
+                if(bookwriter.getText().equals("")) {
+                    emptywriter.setFill(Color.FIREBRICK);
+                    emptywriter.setText("Please Enter a Writer");
+                    valid=false;
+                    
+                }
+                else {
+                    emptywriter.setText("");
+                }
+
+                if(bookpublisher.getText().equals("")) {
+                    emptypublisher.setFill(Color.FIREBRICK);
+                    emptypublisher.setText("Please Enter a Publisher");
+                    valid=false;
+                    
+                }
+                else {
+
+                    emptypublisher.setText("");
+                }
+
                 bookCategory=comboBox.getValue();
                 if(bookCategory==(null)) {
                     nullcategory.setFill(Color.FIREBRICK);
@@ -475,8 +552,23 @@ VBox root = new VBox();
                     nullcategory.setText("");
                 }
                 System.out.println(bookCategory);
-                int numberofbooks;
+                int numberofbooks=0;
+                try {
                 numberofbooks=Integer.parseInt(numberofbooksfield.getText());
+                if(numberofbooks<0) {
+                    invalidbooks.setFill(Color.FIREBRICK);
+                    invalidbooks.setText("Please Enter a Valid Number of Books");
+                    valid=false;
+                }
+                else {
+                    invalidbooks.setText("");
+                }
+                }
+                catch (NumberFormatException e){
+                    invalidbooks.setFill(Color.FIREBRICK);
+                    invalidbooks.setText("Please Enter a Valid Number of Books");
+                    valid=false;
+                }
                 System.out.println(numberofbooks);
                 if(valid) {
                 Book b = new Book(bookTitle, bookWriter, bookPublisher, bookISBN, year_of_publish, bookCategory,numberofbooks);
@@ -495,12 +587,11 @@ VBox root = new VBox();
                 loadadminPage(admingrid, primaryStage, adminScene,loginScene);
                 primaryStage.setScene(adminScene);
             }
+            else {
+                loadadminPage(admingrid, primaryStage, adminScene,loginScene);
+            }
             }
         });
-
-        
-
-        
 
         savecategoryButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
