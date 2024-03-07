@@ -17,6 +17,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
@@ -73,8 +74,18 @@ public class AdminPage {
             Text categoryText = new Text("Category: " + category);
             content.getChildren().add(categoryText);
             for (Book book : groupedBooks.get(category)) {
-                Text bookText = new Text("  Book Title: " + book.getTitle() + " ISBN: " + book.getISBN());
-                content.getChildren().add(bookText);
+                 Hyperlink bookLink = new Hyperlink("  Book Title: " + book.getTitle() + " ISBN: " + book.getISBN());
+        bookLink.setOnAction(e -> {
+            List<User> users = Serialize.readAllUsers();
+            User currentUser=Serialize.findUserByUsername(users, "Admin");
+            GridPane bookpagegrid = new GridPane();
+            Scene BookScene = new Scene(bookpagegrid, 1000, 500);
+            BookScene.getStylesheets().add(App.class.getResource("styles.css").toExternalForm());
+            BookPage.loadbookpage(book, bookpagegrid, primaryStage, currentUser, admingrid, loginScene, null, null, null, loginScene, adminScene, BookScene);
+            primaryStage.setScene(BookScene);
+            System.out.println("Clicked on book: " + book.getTitle());
+        });
+                content.getChildren().add(bookLink);
             }
         }
         List<Category> categories = Serialize.readAllCategories();
