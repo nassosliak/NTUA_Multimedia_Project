@@ -32,6 +32,7 @@ import javafx.stage.Stage;
 public class BookPage {
     public static void loadbookpage(Book b,GridPane bookpagegrid, Stage primaryStage, User currentUser, GridPane maingrid, Scene loginscene, TextField searchbar, TextField searchbar_writer, TextField searchbar_year, Scene mainScene, Scene adminScene, Scene bookpageScene) {
         //bookpagegrid.getChildren().clear();
+        bookpagegrid.setAlignment(Pos.CENTER);
         List<Book> books = Serialize.readAllBooks();
         Button mainpagenavButton = new Button();
         Image iconImage = new Image(MainPage.class.getResourceAsStream("resources/arrow_back_FILL0_wght400_GRAD0_opsz24.png"));
@@ -90,7 +91,7 @@ bookpagegrid.add(scrollPane, 1, 10);
         boolean bookcontained =false;
         if(currentUser.number_of_borrowed_books()!=0) {
         for(Book book: currentUser.getBorrowedBooks()) {
-            if(book.getISBN()==b.getISBN()) {
+            if(book.getISBN().equals(b.getISBN())) {
 bookcontained=true;
 break;
             }
@@ -579,7 +580,7 @@ break;
                         boolean avbooks=true;
                         if(currentUser!=null) {
                         for (Book book : books) {
-                            if(book.getISBN()==b.getISBN()) {
+                            if(book.getISBN().equals(b.getISBN())) {
                                                         
                                 bookFound = true;
                                 
@@ -588,14 +589,14 @@ break;
                                         currentUser.borrowedbooks= new ArrayList();
                                       }
                                         if(book.getNumberofBooks()>0) {
-                                            if(currentUser.getBorrowedBooks().size()==2 && (currentUser.borrowedbooks.get(0).getISBN()==book.getISBN() ||
-                                            currentUser.borrowedbooks.get(1).getISBN()==book.getISBN())) {
+                                            if(currentUser.getBorrowedBooks().size()==2 && (currentUser.borrowedbooks.get(0).getISBN().equals(book.getISBN()) ||
+                                            currentUser.borrowedbooks.get(1).getISBN().equals(book.getISBN()))) {
                                                 System.out.println("Book "+book.getISBN()+" already borrowed");
                                                 break;
                                             
                                         }
                                         if(currentUser.getBorrowedBooks().size()==1) {
-                                            if(currentUser.borrowedbooks.get(0).getISBN()==book.getISBN()) {
+                                            if(currentUser.borrowedbooks.get(0).getISBN().equals(book.getISBN())) {
                                                 System.out.println("Book "+book.getISBN()+" already borrowed");
                                                 break;
                                             }
@@ -673,7 +674,7 @@ break;
                         boolean bookFound = false;
                         if(currentUser!=null) {
                         for (Book book : books) {
-                            if(book.getISBN()==b.getISBN()) {
+                            if(book.getISBN().equals(b.getISBN())) {
                                 bookFound = true;
                                 
                                 if (currentUser.getBorrowedBooks().size() <= 2 && currentUser.number_of_borrowed_books() > 0 ) {

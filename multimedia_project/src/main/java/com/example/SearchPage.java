@@ -30,7 +30,7 @@ public class SearchPage {
 
     public static void loadsearchPage(TextField searchbar, TextField searchbar_writer, TextField searchbar_year,Stage primaryStage,VBox root,User currentUser,GridPane maingrid, Scene loginscene, Scene mainScene, TextField isbnfield, Scene adminScene) {
        //search page
-        // Create a VBox to hold the content for the search section
+
         root.getChildren().clear();
         VBox searchContent = new VBox();
         List<Book> books = Serialize.readAllBooks();
@@ -119,7 +119,7 @@ public class SearchPage {
                 //book page
 
  GridPane bookpagegrid = new GridPane();
- Scene bookpageScene = new Scene(bookpagegrid, 1000, 500);
+ Scene bookpageScene = new Scene(bookpagegrid, 1400, 700);
  
  BookPage.loadbookpage(book,bookpagegrid,primaryStage,currentUser,maingrid,loginscene,searchbar,searchbar_writer,searchbar_year,mainScene,adminScene,bookpageScene);
 
@@ -139,7 +139,7 @@ public class SearchPage {
         ScrollPane searchScrollPane = new ScrollPane(searchContent);
         searchScrollPane.setFitToHeight(true);
         searchScrollPane.setPrefViewportHeight(400);
-        searchScrollPane.setPrefViewportWidth(500);
+        searchScrollPane.setPrefViewportWidth(300);
         Button mainpagenavButton = new Button();
         Image iconImage = new Image(MainPage.class.getResourceAsStream("resources/arrow_back_FILL0_wght400_GRAD0_opsz24.png"));
         mainpagenavButton.setGraphic(new ImageView(iconImage));

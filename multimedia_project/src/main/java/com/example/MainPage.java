@@ -5,6 +5,7 @@ import java.util.List;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -43,8 +44,11 @@ maingrid.getChildren().clear();
         if(currentUser!=null) {
         Text basic =new Text("Hi "+ currentUser.getusername());
         basic.setId("mainpagetitle");
-        maingrid.add(basic,2,1);
+        maingrid.add(basic,0,1);
         }
+        Text title = new Text("Library");
+        title.setId("title");
+        maingrid.add(title,0,0);
         RadioButton checkBoxTitle = new RadioButton("Search by Title");
         RadioButton checkBoxWriter = new RadioButton("Search by Writer");
         RadioButton checkBoxYear = new RadioButton("Search by Year");
@@ -53,13 +57,17 @@ maingrid.getChildren().clear();
         checkBoxTitle.setOnAction(e -> toggleTextField(maingrid, 2, checkBoxTitle.isSelected(), searchbar));
         checkBoxWriter.setOnAction(e -> toggleTextField(maingrid, 3,checkBoxWriter.isSelected(), searchbar_writer));
         checkBoxYear.setOnAction(e -> toggleTextField(maingrid, 4,checkBoxYear.isSelected(), searchbar_year));
-
+        GridPane.setMargin(checkBoxTitle, new Insets(10, 10, 10, 10)); // Adjust the insets as needed
+GridPane.setMargin(checkBoxWriter, new Insets(10, 10, 10, 10));
+GridPane.setMargin(checkBoxYear, new Insets(10, 10, 10, 10));
         maingrid.add(checkBoxTitle,0,2);
         maingrid.add(checkBoxWriter,0,3);
         maingrid.add(checkBoxYear,0,4);
     
-
-    
+        Text top = new Text("Top Rated Books");
+        maingrid.add(top,0,5);
+        top.setId("top");
+        GridPane.setMargin(top, new Insets(10, 10, 10, 10));
         Button mybooksButton = new Button("My books");
         maingrid.add(mybooksButton,10,3);
         Text borrowdbooksText = new Text("Borrowed books");
@@ -80,7 +88,8 @@ maingrid.getChildren().clear();
         
 
       VBox root = new VBox();
-      Scene searchScene = new Scene(root, 1000, 500);
+      root.setAlignment(Pos.CENTER);
+      Scene searchScene = new Scene(root, 1400, 700);
       searchScene.getStylesheets().add(App.class.getResource("styles.css").toExternalForm());
 
 
@@ -90,7 +99,7 @@ maingrid.getChildren().clear();
         int rowcounter=0;
         MainPage mainPageInstance = new MainPage(); // Create an instance of MainPage
         Collections.sort(books, mainPageInstance.new BookRatingComparator());
-        VBox bookContainer = new VBox();
+        HBox bookContainer = new HBox();
 bookContainer.setSpacing(10);
         
         for (Book book : books) {
@@ -150,7 +159,8 @@ bookContainer.setSpacing(10);
 }
 ScrollPane scrollPane = new ScrollPane();
 scrollPane.setContent(bookContainer);
-scrollPane.setPrefWidth(300);
+scrollPane.setPrefWidth(600);
+scrollPane.setPrefHeight(250);
 maingrid.add(scrollPane, 0, 10);
         Button searchButton = new Button("Search");
         HBox hsearchButton = new HBox(10);
@@ -160,7 +170,7 @@ maingrid.add(scrollPane, 0, 10);
         //My books page
         GridPane mybooksgrid = new GridPane();
         
-        Scene mybooksScene = new Scene(mybooksgrid,1000,500);
+        Scene mybooksScene = new Scene(mybooksgrid,1400,700);
         mybooksScene.getStylesheets().add(App.class.getResource("styles.css").toExternalForm());
         MyBooksPage.loadmybookspage(currentUser,mybooksgrid,primaryStage,mybooksScene,loginscene,searchbar,searchbar_writer,searchbar_year,mainScene,maingrid,adminScene);
 

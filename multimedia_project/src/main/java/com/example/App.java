@@ -81,17 +81,18 @@ public class App extends Application {
         actiontarget.setId("actiontarget");
 
       
-        Scene loginscene = new Scene(grid, 1000, 500);
-        loginscene.getStylesheets().add(App.class.getResource("styles.css").toExternalForm());
+        Scene loginscene = new Scene(grid, 1400, 700);
+        loginscene.getStylesheets().add(App.class.getResource("login_styles.css").toExternalForm());
 
         //register page
         GridPane registergrid = new GridPane();
-        Scene registerscene = new Scene(registergrid, 1000, 500);
+        Scene registerscene = new Scene(registergrid, 1400, 700);
         registerscene.getStylesheets().add(App.class.getResource("styles.css").toExternalForm());
   
         //adminpage
         GridPane admingrid = new GridPane();
-        Scene adminScene = new Scene(admingrid, 1000, 500);
+        admingrid.setAlignment(Pos.CENTER);
+        Scene adminScene = new Scene(admingrid, 1400, 700);
         adminScene.getStylesheets().add(App.class.getResource("styles.css").toExternalForm());
         AdminPage.loadadminPage(admingrid,primaryStage,adminScene,loginscene);
 
@@ -99,11 +100,12 @@ public class App extends Application {
         GridPane maingrid = new GridPane();
         TextField searchbar =new TextField();
         maingrid.add(searchbar,1,2);
+        maingrid.setAlignment(Pos.CENTER);
         TextField searchbar_writer =new TextField();
         maingrid.add(searchbar_writer,1,3);
         TextField searchbar_year =new TextField();
         maingrid.add(searchbar_year,1,4);
-        Scene mainScene = new Scene(maingrid, 1000, 500);
+        Scene mainScene = new Scene(maingrid, 1400, 700);
         mainScene.getStylesheets().add(App.class.getResource("styles.css").toExternalForm());
         MainPage.updateMainGrid(maingrid, books, primaryStage, loginscene, currentUser, searchbar,searchbar_writer,searchbar_year, mainScene,adminScene);
         Register.loadregisterpage(registergrid, primaryStage, loginscene);

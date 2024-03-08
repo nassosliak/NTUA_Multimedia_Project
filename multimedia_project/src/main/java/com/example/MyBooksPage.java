@@ -71,7 +71,7 @@ public class MyBooksPage {
                 
 
                 GridPane bookpagegrid = new GridPane();
-                Scene bookpageScene = new Scene(bookpagegrid, 1000, 500);
+                Scene bookpageScene = new Scene(bookpagegrid, 1400, 700);
                 bookpageScene.getStylesheets().add(App.class.getResource("styles.css").toExternalForm());
  BookPage.loadbookpage(book,bookpagegrid,primaryStage,currentUser,maingrid,loginscene,searchbar,searchbar_writer,searchbar_year,mainScene,adminScene,bookpageScene);
  
