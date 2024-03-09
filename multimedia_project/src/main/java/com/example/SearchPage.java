@@ -137,9 +137,9 @@ public class SearchPage {
     }
         // Create a ScrollPane for the search section
         ScrollPane searchScrollPane = new ScrollPane(searchContent);
-        searchScrollPane.setFitToHeight(true);
-        searchScrollPane.setPrefViewportHeight(400);
-        searchScrollPane.setPrefViewportWidth(300);
+        searchScrollPane.setPrefHeight(400);
+        searchScrollPane.setPrefWidth(400);
+        
         Button mainpagenavButton = new Button();
         Image iconImage = new Image(MainPage.class.getResourceAsStream("resources/arrow_back_FILL0_wght400_GRAD0_opsz24.png"));
         mainpagenavButton.setGraphic(new ImageView(iconImage));
@@ -155,6 +155,9 @@ public class SearchPage {
                     primaryStage.setScene(adminScene);
                 }
                 else {
+            searchbar.setText("");
+            searchbar_writer.setText("");
+            searchbar_year.setText("");
             primaryStage.setScene(mainScene);
                 }
             }

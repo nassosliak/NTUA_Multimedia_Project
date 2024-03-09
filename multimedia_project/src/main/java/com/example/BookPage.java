@@ -151,7 +151,7 @@ break;
         
         Button publishcommentButton = new Button("Publish Comment");
         commentgrid.add(publishcommentButton,2,3);
-        Scene addcommentScene = new Scene(commentgrid, 1000, 500);
+        Scene addcommentScene = new Scene(commentgrid, 1400, 700);
         addcommentScene.getStylesheets().add(App.class.getResource("styles.css").toExternalForm());
 
         //add rating page
@@ -168,7 +168,7 @@ break;
         
         Button publishratingButton = new Button("Publish Rating");
         ratinggrid.add(publishratingButton,2,3);
-        Scene addratingScene = new Scene(ratinggrid, 1000, 500);
+        Scene addratingScene = new Scene(ratinggrid, 1400, 700);
         addratingScene.getStylesheets().add(App.class.getResource("styles.css").toExternalForm());
 
         //editbook page
@@ -248,7 +248,7 @@ break;
         editbookgrid.add(emptypublisher, 7, 6);
         editbookgrid.setHalignment(emptypublisher, RIGHT);
         emptypublisher.setId("lendlimit");
-         Scene editbookScene = new Scene(editbookgrid, 1000, 500);
+         Scene editbookScene = new Scene(editbookgrid, 1400, 700);
          editbookScene.getStylesheets().add(App.class.getResource("styles.css").toExternalForm());
         addcommentButton.setOnAction(new EventHandler<ActionEvent>() {
 
@@ -272,7 +272,7 @@ break;
             public void handle(ActionEvent a) {
                 
                 for(Book book:books) {
-                    if(book.getISBN()==b.getISBN()) {
+                    if(book.getISBN().equals(b.getISBN())) {
                         book.comment(currentUser.getusername(),commentfield.getText());
                         System.out.println("Book found");
                         newbook=book;
@@ -284,12 +284,12 @@ break;
                 if(u.number_of_borrowed_books()!=0) {
                     for (int i = 0; i < u.getBorrowedBooks().size(); i++) {
                         Book borrowedBook = u.borrowedbooks.get(i);
-                        if (borrowedBook.getISBN() == b.getISBN()) {
-                            //System.out.println("removed "+u.borrowedbooks.get(i));
+                        if (borrowedBook.getISBN().equals(b.getISBN())) {
+                            System.out.println("removed "+u.borrowedbooks.get(i));
                             u.borrowedbooks.remove(i);
                             
                             u.borrowedbooks.add(newbook);
-                            //System.out.println("added "+u.getBorrowedBooks());
+                            System.out.println("added "+u.getBorrowedBooks());
                             break;
                 }
             }}
@@ -305,6 +305,9 @@ break;
                     
                 
                 System.out.println("Comment added from "+ currentUser.getusername()+' '+commentfield.getText());
+                searchbar_writer.setText("");
+            searchbar_year.setText("");
+            searchbar.setText("");
                 loadbookpage(b, bookpagegrid, primaryStage, currentUser, maingrid, loginscene, searchbar, searchbar_writer, searchbar_year, mainScene, adminScene, bookpageScene);
                 MainPage.updateMainGrid(maingrid,books,primaryStage,loginscene,currentUser,searchbar,searchbar_writer,searchbar_year,mainScene,adminScene);
                 primaryStage.setScene(mainScene);
@@ -319,9 +322,10 @@ break;
                 int bookrating = spinner.getValue();
 
                 for(Book book:books) {
-                    if(book.getISBN()==b.getISBN()) {
+                    if(book.getISBN().equals(b.getISBN())) {
                         book.rate(currentUser.getusername(),bookrating);
                         System.out.println("Book found");
+                        newbook=book;
                         break;
                 }
             }
@@ -330,7 +334,7 @@ break;
                 if(u.number_of_borrowed_books()!=0) {
                     for (int i = 0; i < u.getBorrowedBooks().size(); i++) {
                         Book borrowedBook = u.borrowedbooks.get(i);
-                        if (borrowedBook.getISBN() == b.getISBN()) {
+                        if (borrowedBook.getISBN().equals(b.getISBN())) {
                             System.out.println("removed "+u.borrowedbooks.get(i));
                             u.borrowedbooks.remove(i);
                             u.borrowedbooks.add(newbook);
@@ -349,6 +353,9 @@ break;
                         }
                 
                 System.out.println("Rating added from "+ currentUser.getusername()+' '+bookrating);
+                searchbar_writer.setText("");
+            searchbar_year.setText("");
+            searchbar.setText("");
                 MainPage.updateMainGrid(maingrid,books,primaryStage,loginscene,currentUser,searchbar,searchbar_writer,searchbar_year,mainScene,adminScene);
                 primaryStage.setScene(mainScene);
 
@@ -408,6 +415,9 @@ break;
                     primaryStage.setScene(adminScene);
                 }
                 else {
+                    searchbar_writer.setText("");
+            searchbar_year.setText("");
+            searchbar.setText("");
             primaryStage.setScene(mainScene);
                 }
             }
@@ -440,9 +450,6 @@ break;
         editbookButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent s) {
-
-
-              
                 
                 int year_of_publish=0;
                 String bookCategory;
@@ -452,8 +459,6 @@ break;
                 
                 
                 boolean valid=true;
-                
-                
                 
                 try {
                     year_of_publish = Integer.parseInt(editbook_year_of_publish.getText());
@@ -545,7 +550,7 @@ break;
                     if(u.number_of_borrowed_books()!=0) {
                         for (int i = 0; i < u.getBorrowedBooks().size(); i++) {
                             Book borrowedBook = u.borrowedbooks.get(i);
-                            if (borrowedBook.getISBN() == b.getISBN()) {
+                            if (borrowedBook.getISBN().equals( b.getISBN())) {
                                 System.out.println("removed "+u.borrowedbooks.get(i));
                                 u.borrowedbooks.remove(i);
                                 Book newbook = new Book(editbooktitle.getText(), editbookwriter.getText(), editbookpublisher.getText(),b.getISBN(), year_of_publish, bookCategory,numberofbooks);
@@ -653,6 +658,9 @@ break;
                         }
                         System.out.println("Number of borrowed books: "+currentUser.number_of_borrowed_books());
                         if(!limitreached && avbooks) {
+                            searchbar_writer.setText("");
+            searchbar_year.setText("");
+            primaryStage.setScene(mainScene);
                         MainPage.updateMainGrid(maingrid, books, primaryStage, loginscene, currentUser, searchbar,searchbar_writer,searchbar_year, mainScene,adminScene);
                         primaryStage.setScene(mainScene);
                         }
@@ -689,7 +697,7 @@ break;
                                                 Book borrowedBook = borrowedBooks.get(i);
                                                 LocalDateTime borrowingDate = borrowingDates.get(i);
                                 
-                                                if (borrowedBook.getISBN() == b.getISBN()) {
+                                                if (borrowedBook.getISBN() .equals(b.getISBN())) {
                                                     // Remove the borrowed book and its borrowing date
                                                     borrowedBooks.remove(i);
                                                     borrowingDates.remove(i);
@@ -711,6 +719,9 @@ break;
                                                 }
                                             }
                                         }
+                                        searchbar_writer.setText("");
+            searchbar_year.setText("");
+            primaryStage.setScene(mainScene);
                                         MainPage.updateMainGrid(maingrid, books, primaryStage, loginscene, currentUser, searchbar,searchbar_writer,searchbar_year, mainScene,adminScene);
                                         primaryStage.setScene(mainScene);
                                     }
