@@ -28,7 +28,7 @@ public class SearchPage {
         }
     }
 
-    public static void loadsearchPage(TextField searchbar, TextField searchbar_writer, TextField searchbar_year,Stage primaryStage,VBox root,User currentUser,GridPane maingrid, Scene loginscene, Scene mainScene, TextField isbnfield, Scene adminScene) {
+    public static void loadsearchPage(TextField searchbar, TextField searchbar_writer, TextField searchbar_year,Stage primaryStage,GridPane root,User currentUser,GridPane maingrid, Scene loginscene, Scene mainScene, TextField isbnfield, Scene adminScene) {
        //search page
 
         root.getChildren().clear();
@@ -42,7 +42,7 @@ public class SearchPage {
             }
             else {
                 for (Book b : books) {
-                    int isbn = Integer.parseInt(isbnfield.getText()); // Convert ISBN to int
+                    String isbn = (isbnfield.getText());
                     if (String.valueOf(b.getISBN()).contains(String.valueOf(isbn)) && (!searchbooks.contains(b))) {
                         searchbooks.add(b);
                     }
@@ -138,15 +138,16 @@ public class SearchPage {
         // Create a ScrollPane for the search section
         ScrollPane searchScrollPane = new ScrollPane(searchContent);
         searchScrollPane.setPrefHeight(400);
-        searchScrollPane.setPrefWidth(400);
+        searchScrollPane.setPrefWidth(700);
         
+
         Button mainpagenavButton = new Button();
         Image iconImage = new Image(MainPage.class.getResourceAsStream("resources/arrow_back_FILL0_wght400_GRAD0_opsz24.png"));
         mainpagenavButton.setGraphic(new ImageView(iconImage));
         mainpagenavButton.getStyleClass().add("mainpagenavButton");
-        root.getChildren().add(mainpagenavButton);
+        root.add(mainpagenavButton,0,0);
 
-        root.getChildren().add(searchScrollPane);
+        root.add(searchScrollPane,1,1);
         
          mainpagenavButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override

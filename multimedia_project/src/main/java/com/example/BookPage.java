@@ -10,6 +10,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -35,6 +36,7 @@ public class BookPage {
         bookpagegrid.setAlignment(Pos.CENTER);
         List<Book> books = Serialize.readAllBooks();
         Button mainpagenavButton = new Button();
+        GridPane.setMargin(mainpagenavButton, new Insets(10,10,10,10));
         Image iconImage = new Image(MainPage.class.getResourceAsStream("resources/arrow_back_FILL0_wght400_GRAD0_opsz24.png"));
         mainpagenavButton.setGraphic(new ImageView(iconImage));
         mainpagenavButton.getStyleClass().add("mainpagenavButton");
@@ -43,30 +45,39 @@ public class BookPage {
         booktexttitle.setId("booktexttitle");
         bookpagegrid.add(booktexttitle,1,0);
         Text booktextwriter= new Text("Writer: " +b.getWriter());
+        booktextwriter.setId("booktext");
         bookpagegrid.add(booktextwriter,1,1);
         Text booktextpublisher= new Text("Publisher: " + b.getPublisher());
+        booktextpublisher.setId("booktext");
         bookpagegrid.add(booktextpublisher,1,2);
         Text booktextcategory= new Text("Category: " + b.getCategory());
+        booktextcategory.setId("booktext");
         bookpagegrid.add(booktextcategory,1,3);
         Text booktextisbn= new Text("ISBN: "+(b.getISBN()));
+        booktextisbn.setId("booktext");
         bookpagegrid.add(booktextisbn,1,4);
         Text booktextyear= new Text("Year of Publish: "+Integer.toString(b.getYear_of_Publish()));
+        booktextyear.setId("booktext");
         bookpagegrid.add(booktextyear,1,5);
         String avgRatingText = String.format("%.2f", b.averagerating());
+
         Text bookavgrateText = new Text("Average User Rating: "+avgRatingText);
+        bookavgrateText.setId("booktext");
         bookpagegrid.add(bookavgrateText,1,7);
         Text bookavText = new Text("Available books: "+Integer.toString(b.getNumberofBooks()));
+        bookavText.setId("booktext");
         bookpagegrid.add(bookavText,1,6);
         Text bookrates = new Text("Total User Ratings: "+Integer.toString(b.gettotalratings()));
+        bookrates.setId("booktext");
         bookpagegrid.add(bookrates,1,8);
         Ratingfx rating = new Ratingfx(5);
         rating.setRating((int)Math.round(b.averagerating()));
         bookpagegrid.add(rating, 1, 9);
         int rowindex=2;
        ScrollPane scrollPane = new ScrollPane();
-scrollPane.setFitToWidth(true);
-scrollPane.setPrefViewportHeight(300);
 
+scrollPane.setPrefWidth(400);
+scrollPane.setPrefHeight(220);
 if(!b.bookcomments.isEmpty()) {
 VBox commentsBox = new VBox();
 commentsBox.setSpacing(10);
@@ -98,8 +109,8 @@ break;
         }
     }
         if(currentUser!=null && currentUser.getBorrowedBooks() != null && bookcontained){
-        bookpagegrid.add(addcommentButton,2,11);
-        bookpagegrid.add(addratingButton,3,11);
+        bookpagegrid.add(addcommentButton,2,4);
+        bookpagegrid.add(addratingButton,2,6);
         }
         Button lendbookButton = new Button("Borrow");
         final Text lendlimit = new Text();
@@ -121,34 +132,37 @@ break;
         hdeleteButton.getChildren().add(deleteButton);
         
         if(currentUser.getusername().equals("Admin")) {
-            bookpagegrid.add(deleteButton, 1, 11);
-        bookpagegrid.add(editButton, 2, 11);
+            bookpagegrid.add(deleteButton,2, 4);
+        bookpagegrid.add(editButton, 2, 6);
         }
         else {
         if (currentUser != null && currentUser.getBorrowedBooks() != null && bookcontained) {
             bookpagegrid.getChildren().remove(lendbookButton);
-            bookpagegrid.add(returnbookButton, 1, 11);
+            bookpagegrid.add(returnbookButton, 2, 2);
         }
         
         if (currentUser != null && currentUser.getBorrowedBooks() != null && !bookcontained)  {
         bookpagegrid.getChildren().remove(returnbookButton);
-        bookpagegrid.add(lendbookButton,1,11);
+        bookpagegrid.add(lendbookButton,2,2);
         }
     }
         //addcomment page
         GridPane commentgrid = new GridPane();
+        commentgrid.setAlignment(Pos.CENTER);
         Button bookpagenavButton3 = new Button();
         Image iconImage4 = new Image(MainPage.class.getResourceAsStream("resources/arrow_back_FILL0_wght400_GRAD0_opsz24.png"));
         bookpagenavButton3.setGraphic(new ImageView(iconImage4));
         bookpagenavButton3.getStyleClass().add("bookpagenavButton");
         commentgrid.add(bookpagenavButton3,0,0);
-        Text commentTitle = new Text("Add a comment");
+        Text commentTitle = new Text("Add a Comment...");
+        GridPane.setMargin(commentTitle, new Insets(10,10,10,10));
+        commentTitle.setStyle("-fx-font-size:20px;");
         commentgrid.add(commentTitle,1,0);
         TextArea commentfield = new TextArea();
         commentfield.setPrefWidth(200);
         commentfield.setPrefHeight(400);
         commentgrid.add(commentfield,1,3);
-        
+        commentfield.setWrapText(true);
         Button publishcommentButton = new Button("Publish Comment");
         commentgrid.add(publishcommentButton,2,3);
         Scene addcommentScene = new Scene(commentgrid, 1400, 700);
@@ -156,44 +170,56 @@ break;
 
         //add rating page
         GridPane ratinggrid = new GridPane();
+        ratinggrid.setAlignment(Pos.CENTER);
         Button bookpagenavButton = new Button();
         Image iconImage2 = new Image(MainPage.class.getResourceAsStream("resources/arrow_back_FILL0_wght400_GRAD0_opsz24.png"));
         bookpagenavButton.setGraphic(new ImageView(iconImage2));
         bookpagenavButton.getStyleClass().add("bookpagenavButton");
         ratinggrid.add(bookpagenavButton,0,0);
         Text ratingTitle = new Text("Add a Rating");
+        ratingTitle.setStyle("-fx-font-size:20px;");
+        GridPane.setMargin(ratingTitle, new Insets(10,10,10,10));
         ratinggrid.add(ratingTitle,1,0);
         Spinner<Integer> spinner = new Spinner<>(1, 5, 0);
-        ratinggrid.add(spinner,2,4);
+        ratinggrid.add(spinner,1,2);
+        GridPane.setMargin(spinner, new Insets(30,10,30,10));
         
         Button publishratingButton = new Button("Publish Rating");
-        ratinggrid.add(publishratingButton,2,3);
+        ratinggrid.add(publishratingButton,1,3);
         Scene addratingScene = new Scene(ratinggrid, 1400, 700);
         addratingScene.getStylesheets().add(App.class.getResource("styles.css").toExternalForm());
 
         //editbook page
         GridPane editbookgrid =new GridPane();
+        editbookgrid.setAlignment(Pos.CENTER);
         Button bookpagenavButton2 = new Button();
         Image iconImage3 = new Image(MainPage.class.getResourceAsStream("resources/arrow_back_FILL0_wght400_GRAD0_opsz24.png"));
         bookpagenavButton2.setGraphic(new ImageView(iconImage3));
         bookpagenavButton2.getStyleClass().add("bookpagenavButton");
         editbookgrid.add(bookpagenavButton2,0,0);
-        Text editbookpagetitle=new Text("Edit book Page");
-        editbookgrid.add(editbookpagetitle,2,1);
-        
+        Text editbookpagetitle=new Text("Edit Book");
+        editbookgrid.add(editbookpagetitle,1,0);
+        editbookpagetitle.setStyle("-fx-font-size: 20px;");
+        Text a = new Text("Book Title: ");
+        editbookgrid.add(a,1,1);
         TextField editbooktitle = new TextField(b.getTitle());
-        editbookgrid.add(editbooktitle,2,4);
-        
+        editbookgrid.add(editbooktitle,2,1);
+        Text c = new Text("Writer: ");
+        editbookgrid.add(c,1,2);
         TextField editbookwriter = new TextField(b.getWriter());
-        editbookgrid.add(editbookwriter,2,6);
- 
+        editbookgrid.add(editbookwriter,2,2);
+        Text d = new Text("Publisher: ");
+        editbookgrid.add(d,1,3);
         TextField editbookpublisher = new TextField(b.getPublisher());
-        editbookgrid.add(editbookpublisher,2,8);
-        Text editbookisbn = new Text((b.getISBN()));
-        editbookgrid.add(editbookisbn,2,10);
- 
+        editbookgrid.add(editbookpublisher,2,3);
+        Text editbookisbn = new Text("ISBN: "+(b.getISBN()));
+        editbookgrid.add(editbookisbn,1,4);
+        Text e= new Text("Year of Publish: ");
+        editbookgrid.add(e,1,5);
         TextField editbook_year_of_publish = new TextField(Integer.toString(b.getYear_of_Publish()));
-        editbookgrid.add(editbook_year_of_publish,2,11);
+        editbookgrid.add(editbook_year_of_publish,2,5);
+        Text f = new Text("Category: ");
+        editbookgrid.add(f,1,6);
         ComboBox<String> comboBox = new ComboBox<>();
         List<Category> categories = Serialize.readAllCategories();
         ObservableList<String> items =FXCollections.observableArrayList();
@@ -205,47 +231,43 @@ break;
         comboBox.getSelectionModel().selectFirst();
 
         VBox category = new VBox(comboBox);
-        editbookgrid.add(category,2,12);
+        editbookgrid.add(category,2,6);
+        Text g = new Text("Number of Books: ");
+        editbookgrid.add(g,1,7);
          TextField editnumberofbooksfield = new TextField(Integer.toString(b.getNumberofBooks()));
-         editbookgrid.add(editnumberofbooksfield,2,16);
+         editbookgrid.add(editnumberofbooksfield,2,7);
          Button editbookButton = new Button("Edit Book");
-         editbookgrid.add(editbookButton,3,4);
+         editbookgrid.add(editbookButton,1,8);
          final Text nullcategory = new Text("");
-         editbookgrid.add(nullcategory, 4, 14);
+         editbookgrid.add(nullcategory, 4, 6);
          editbookgrid.setColumnSpan(nullcategory, 2);
          editbookgrid.setHalignment(nullcategory, RIGHT);
-        nullcategory.setId("nullcategory");
+        nullcategory.setId("lendlimit");
         
         final Text invalidyear = new Text("");
-        editbookgrid.add(invalidyear, 4, 12);
+        editbookgrid.add(invalidyear, 4, 5);
 
         editbookgrid.setHalignment(invalidyear, RIGHT);
-        invalidyear.setId("invalidyear");
-
-        final Text invalidisbn = new Text("");
-        editbookgrid.add(invalidisbn, 4, 10);
-
-        editbookgrid.setHalignment(invalidisbn, RIGHT);
-        editbookgrid.setId("invalidisbn");
+        invalidyear.setId("lendlimit");
 
         final Text invalidbooks = new Text("");
-        editbookgrid.add(invalidbooks, 4, 16);
+        editbookgrid.add(invalidbooks, 4, 7);
 
         editbookgrid.setHalignment(invalidbooks, RIGHT);
-        invalidbooks.setId("invalidbooks");
+        invalidbooks.setId("lendlimit");
 
         final Text emptytitle = new Text();
-        editbookgrid.add(emptytitle, 7, 8);
+        editbookgrid.add(emptytitle, 4, 1);
         editbookgrid.setHalignment(emptytitle, RIGHT);
         emptytitle.setId("lendlimit");
 
         final Text emptywriter = new Text();
-        editbookgrid.add(emptywriter, 7, 9);
+        editbookgrid.add(emptywriter, 4, 2);
         editbookgrid.setHalignment(emptywriter, RIGHT);
         emptywriter.setId("lendlimit");
 
         final Text emptypublisher = new Text();
-        editbookgrid.add(emptypublisher, 7, 6);
+        editbookgrid.add(emptypublisher, 4, 3);
         editbookgrid.setHalignment(emptypublisher, RIGHT);
         emptypublisher.setId("lendlimit");
          Scene editbookScene = new Scene(editbookgrid, 1400, 700);

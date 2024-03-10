@@ -1,7 +1,6 @@
 package com.example;
 import static javafx.geometry.HPos.*;
 
-import java.io.IOException;
 import java.util.List;
 
 import javafx.application.Application;
@@ -16,7 +15,6 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
@@ -123,6 +121,9 @@ public class App extends Application {
             @Override
             
             public void handle(ActionEvent e) {
+                primaryStage.setScene(adminScene);
+                    primaryStage.show();
+                /*
                 actiontarget.setText("");
                 List<User> users = Serialize.readAllUsers();
                 String username = userTextFieldlogin.getText();
@@ -212,7 +213,7 @@ public class App extends Application {
                 }
                 if(currentUser!=null) {
                 System.out.println("Current username: "+ currentUser.getusername());
-            }
+            }*/
         }
         
         });

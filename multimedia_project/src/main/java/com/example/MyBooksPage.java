@@ -28,8 +28,9 @@ public class MyBooksPage {
         mainpagenavButton.getStyleClass().add("mainpagenavButton");
         mybooksgrid.add(mainpagenavButton,0,0);
         Label mybookstitle = new Label("Borrowed Books");
+    
         mybooksgrid.add(mybookstitle,1,0);
-        mybookstitle.setId("mybookstitle");
+        mybookstitle.setStyle("-fx-font-size: 28px;");
         GridPane.setMargin(mybookstitle, new Insets(0, 0, 0, 30));
         if(!books.isEmpty() &&currentUser!=null) {
         String username = currentUser.getusername();

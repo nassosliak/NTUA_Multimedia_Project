@@ -10,6 +10,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.chart.PieChart;
@@ -33,35 +34,42 @@ import javafx.stage.Stage;
 public class AdminPage {
     public static void loadadminPage(GridPane admingrid, Stage primaryStage, Scene adminScene, Scene loginScene) {
         admingrid.getChildren().clear();
-        Text title_admin = new Text("Welcome Admin");
+        Text title_admin = new Text("Hi Admin");
         title_admin.setId("title_admin");
-        admingrid.add(title_admin, 0, 0);
-
+        admingrid.add(title_admin, 0, 1);
+        Text title = new Text("Library");
+        title.setId("title");
+        admingrid.add(title,0,0);
         Button addButton = new Button("Add Book");
         HBox haddButton = new HBox(10);
         haddButton.setAlignment(Pos.BOTTOM_RIGHT);
         haddButton.getChildren().add(addButton);
-        admingrid.add(addButton, 3, 4);
-        Button openborrowsButton = new Button("See open Borrows");
-        admingrid.add(openborrowsButton, 3, 6);
+        admingrid.add(addButton, 5, 1);
+        Button openborrowsButton = new Button("See Open Borrows");
+        admingrid.add(openborrowsButton, 6,1);
         Button usersButton = new Button("See all users");
-        admingrid.add(usersButton, 3, 7);
+        admingrid.add(usersButton, 7, 1);
         Button addcatButton = new Button("Category Management");
-        admingrid.add(addcatButton, 3, 5);
+        admingrid.add(addcatButton, 8, 1);
         TextField searchField = new TextField();
         searchField.setPromptText("Search Books by ISBN...");
-        Image icon = new Image(AdminPage.class.getResourceAsStream("resources/search_FILL0_wght400_GRAD0_opsz24.png"));
-        ImageView iconView = new ImageView(icon);
-        HBox hbox = new HBox(5); // 5 pixels spacing
-        hbox.getChildren().addAll(iconView, searchField);
-        admingrid.add(hbox, 3, 1);
-        Button searchbyisbn = new Button("Search");
-        admingrid.add(searchbyisbn,4,1);
+        admingrid.add(searchField, 3, 3);
+        Image searchIcon = new Image(MainPage.class.getResourceAsStream("resources/search_FILL0_wght400_GRAD0_opsz24.png"));
+        ImageView imageView = new ImageView(searchIcon);
+        imageView.setFitWidth(16);
+        imageView.setFitHeight(16);
+
+        Label searchLabel = new Label("Search", imageView);
+        searchLabel.setStyle("-fx-padding: 5px;");
+
+        Button searchbyisbn = new Button();
+        searchbyisbn.setGraphic(searchLabel);
+        admingrid.add(searchbyisbn, 4, 3);
         Button editreturntimeButton = new Button("Edit Return Time");
-        admingrid.add(editreturntimeButton, 1, 7);
+        admingrid.add(editreturntimeButton, 9, 1);
        
         Button signoutButton = new Button("Sign out");
-        admingrid.add(signoutButton,10,2);
+        admingrid.add(signoutButton,10,1);
         // Create a Map of books grouped by category (assuming you have this method)
         List<Book> books = Serialize.readAllBooks();
         Map<String, List<Book>> groupedBooks = Book.groupBooksByCategory(books);
@@ -79,7 +87,7 @@ public class AdminPage {
             List<User> users = Serialize.readAllUsers();
             User currentUser=Serialize.findUserByUsername(users, "Admin");
             GridPane bookpagegrid = new GridPane();
-            Scene BookScene = new Scene(bookpagegrid, 1000, 500);
+            Scene BookScene = new Scene(bookpagegrid, 1400, 700);
             BookScene.getStylesheets().add(App.class.getResource("styles.css").toExternalForm());
             BookPage.loadbookpage(book, bookpagegrid, primaryStage, currentUser, admingrid, loginScene, null, null, null, loginScene, adminScene, BookScene);
             primaryStage.setScene(BookScene);
@@ -93,51 +101,77 @@ public class AdminPage {
             Text categoryTextForCategoryContent = new Text("Category: " + cat.getTitle());
             categorycontent.getChildren().add(categoryTextForCategoryContent);
         }
-        // Create a ScrollPane and add the VBox to it
+
         ScrollPane scrollPane = new ScrollPane(content);
         ScrollPane categoryScrollPane = new ScrollPane(categorycontent);
-        // Set adjustable height and width for the ScrollPane
+        GridPane.setMargin(scrollPane, new Insets(0,350,0,-600));
         scrollPane.setPrefHeight(200);
         scrollPane.setPrefWidth(300);
 
-        // Add the ScrollPane to the GridPane
-        admingrid.add(categoryScrollPane, 0, 10, 10, 1);
 
+        admingrid.add(categoryScrollPane, 11,5);
+        GridPane.setMargin(categoryScrollPane, new Insets(0,650,0,-950));
         categoryScrollPane.setPrefHeight(200);
-        categoryScrollPane.setPrefWidth(300);
+        categoryScrollPane.setPrefWidth(200);
 
-        // Add the ScrollPane to the GridPane
-        admingrid.add(scrollPane, 10, 10, 10, 1);
+
+        admingrid.add(scrollPane, 12,5);
+        int days=5;
+        int hours=0;
+        int minutes=0;
+        try {
+            int date=Serialize.readreturntime().getdate();
+            days=date/86400;
+            hours=(date%86400)/3600;
+            minutes=((date%86400)%3600/60);
+        } catch (ClassNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        Text returntimetext = new Text("Return Time: "+days+" days, "+ hours+" hours, "+minutes+" minutes");
+        admingrid.add(returntimetext,13,4);
+        GridPane.setMargin(returntimetext, new Insets(0,150,0,-300));
         //addbook page
         GridPane addbookgrid =new GridPane();
+        addbookgrid.setAlignment(Pos.CENTER);
         Button adminpagenavButton = new Button();
         Image iconImage3 = new Image(MainPage.class.getResourceAsStream("resources/arrow_back_FILL0_wght400_GRAD0_opsz24.png"));
         adminpagenavButton.setGraphic(new ImageView(iconImage3));
         adminpagenavButton.getStyleClass().add("bookpagenavButton");
         addbookgrid.add(adminpagenavButton,0,0);
-        Text addbooktitle=new Text("Add book Page");
-        addbookgrid.add(addbooktitle,2,1);
-        
+        Text addbooktitle=new Text("Add new Book");
+        addbookgrid.add(addbooktitle,1,0);
+        addbooktitle.setStyle("-fx-font-size:20px");
+        Text a = new Text("Book Title: ");
+        addbookgrid.add(a,1,1);
         TextField booktitle = new TextField();
         booktitle.setPromptText("Title");
-        addbookgrid.add(booktitle,2,4);
-        
+        addbookgrid.add(booktitle,2,1);
+        Text b = new Text("Writer: ");
+        addbookgrid.add(b,1,2);
         TextField bookwriter = new TextField();
         bookwriter.setPromptText("Writer");
-        addbookgrid.add(bookwriter,2,6);
-
+        addbookgrid.add(bookwriter,2,2);
+        Text c = new Text("Publisher: ");
+        addbookgrid.add(c,1,3);
         TextField bookpublisher = new TextField();
         bookpublisher.setPromptText("Publisher");
-        addbookgrid.add(bookpublisher,2,8);
-
+        addbookgrid.add(bookpublisher,2,3);
+        Text d = new Text("ISBN: ");
+        addbookgrid.add(d,1,4);
         TextField bookisbn = new TextField();
-        bookisbn.setPromptText("ISBN");
-        addbookgrid.add(bookisbn,2,10);
-
+        bookisbn.setPromptText("ISBN, eg 543-123");
+        addbookgrid.add(bookisbn,2,4);
+        Text e = new Text("Year of Publish: ");
+        addbookgrid.add(e,1,5);
         TextField book_year_of_publish = new TextField();
-        book_year_of_publish.setPromptText("Year of Publish");
-        addbookgrid.add(book_year_of_publish,2,12);
-        
+        book_year_of_publish.setPromptText("Year of Publish, eg 2016");
+        addbookgrid.add(book_year_of_publish,2,5);
+        Text f = new Text("Category: ");
+        addbookgrid.add(f,1,6);
         ComboBox<String> comboBox = new ComboBox<>();
 
         // Create some items to add to the ComboBox
@@ -149,68 +183,70 @@ public class AdminPage {
         comboBox.setItems(items);
 
         comboBox.getSelectionModel().selectFirst();
-
+        Text g = new Text("Number of Books: ");
+        addbookgrid.add(g,1,7);
         VBox category = new VBox(comboBox);
-        addbookgrid.add(category,2,14);
+        addbookgrid.add(category,2,6);
         TextField numberofbooksfield = new TextField();
-        numberofbooksfield.setPromptText("Number of books");
-        addbookgrid.add(numberofbooksfield,2,16);
+        numberofbooksfield.setPromptText("Number of books, eg 12");
+        addbookgrid.add(numberofbooksfield,2,7);
         
         Button savebookButton = new Button("Add Book");
-        addbookgrid.add(savebookButton,3,4);
+        addbookgrid.add(savebookButton,1,8);
         final Text nullcategory = new Text("");
-        addbookgrid.add(nullcategory, 4, 14);
+        addbookgrid.add(nullcategory, 4, 6);
         addbookgrid.setColumnSpan(nullcategory, 2);
         addbookgrid.setHalignment(nullcategory, RIGHT);
         nullcategory.setId("nullcategory");
         
         final Text invalidyear = new Text("");
-        addbookgrid.add(invalidyear, 4, 12);
+        addbookgrid.add(invalidyear, 4, 5);
 
         addbookgrid.setHalignment(invalidyear, RIGHT);
         invalidyear.setId("invalidyear");
 
         final Text invalidisbn = new Text("");
-        addbookgrid.add(invalidisbn, 4, 10);
+        addbookgrid.add(invalidisbn, 4, 4);
 
         addbookgrid.setHalignment(invalidisbn, RIGHT);
         invalidisbn.setId("invalidisbn");
 
         final Text isbnexists = new Text("");
-        addbookgrid.add(isbnexists, 4, 10);
+        addbookgrid.add(isbnexists, 4, 4);
 
         addbookgrid.setHalignment(isbnexists, RIGHT);
         isbnexists.setId("invalidisbn");
 
         final Text invalidbooks = new Text("");
-        addbookgrid.add(invalidbooks, 4, 16);
+        addbookgrid.add(invalidbooks, 4, 7);
 
         addbookgrid.setHalignment(invalidbooks, RIGHT);
         invalidbooks.setId("invalidbooks");
 
         final Text emptytitle = new Text();
-        addbookgrid.add(emptytitle, 7, 8);
+        addbookgrid.add(emptytitle, 4, 1);
         addbookgrid.setHalignment(emptytitle, RIGHT);
         emptytitle.setId("lendlimit");
 
         final Text emptywriter = new Text();
-        addbookgrid.add(emptywriter, 7, 9);
+        addbookgrid.add(emptywriter, 4, 2);
         addbookgrid.setHalignment(emptywriter, RIGHT);
         emptywriter.setId("lendlimit");
 
         final Text emptypublisher = new Text();
-        addbookgrid.add(emptypublisher, 7, 6);
+        addbookgrid.add(emptypublisher, 4, 3);
         addbookgrid.setHalignment(emptypublisher, RIGHT);
         emptypublisher.setId("lendlimit");
 
        
 
-        Scene addbookScene = new Scene(addbookgrid, 1000, 500);
+        Scene addbookScene = new Scene(addbookgrid, 1400, 700);
         addbookScene.getStylesheets().add(App.class.getResource("styles.css").toExternalForm());
 
 
         //edit category
         GridPane editcategoryGridPane = new GridPane();
+        editcategoryGridPane.setAlignment(Pos.CENTER);
         TextField newcategory = new TextField();
         editcategoryGridPane.add(newcategory,2,1);
         Button addcategorypagenavButton = new Button();
@@ -231,11 +267,12 @@ public class AdminPage {
 
         VBox category_Box = new VBox(category_combobox);
         editcategoryGridPane.add(category_Box,3,1);
-        Scene editcategoryScene = new Scene(editcategoryGridPane, 1000, 500);
+        Scene editcategoryScene = new Scene(editcategoryGridPane, 1400, 700);
         editcategoryScene.getStylesheets().add(App.class.getResource("styles.css").toExternalForm());
 
         //delete category
         GridPane deletecategoryGridPane = new GridPane();
+        deletecategoryGridPane.setAlignment(Pos.CENTER);
         Button addcategorypagenavButton1 = new Button();
         Image iconImage2 = new Image(MainPage.class.getResourceAsStream("resources/arrow_back_FILL0_wght400_GRAD0_opsz24.png"));
         addcategorypagenavButton1.setGraphic(new ImageView(iconImage2));
@@ -254,11 +291,12 @@ public class AdminPage {
 
         VBox category_Box1 = new VBox(category_combobox1);
         deletecategoryGridPane.add(category_Box1,3,1);
-        Scene deletecategoryScene = new Scene(deletecategoryGridPane, 1000, 500);
+        Scene deletecategoryScene = new Scene(deletecategoryGridPane, 1400, 700);
         deletecategoryScene.getStylesheets().add(App.class.getResource("styles.css").toExternalForm());
 
         //Category management
         GridPane addcategorygrid = new GridPane();
+        addcategorygrid.setAlignment(Pos.CENTER);
         final Text actiontarget = new Text();
         addcategorygrid.add(actiontarget, 0, 6);
         addcategorygrid.setColumnSpan(actiontarget, 2);
@@ -300,7 +338,7 @@ public class AdminPage {
         // Customize chart appearance (optional)
         pieChart.setTitle("Book Categories");
         addcategorygrid.add(pieChart, 3,7);
-        Scene addCategoryScene = new Scene(addcategorygrid, 1000, 500);
+        Scene addCategoryScene = new Scene(addcategorygrid, 1400, 700);
         addCategoryScene.getStylesheets().add(App.class.getResource("styles.css").toExternalForm());
         
         //edit return time
@@ -319,23 +357,28 @@ TextField minutesTextField = new TextField("0");
 Label daysLabel = new Label("Days:");
 Label hoursLabel = new Label("Hours:");
 Label minutesLabel = new Label("Minutes:");
-
+Text editrt = new Text("Edit Return Time");
+editrt.setStyle("-fx-font-size:20px");
+editreturnGridPane.add(editrt,8,0);
+GridPane.setMargin(editrt, new Insets(20,20,20,-400));
 // Add labels and text fields to the grid pane
-editreturnGridPane.add(daysLabel, 1, 0);
-editreturnGridPane.add(daysTextField, 2, 0);
-editreturnGridPane.add(hoursLabel, 3, 0);
-editreturnGridPane.add(hoursTextField, 4, 0);
-editreturnGridPane.add(minutesLabel, 5, 0);
-editreturnGridPane.add(minutesTextField,6, 0);
+editreturnGridPane.add(daysLabel, 1, 1);
+editreturnGridPane.add(daysTextField, 2, 1);
+editreturnGridPane.add(hoursLabel, 3, 1);
+editreturnGridPane.add(hoursTextField, 4, 1);
+editreturnGridPane.add(minutesLabel, 5,1);
+editreturnGridPane.add(minutesTextField,6, 1);
 editreturnGridPane.setAlignment(Pos.CENTER);
 Button savereturntimeButton = new Button("Save Return Time");
-editreturnGridPane.add(savereturntimeButton, 7, 0);
+editreturnGridPane.add(savereturntimeButton, 7, 2);
+GridPane.setMargin(savereturntimeButton, new Insets(20,20,20,-400));
 
-Scene editreturntimeScene = new Scene(editreturnGridPane, 1000, 500);
+Scene editreturntimeScene = new Scene(editreturnGridPane, 1400, 700);
 editreturntimeScene.getStylesheets().add(App.class.getResource("styles.css").toExternalForm());
 //searchpage admin
-VBox root = new VBox();
-      Scene searchScene = new Scene(root, 1000, 500);
+GridPane root = new GridPane();
+root.setAlignment(Pos.CENTER);
+      Scene searchScene = new Scene(root, 1400, 700);
       searchScene.getStylesheets().add(App.class.getResource("styles.css").toExternalForm());
 
         addButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -458,12 +501,18 @@ VBox root = new VBox();
                 }
                 try {
                     Serialize.writereturntime(adminReturnTime);
-                    System.out.println("Serialized return time to "+ adminReturnTime.getdate());
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Information Dialog");
+        alert.setHeaderText(null);
+        alert.setContentText("New return time set to "+ daysTextField.getText() +" days, "+hoursTextField.getText() +" hours, "+minutesTextField.getText() +" minutes");
+        alert.showAndWait();
+                    System.out.println("Serialized return time to "+ (adminReturnTime.getdate()));
                 } catch (IOException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
             System.out.println(adminReturnTime.getdate());
+            loadadminPage(admingrid, primaryStage, adminScene, loginScene);
             primaryStage.setScene(adminScene);}
         });
         savebookButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -663,15 +712,14 @@ VBox root = new VBox();
         alert.setHeaderText("Delete Category");
         alert.setContentText("Are you sure you want to delete this category \n and all the books that belong to it?");
         
-        // Add buttons to the alert
         ButtonType buttonTypeYes = new ButtonType("Yes");
         ButtonType buttonTypeNo = new ButtonType("No");
         alert.getButtonTypes().setAll(buttonTypeYes, buttonTypeNo);
         
-        // Show the alert and wait for user response
+
         alert.showAndWait().ifPresent(buttonType -> {
             if (buttonType == buttonTypeYes) {
-                // User clicked Yes, proceed with deletion
+
                 System.out.println(category);
                 try {
                     Serialize.deleteCategory(category);
@@ -681,7 +729,7 @@ VBox root = new VBox();
                     e.printStackTrace();
                 }
                 
-                // Reload admin page after deletion
+
                 List<Category> categories = Serialize.readAllCategories();
                 for (Category cate : categories) {
                     System.out.println(cate);
@@ -689,7 +737,7 @@ VBox root = new VBox();
                 loadadminPage(admingrid, primaryStage, adminScene, loginScene);
                 primaryStage.setScene(adminScene);
             } else {
-                // User clicked No, do nothing
+
                 System.out.println("Delete operation canceled");
             }
         });

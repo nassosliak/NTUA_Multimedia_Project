@@ -68,7 +68,7 @@ maingrid.getChildren().clear();
 checkBoxWriter.setOnAction(e -> toggleTextField(maingrid, 3, checkBoxWriter.isSelected(), searchbar_writer, 1));
 checkBoxYear.setOnAction(e -> toggleTextField(maingrid, 4, checkBoxYear.isSelected(), searchbar_year, 1));
 
-        GridPane.setMargin(checkBoxTitle, new Insets(10, 10, 0, 10)); 
+        GridPane.setMargin(checkBoxTitle, new Insets(10, 10, 0, 10));
 GridPane.setMargin(checkBoxWriter, new Insets(10, 10, 10, 10));
 GridPane.setMargin(checkBoxYear, new Insets(10, 10, 10, 10));
         maingrid.add(checkBoxTitle,0,2);
@@ -103,7 +103,7 @@ Text bbtText = new Text(currentUser.getBorrowedBooks().get(i).getTitle() + ", re
     
     maingrid.add(borrowedBooksContainer,1,6);
     GridPane.setMargin(borrowedBooksContainer, new Insets(0, 10, 10, 10));
-      VBox root = new VBox();
+      GridPane root = new GridPane();
       root.setAlignment(Pos.CENTER);
       Scene searchScene = new Scene(root, 1400, 700);
       searchScene.getStylesheets().add(App.class.getResource("styles.css").toExternalForm());

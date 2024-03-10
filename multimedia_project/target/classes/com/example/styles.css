@@ -28,33 +28,35 @@
     -fx-font-weight: bold;
 }
 
-/* Styles for the main navigation button */
+
 .mainpagenavButton {
     -fx-min-width: 20px;
     -fx-min-height: 20px;
-    -fx-background-color: #FFFFFF; /* White background */
-    -fx-effect: dropshadow(three-pass-box, rgba(161, 6, 6, 0.6), 5, 0.0, 0, 1); /* Red drop shadow effect */
+    -fx-background-color: #FFFFFF; 
+    -fx-effect: dropshadow(three-pass-box, rgba(161, 6, 6, 0.6), 5, 0.0, 0, 1);
 }
 
-/* Styles for labels */
+
 .label {
-    -fx-font-size: 12px;
-    -fx-font-weight: bold;
+    -fx-font-size: 14px;
     -fx-font-family: "Roboto";
-    -fx-text-fill: #333333; /* Dark gray text */
-    /*-fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 0.5), 0, 0, 0, 1); /* White drop shadow effect */
+    
 }
+#booktext {
+    -fx-font-family: "Roboto";
+    -fx-font-size: 14px;
 
+}
 
 #scenetitle {
     -fx-font-size: 32px;
     -fx-font-family: "Roboto";
     -fx-fill: #818181;
-    -fx-effect: innershadow(three-pass-box, rgba(0, 0, 0, 0.7), 6, 0.0, 0, 2); /* Inner shadow effect */
+    -fx-effect: innershadow(three-pass-box, rgba(0, 0, 0, 0.7), 6, 0.0, 0, 2); 
 }
 
 #actiontarget {
-    -fx-fill: FIREBRICK;
+    -fx-fill: Red;
     -fx-font-family: "Roboto";
     -fx-font-weight: bold;
     
@@ -65,7 +67,7 @@
   
 }
 #emailexists {
-    -fx-fill: rgb(255, 0, 0);
+    -fx-fill: Red;
     -fx-font-weight: bold;
     -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 0.5), 0, 0, 0, 1); /* White drop shadow effect */
 }
@@ -84,11 +86,11 @@
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 10, 0, 0, 0);
     -fx-background-radius: 8;
 }
-.text {
+.text { -fx-font-size: 14px;
     -fx-font-family: "Roboto";
 }
 #booktexttitle{
-    -fx-font-size: 16px;
+    -fx-font-size: 18px;
 }
 #mainpagetitle {
     -fx-font-size: 16px;

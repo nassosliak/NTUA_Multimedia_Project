@@ -6,6 +6,8 @@ import java.util.List;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -18,6 +20,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
@@ -26,16 +29,20 @@ import javafx.stage.Stage;
 public class AdminUsersPage {
     public static void loadadminuserspage(Stage primaryStage, Scene adminScene, GridPane admingrid, Scene loginScene) {
         GridPane adminusersgrid = new GridPane();
+        adminusersgrid.setAlignment(Pos.CENTER);
         Button mainpagenavButton = new Button();
         Image iconImage = new Image(MainPage.class.getResourceAsStream("resources/arrow_back_FILL0_wght400_GRAD0_opsz24.png"));
         mainpagenavButton.setGraphic(new ImageView(iconImage));
         mainpagenavButton.getStyleClass().add("mainpagenavButton");
         adminusersgrid.add(mainpagenavButton,0,0);
-        Scene adminusersScene = new Scene(adminusersgrid, 1000, 500);
+        Scene adminusersScene = new Scene(adminusersgrid, 1400, 700);
             adminusersScene.getStylesheets().add(App.class.getResource("styles.css").toExternalForm());
         List<User> users = Serialize.readAllUsers();
         VBox usersContainer = new VBox();
         usersContainer.setSpacing(10);
+        Text userstext = new Text("All Users: ");
+        adminusersgrid.add(userstext,1,1);
+        userstext.setStyle("-fx-font-size:20px;");
 
         
         int rowindex = 1;
@@ -44,6 +51,15 @@ public class AdminUsersPage {
                 continue;
             }
             VBox userVBox = new VBox();
+            double x1 = 50;
+        double y1 = 100;
+        double x2 = 250;
+        double y2 = 100;
+        Line line = new Line(x1, y1, x2, y2);
+
+        // Set the line color
+        line.setStroke(Color.BLUE);
+        userVBox.getChildren().add(line);
             Text userText = new Text("Username: " + u.getusername() + "\n"+
             "First Name: "+ u.getfirstname()+ "\n"+ "Last Name: "+u.getlastname()+"\n"+ "Email: "+ u.getemail()+ "\n"+"ID: " + u.getID());
             //adminusersgrid.add(userText, 1, rowindex);
@@ -54,15 +70,16 @@ public class AdminUsersPage {
             
             // Edit user page
             GridPane editusergrid = new GridPane();
+            editusergrid.setAlignment(Pos.CENTER);
             Button userspagenavbutton = new Button();
             Image iconImage2 = new Image(MainPage.class.getResourceAsStream("resources/arrow_back_FILL0_wght400_GRAD0_opsz24.png"));
             userspagenavbutton.setGraphic(new ImageView(iconImage2));
             userspagenavbutton.getStyleClass().add("mainpagenavButton");
             editusergrid.add(userspagenavbutton,0,0);
-            //editusergrid.setAlignment(Pos.CENTER);
+            editusergrid.setAlignment(Pos.CENTER);
             Text editusertitle = new Text("Edit User Information");
             editusertitle.setFont(Font.font("Roboto", FontWeight.NORMAL, 20));
-            editusergrid.add(editusertitle, 1,1, 2, 1);
+            editusergrid.add(editusertitle, 1,0);
             TextField editusernamefield = new TextField(u.getusername());
             editusergrid.add(editusernamefield, 1, 1);
             TextField editpasswordfield = new TextField(u.getpassword());
@@ -126,7 +143,7 @@ public class AdminUsersPage {
         editusergrid.setHalignment(idempty, RIGHT);
         idempty.setId("usernameexists");
 
-            Scene edituserscene = new Scene(editusergrid, 1000, 500);
+            Scene edituserscene = new Scene(editusergrid, 1400, 700);
             edituserscene.getStylesheets().add(App.class.getResource("styles.css").toExternalForm());
 
 
@@ -142,20 +159,26 @@ public class AdminUsersPage {
                 public void handle(MouseEvent event) {
                     System.out.println("Clicked on user: " + u.getusername());
                     GridPane adminusergrid = new GridPane();
-                    
+                    adminusergrid.setAlignment(Pos.CENTER);
                     Button adminuserspageButton = new Button();
                     Image iconImage3 = new Image(MainPage.class.getResourceAsStream("resources/arrow_back_FILL0_wght400_GRAD0_opsz24.png"));
                     adminuserspageButton.setGraphic(new ImageView(iconImage3));
                     adminuserspageButton.getStyleClass().add("mainpagenavButton");
                     adminusergrid.add(adminuserspageButton, 0, 0);
+                    Text a = new Text("User Information ");
+                    adminusergrid.add(a,1,0);
+                    a.setStyle("-fx-font-size: 20px;");
                     Text username = new Text("Username: " + u.getusername() + "\n"+
                     "First Name: "+ u.getfirstname()+ "\n"+ "Last Name: "+u.getlastname()+"\n"+ "Email: "+ u.getemail()+ "\n"+"ID: " + u.getID());
-                    adminusergrid.add(username, 0, 2);
+                    username.setStyle("-fx-font-size: 16px;");
+                    adminusergrid.add(username, 1, 2);
                     Button deleteuserButton = new Button("Delete User");
-                    adminusergrid.add(deleteuserButton, 1, 5);
+                    adminusergrid.add(deleteuserButton, 2, 2);
+                    GridPane.setMargin(deleteuserButton, new Insets(0,0,0,10));
                     Button edituserButton = new Button("Edit User");
-                    adminusergrid.add(edituserButton, 1, 6);
-                    Scene adminuserScene = new Scene(adminusergrid, 1000, 500);
+                    adminusergrid.add(edituserButton, 2,3);
+                    GridPane.setMargin(edituserButton, new Insets(0,0,0,10));
+                    Scene adminuserScene = new Scene(adminusergrid, 1400, 700);
                     adminuserScene.getStylesheets().add(App.class.getResource("styles.css").toExternalForm());
                     primaryStage.setScene(adminuserScene);
 
@@ -333,7 +356,7 @@ public class AdminUsersPage {
         ScrollPane scrollpane = new ScrollPane(usersContainer);
         scrollpane.setPrefHeight(300);
         scrollpane.setPrefWidth(400);
-        adminusersgrid.add(scrollpane,0,2);
+        adminusersgrid.add(scrollpane,1,2);
        
         primaryStage.setScene(adminusersScene);
     }
