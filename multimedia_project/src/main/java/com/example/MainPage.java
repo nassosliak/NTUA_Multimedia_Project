@@ -30,7 +30,8 @@ public class MainPage {
     private static void toggleTextField(GridPane gridPane, int row, boolean addTextField, TextField textField, int columnIndex) {
         if (addTextField) {
             gridPane.add(textField, columnIndex, row);
-            GridPane.setMargin(textField, new Insets(0, 350, 0, -400));
+            GridPane.setMargin(textField, new Insets(0, 500, 0, -450));
+            textField.setPrefWidth(columnIndex);
         } else {
             gridPane.getChildren().remove(textField);
             textField.setText("");

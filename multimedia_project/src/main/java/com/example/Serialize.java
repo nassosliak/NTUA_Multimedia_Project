@@ -84,17 +84,17 @@ public static void deleteBook(String ISBN) throws IOException {
             if(u.getBorrowedBooks()!=null) {
                 List<Book> borrowedBooks = u.getBorrowedBooks();
                 List<LocalDateTime> borrowingDates = u.getBorrowingDates();
-            if(u.getBorrowedBooks().size()==1 && u.borrowedbooks.get(0).getISBN()==(b.getISBN())) {
+            if(u.getBorrowedBooks().size()==1 && u.borrowedbooks.get(0).getISBN().equals(b.getISBN())) {
                 borrowedBooks.remove(0);
                 System.out.println("Book "+ b.getISBN()  + " removed");
                 borrowingDates.remove(0);
             }
-            if(u.getBorrowedBooks().size()==2 && (u.getBorrowedBooks().get(0).getISBN()==(b.getISBN()))) {
+            if(u.getBorrowedBooks().size()==2 && (u.getBorrowedBooks().get(0).getISBN().equals(b.getISBN()))) {
                 borrowedBooks.remove(0);
                 System.out.println("Book "+ b.getISBN()  + " removed");
                 borrowingDates.remove(0);
             }
-            if(u.getBorrowedBooks().size()==2 && u.getBorrowedBooks().get(1).getISBN()==(b.getISBN())) {
+            if(u.getBorrowedBooks().size()==2 && u.getBorrowedBooks().get(1).getISBN().equals(b.getISBN())) {
                 borrowedBooks.remove(1);
                 System.out.println("Book "+ b.getISBN()  + " removed");
                 borrowingDates.remove(1);
@@ -179,10 +179,10 @@ public static void deleteuser(String username) throws IOException {
             for (Book b:user.getBorrowedBooks()) {
             
                 for (Book book : books) {
-                    if (book.getISBN()==(b.getISBN())) {
-                        // Increment the number of available books
+                    if (book.getISBN().equals(b.getISBN())) {
+                        
                         book.setNumberofBooks(book.getNumberofBooks() + 1);
-                        break; // Once found, break the loop
+                        break;
                     }
                 }
             System.out.println("Book Returned: " + b);
@@ -310,17 +310,17 @@ private static void createMedialabFolderIfNotExists() {
                     if(u.getBorrowedBooks()!=null) {
                         List<Book> borrowedBooks = u.getBorrowedBooks();
                         List<LocalDateTime> borrowingDates = u.getBorrowingDates();
-                    if(u.getBorrowedBooks().size()==1 && u.borrowedbooks.get(0).getISBN()==(b.getISBN())) {
+                    if(u.getBorrowedBooks().size()==1 && u.borrowedbooks.get(0).getISBN().equals(b.getISBN())) {
                         borrowedBooks.remove(0);
                         System.out.println("Book "+ b.getISBN()  + " removed");
                         borrowingDates.remove(0);
                     }
-                    if(u.getBorrowedBooks().size()==2 && (u.getBorrowedBooks().get(0).getISBN()==(b.getISBN()))) {
+                    if(u.getBorrowedBooks().size()==2 && (u.getBorrowedBooks().get(0).getISBN().equals(b.getISBN()))) {
                         borrowedBooks.remove(0);
                         System.out.println("Book "+ b.getISBN()  + " removed");
                         borrowingDates.remove(0);
                     }
-                    if(u.getBorrowedBooks().size()==2 && u.getBorrowedBooks().get(1).getISBN()==(b.getISBN())) {
+                    if(u.getBorrowedBooks().size()==2 && u.getBorrowedBooks().get(1).getISBN().equals(b.getISBN())) {
                         borrowedBooks.remove(1);
                         System.out.println("Book "+ b.getISBN()  + " removed");
                         borrowingDates.remove(1);

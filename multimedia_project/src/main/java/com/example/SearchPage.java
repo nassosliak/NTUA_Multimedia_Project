@@ -153,6 +153,7 @@ public class SearchPage {
             @Override
             public void handle(ActionEvent e) {
                 if(currentUser.getusername().equals("Admin")) {
+                    AdminPage.loadadminPage(maingrid, primaryStage, adminScene, loginscene);
                     primaryStage.setScene(adminScene);
                 }
                 else {

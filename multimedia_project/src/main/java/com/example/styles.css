@@ -69,7 +69,7 @@
 #emailexists {
     -fx-fill: Red;
     -fx-font-weight: bold;
-    -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 0.5), 0, 0, 0, 1); /* White drop shadow effect */
+    -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 0.5), 0, 0, 0, 1);
 }
 .vbox {
     -fx-background-radius: 8;
@@ -118,7 +118,7 @@
 }
 
 .button:hover {
-    -fx-background-color: linear-gradient(to bottom, #cccccc, #aaaaaa); 
+    -fx-background-color: linear-gradient(to bottom, #cccccc, #aaaaaa);
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.5), 10, 0, 0, 0);
     -fx-effect: innershadow(gaussian, rgba(0,0,0,0.5), 10, 0.5, 0, 0);
 }

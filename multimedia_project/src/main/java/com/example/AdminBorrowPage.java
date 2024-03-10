@@ -122,19 +122,32 @@ public class AdminBorrowPage {
             @Override
             public void handle(ActionEvent event) {
                 List<User> users = Serialize.readAllUsers();
+                List<Book> books = Serialize.readAllBooks();
+                Book b = user.getBorrowedBooks().get(key);
                 for(User u: users) {
                     if(u.getusername().equals(user.getusername())) {
-                        Book b = user.getBorrowedBooks().get(key);
+    
+                        
+                        for(Book book:books) {
+                            if(book.getISBN().equals(b.getISBN())) {
+                                book.setNumberofBooks(b.getNumberofBooks()+1);
+                                b=book;
+                            }
+                        }
+                        
                 System.out.println("removed book "+user.getBorrowedBooks().get(key).getISBN());
                 u.getBorrowedBooks().remove(key);
                 u.getBorrowingDates().remove(key);
                 try {
                     Serialize.writeAllUsers(users);
+                    Serialize.writeAllBooks(books);
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Information Dialog");
         alert.setHeaderText(null);
         alert.setContentText("Returned Book "+ b.getTitle()+" (ISBN: )"+b.getISBN()+" from user: "+ u.getusername());
         alert.showAndWait();
+        GridPane admingrid = new GridPane();
+        AdminPage.loadadminPage(admingrid, primaryStage, adminScene, adminScene);
                 } catch (IOException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
@@ -143,14 +156,32 @@ public class AdminBorrowPage {
                 
             }
         }
-        
+        for(User us:users) {
+            if(us.getBorrowedBooks()!=null&&us.getBorrowedBooks().size()==1 && (us.borrowedbooks.get(0).getISBN().equals(b.getISBN()))) {
+                us.borrowedbooks.get(0).setNumberofBooks(us.borrowedbooks.get(0).getNumberofBooks()+1);
+        }
+        if(us.getBorrowedBooks()!=null&&us.getBorrowedBooks().size()==2 && (us.borrowedbooks.get(0).getISBN().equals(b.getISBN()))) {
+            us.borrowedbooks.get(0).setNumberofBooks(us.borrowedbooks.get(0).getNumberofBooks()+1);
+    }
+    if(us.getBorrowedBooks()!=null&&us.getBorrowedBooks().size()==2 && (us.borrowedbooks.get(1).getISBN().equals(b.getISBN()))) {
+        us.borrowedbooks.get(1).setNumberofBooks(us.borrowedbooks.get(1).getNumberofBooks()+1);
+}
+    }
+    try {
+        Serialize.writeAllUsers(users);
+    } catch (IOException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+    }
+        GridPane admingrid = new GridPane();
+        AdminPage.loadadminPage(admingrid, primaryStage, adminScene, adminScene);
         loadAdminBorrowPage(primaryStage, adminScene);
             }
         });
         adminpagenavButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-
+                loadAdminBorrowPage(primaryStage, adminScene);
                 primaryStage.setScene(adminBorrowScene);
             }
         });

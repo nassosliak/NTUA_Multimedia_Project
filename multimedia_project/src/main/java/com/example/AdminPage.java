@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -70,14 +71,14 @@ public class AdminPage {
        
         Button signoutButton = new Button("Sign out");
         admingrid.add(signoutButton,10,1);
-        // Create a Map of books grouped by category (assuming you have this method)
+
         List<Book> books = Serialize.readAllBooks();
         Map<String, List<Book>> groupedBooks = Book.groupBooksByCategory(books);
 
-        // Create a VBox to hold the content of books and categories
+  
         VBox content = new VBox();
         VBox categorycontent = new VBox();
-        // Iterate over each category
+
         for (String category : groupedBooks.keySet()) {
             Text categoryText = new Text("Category: " + category);
             content.getChildren().add(categoryText);
@@ -89,7 +90,16 @@ public class AdminPage {
             GridPane bookpagegrid = new GridPane();
             Scene BookScene = new Scene(bookpagegrid, 1400, 700);
             BookScene.getStylesheets().add(App.class.getResource("styles.css").toExternalForm());
-            BookPage.loadbookpage(book, bookpagegrid, primaryStage, currentUser, admingrid, loginScene, null, null, null, loginScene, adminScene, BookScene);
+            List<Book> books1 = Serialize.readAllBooks();
+            Book bo=null;
+            for(Book book1:books1) {
+                if(book.getISBN().equals(book1.getISBN())) {
+                    bo=book1;
+                    break;
+                }
+ 
+            }
+            BookPage.loadbookpage(bo, bookpagegrid, primaryStage, currentUser, admingrid, loginScene, null, null, null, null, adminScene, BookScene);
             primaryStage.setScene(BookScene);
             System.out.println("Clicked on book: " + book.getTitle());
         });
@@ -247,15 +257,27 @@ public class AdminPage {
         //edit category
         GridPane editcategoryGridPane = new GridPane();
         editcategoryGridPane.setAlignment(Pos.CENTER);
+        Text ed= new Text("Edit Category Name");
+        editcategoryGridPane.add(ed,2,1);
+        ed.setStyle("-fx-font-size:20px;");
+        final Text emptycat = new Text();
+        editcategoryGridPane.add(emptycat, 2, 3);
+        editcategoryGridPane.setHalignment(emptycat, RIGHT);
+        editcategoryGridPane.setId("actiontarget");
+        final Text excat = new Text();
+        editcategoryGridPane.add(excat, 2, 3);
+        editcategoryGridPane.setHalignment(excat, RIGHT);
+        editcategoryGridPane.setId("actiontarget");
         TextField newcategory = new TextField();
-        editcategoryGridPane.add(newcategory,2,1);
+        newcategory.setPromptText("New Category Name");
+        editcategoryGridPane.add(newcategory,2,2);
         Button addcategorypagenavButton = new Button();
         Image iconImage1 = new Image(MainPage.class.getResourceAsStream("resources/arrow_back_FILL0_wght400_GRAD0_opsz24.png"));
         addcategorypagenavButton.setGraphic(new ImageView(iconImage1));
         addcategorypagenavButton.getStyleClass().add("mainpagenavButton");
         editcategoryGridPane.add(addcategorypagenavButton,0,0);
         Button editcategoryButton = new Button("Edit Category");
-        editcategoryGridPane.add(editcategoryButton,4,1);
+        editcategoryGridPane.add(editcategoryButton,4,2);
         ComboBox<String> category_combobox = new ComboBox<>();
         ObservableList<String> catgory_items =FXCollections.observableArrayList();
         for(Category cat:categories) {
@@ -266,20 +288,24 @@ public class AdminPage {
         category_combobox.getSelectionModel().selectFirst();
 
         VBox category_Box = new VBox(category_combobox);
-        editcategoryGridPane.add(category_Box,3,1);
+        editcategoryGridPane.add(category_Box,3,2);
+        GridPane.setMargin(category_Box, new Insets(10,10,10,10));
         Scene editcategoryScene = new Scene(editcategoryGridPane, 1400, 700);
         editcategoryScene.getStylesheets().add(App.class.getResource("styles.css").toExternalForm());
 
         //delete category
         GridPane deletecategoryGridPane = new GridPane();
         deletecategoryGridPane.setAlignment(Pos.CENTER);
+        Text del = new Text("Delete Category");
+        del.setStyle("-fx-font-size:20px;");
+        deletecategoryGridPane.add(del,1,1);
         Button addcategorypagenavButton1 = new Button();
         Image iconImage2 = new Image(MainPage.class.getResourceAsStream("resources/arrow_back_FILL0_wght400_GRAD0_opsz24.png"));
         addcategorypagenavButton1.setGraphic(new ImageView(iconImage2));
         addcategorypagenavButton1.getStyleClass().add("mainpagenavButton");
         deletecategoryGridPane.add(addcategorypagenavButton1,0,0);
         Button deletecategoryButton = new Button("Delete Category");
-        deletecategoryGridPane.add(deletecategoryButton,4,1);
+        deletecategoryGridPane.add(deletecategoryButton,2,2);
         ComboBox<String> category_combobox1 = new ComboBox<>();
         ObservableList<String> catgory_items1 =FXCollections.observableArrayList();
         for(Category cat:categories) {
@@ -290,7 +316,8 @@ public class AdminPage {
         category_combobox1.getSelectionModel().selectFirst();
 
         VBox category_Box1 = new VBox(category_combobox1);
-        deletecategoryGridPane.add(category_Box1,3,1);
+        GridPane.setMargin(category_Box1, new Insets(10,10,0,0));
+        deletecategoryGridPane.add(category_Box1,1,2);
         Scene deletecategoryScene = new Scene(deletecategoryGridPane, 1400, 700);
         deletecategoryScene.getStylesheets().add(App.class.getResource("styles.css").toExternalForm());
 
@@ -298,25 +325,26 @@ public class AdminPage {
         GridPane addcategorygrid = new GridPane();
         addcategorygrid.setAlignment(Pos.CENTER);
         final Text actiontarget = new Text();
-        addcategorygrid.add(actiontarget, 0, 6);
-        addcategorygrid.setColumnSpan(actiontarget, 2);
+        addcategorygrid.add(actiontarget, 2, 5);
         addcategorygrid.setHalignment(actiontarget, RIGHT);
         actiontarget.setId("actiontarget");
-        Text addnewcat = new Text("Add new Category");
+        Text addnewcat = new Text("Category Management");
+        addnewcat.setStyle("-fx-font-size:20px");
         addcategorygrid.add(addnewcat,1,0);
         Button mainpagenavButton = new Button();
         Image iconImage = new Image(MainPage.class.getResourceAsStream("resources/arrow_back_FILL0_wght400_GRAD0_opsz24.png"));
         mainpagenavButton.setGraphic(new ImageView(iconImage));
         mainpagenavButton.getStyleClass().add("mainpagenavButton");
-        addcategorygrid.add(mainpagenavButton,2,0);
+        addcategorygrid.add(mainpagenavButton,0,0);
         TextField categorytitle = new TextField();
-        addcategorygrid.add(categorytitle,2,4);
+        categorytitle.setPromptText("New Category");
+        addcategorygrid.add(categorytitle,1,4);
         Button savecategoryButton = new Button("Add Category");
         addcategorygrid.add(savecategoryButton,3,4);
         Button deletecategorynavButton = new Button("Delete Category");
-        addcategorygrid.add(deletecategorynavButton,3,5);
+        addcategorygrid.add(deletecategorynavButton,4,4);
         Button editcategorynavButton = new Button("Edit Category Name");
-        addcategorygrid.add(editcategorynavButton,3,6);
+        addcategorygrid.add(editcategorynavButton,5,4);
         Map<String, Integer> categoryCounts = new HashMap<>();
 
         for (String cat : groupedBooks.keySet()) {
@@ -332,11 +360,17 @@ public class AdminPage {
 
         for (String category_1 : categoryCounts.keySet()) {
             int count = categoryCounts.get(category_1);
-            pieChart.getData().add(new PieChart.Data(category_1, count));
+            PieChart.Data slice = new PieChart.Data(category_1, count);
+            pieChart.getData().add(slice);
         }
-
-        // Customize chart appearance (optional)
-        pieChart.setTitle("Book Categories");
+        for (PieChart.Data data : pieChart.getData()) {
+    String ca = data.getName();
+    int count = (int) data.getPieValue();
+    data.nameProperty().bind(
+            Bindings.concat(ca, " (", count, ")") 
+    );
+}
+        pieChart.setTitle("Categories with Most Books");
         addcategorygrid.add(pieChart, 3,7);
         Scene addCategoryScene = new Scene(addcategorygrid, 1400, 700);
         addCategoryScene.getStylesheets().add(App.class.getResource("styles.css").toExternalForm());
@@ -532,11 +566,12 @@ root.setAlignment(Pos.CENTER);
                 
                 bookISBN=bookisbn.getText();
                 String isbnText = bookisbn.getText();
-                if (isbnText.isEmpty() || !isbnText.matches(".*\\d.*") || !isbnText.contains("-")) {
+                if (isbnText.isEmpty() || !isbnText.matches(".*\\d[-]?\\d.*")) {
                     invalidisbn.setText("Invalid ISBN Format");
                     invalidisbn.setFill(Color.FIREBRICK);
                     valid = false;
                 }
+                
                 else {
                     invalidisbn.setText("");
                 }
@@ -710,7 +745,7 @@ root.setAlignment(Pos.CENTER);
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Confirmation Dialog");
         alert.setHeaderText("Delete Category");
-        alert.setContentText("Are you sure you want to delete this category \n and all the books that belong to it?");
+        alert.setContentText("Are you sure you want to delete category "+category_combobox1.getValue() +"\n and all the books that belong to it?");
         
         ButtonType buttonTypeYes = new ButtonType("Yes");
         ButtonType buttonTypeNo = new ButtonType("No");
@@ -719,7 +754,7 @@ root.setAlignment(Pos.CENTER);
 
         alert.showAndWait().ifPresent(buttonType -> {
             if (buttonType == buttonTypeYes) {
-
+                
                 System.out.println(category);
                 try {
                     Serialize.deleteCategory(category);
@@ -744,18 +779,47 @@ root.setAlignment(Pos.CENTER);
     }
 });
 
-        
-
-        
 
         editcategoryButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent s) {
-                
+                emptycat.setText("");
+                excat.setText("");
                 String Category;
                 Category=category_combobox.getValue();
                 System.out.println(Category);
+                Category cat = new Category(Category);
+                boolean valid=true;
+                if(newcategory.getText().equals("")) {
+                    emptycat.setFill(Color.FIREBRICK);
+                    emptycat.setText("Please Enter a Category Name");
+                    loadadminPage(admingrid, primaryStage, adminScene, loginScene);
+                    return;
+                }
+                for(Category c: categories) {
+                    if(newcategory.getText().equals(Category)) {continue;}
+                    if(c.getTitle().equals(newcategory.getText())) {
+                        valid=false;
+                        loadadminPage(admingrid, primaryStage, adminScene, loginScene);
+                        break;
+                    }
+                }
+                if(!valid) {
+                    excat.setFill(Color.FIREBRICK);
+                    excat.setText("Category Already Exists");
+                }
+                if(valid){
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                    alert.setTitle("Confirmation Dialog");
+                    alert.setHeaderText("Edit Category");
+                    alert.setContentText("Are you sure you want to change category name from "+category_combobox.getValue() +"\n to "+ newcategory.getText()+" ?");
+                    ButtonType buttonTypeYes = new ButtonType("Yes");
+        ButtonType buttonTypeNo = new ButtonType("No");
+        alert.getButtonTypes().setAll(buttonTypeYes, buttonTypeNo);
+        alert.showAndWait().ifPresent(buttonType -> {
+            if (buttonType == buttonTypeYes) {
                 try {
+                    
                 Serialize.editCategory(Category, newcategory.getText());
                 
                 }
@@ -804,6 +868,7 @@ root.setAlignment(Pos.CENTER);
         primaryStage.setScene(adminScene);
 
             }
+        });}}
         });
         signoutButton.setOnAction(new EventHandler<ActionEvent>() {
 

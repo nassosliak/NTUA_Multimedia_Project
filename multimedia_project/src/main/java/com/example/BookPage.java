@@ -397,11 +397,26 @@ break;
 
         alert.showAndWait().ifPresent(buttonType -> {
             if (buttonType == buttonTypeYes) {
-                // User clicked Yes, proceed with deletion
+                List<User> users = Serialize.readAllUsers();
+
+                for(User u:users) {
+                    if(u.number_of_borrowed_books()!=0) {
+                        for (int i = 0; i < u.getBorrowedBooks().size(); i++) {
+                            Book borrowedBook = u.borrowedbooks.get(i);
+                            if (borrowedBook.getISBN().equals(b.getISBN())) {
+                                
+                                u.borrowedbooks.remove(i);
+                                u.borrowingDates.remove(i);
+                                
+                                break;
+                    }
+                }}
+            }
                 String ISBN = b.getISBN();
                 System.out.println(ISBN);
                 try {
                     Serialize.deleteBook(ISBN);
+                    Serialize.writeAllUsers(users);
                     System.out.println("Book deleted successfully");
                 } catch (IOException e) {
                     System.out.println("Error deleting book: " + e.getMessage());
@@ -634,10 +649,22 @@ break;
                                     System.out.println("Book borrowed: " + book+ "at "+ currentUser.borrowingDates);
                                     
                                     book.setNumberofBooks(book.Number_of_Books-1);
-                                    
+                                    List<User> users = Serialize.readAllUsers();
+                                    for(User u:users) {
+                                        if(u.getBorrowedBooks()!=null&&u.getBorrowedBooks().size()==1 && (u.borrowedbooks.get(0).getISBN().equals(book.getISBN()))) {
+                                            u.borrowedbooks.get(0).setNumberofBooks(u.borrowedbooks.get(0).getNumberofBooks()-1);
+                                    }
+                                    if(u.getBorrowedBooks()!=null&&u.getBorrowedBooks().size()==2 && (u.borrowedbooks.get(0).getISBN().equals(book.getISBN()))) {
+                                        u.borrowedbooks.get(0).setNumberofBooks(u.borrowedbooks.get(0).getNumberofBooks()-1);
+                                }
+                                if(u.getBorrowedBooks()!=null&&u.getBorrowedBooks().size()==2 && (u.borrowedbooks.get(1).getISBN().equals(book.getISBN()))) {
+                                    u.borrowedbooks.get(1).setNumberofBooks(u.borrowedbooks.get(1).getNumberofBooks()-1);
+                            }
+                                }
                                     try {
                                         
                                         Serialize.writeAllBooks(books);
+                                        Serialize.writeAllUsers(users);
                                         Serialize.updateUser(currentUser);
                                         showAlert("Book borrowed");
                                     } catch (ClassNotFoundException e) {
@@ -719,7 +746,7 @@ break;
                                                 Book borrowedBook = borrowedBooks.get(i);
                                                 LocalDateTime borrowingDate = borrowingDates.get(i);
                                 
-                                                if (borrowedBook.getISBN() .equals(b.getISBN())) {
+                                                if (borrowedBook.getISBN().equals(b.getISBN())) {
                                                     // Remove the borrowed book and its borrowing date
                                                     borrowedBooks.remove(i);
                                                     borrowingDates.remove(i);
@@ -728,6 +755,18 @@ break;
                                 
                                                     // Update book count, write to file, etc.
                                                     book.setNumberofBooks(book.getNumberofBooks() + 1);
+                                                    List<User> users = Serialize.readAllUsers();
+                                                    for(User u:users) {
+                                                        if(u.getBorrowedBooks()!=null&&u.getBorrowedBooks().size()==1 && (u.borrowedbooks.get(0).getISBN().equals(book.getISBN()))) {
+                                                            u.borrowedbooks.get(0).setNumberofBooks(u.borrowedbooks.get(0).getNumberofBooks()+1);
+                                                    }
+                                                    if(u.getBorrowedBooks()!=null&&u.getBorrowedBooks().size()==2 && (u.borrowedbooks.get(0).getISBN().equals(book.getISBN()))) {
+                                                        u.borrowedbooks.get(0).setNumberofBooks(u.borrowedbooks.get(0).getNumberofBooks()+1);
+                                                }
+                                                if(u.getBorrowedBooks()!=null&&u.getBorrowedBooks().size()==2 && (u.borrowedbooks.get(1).getISBN().equals(book.getISBN()))) {
+                                                    u.borrowedbooks.get(1).setNumberofBooks(u.borrowedbooks.get(1).getNumberofBooks()+1);
+                                            }
+                                                }
                                 
                                                     try {
                                                         Serialize.writeAllBooks(books);
@@ -743,7 +782,7 @@ break;
                                         }
                                         searchbar_writer.setText("");
             searchbar_year.setText("");
-            primaryStage.setScene(mainScene);
+            searchbar.setText("");
                                         MainPage.updateMainGrid(maingrid, books, primaryStage, loginscene, currentUser, searchbar,searchbar_writer,searchbar_year, mainScene,adminScene);
                                         primaryStage.setScene(mainScene);
                                     }

@@ -80,65 +80,77 @@ public class AdminUsersPage {
             Text editusertitle = new Text("Edit User Information");
             editusertitle.setFont(Font.font("Roboto", FontWeight.NORMAL, 20));
             editusergrid.add(editusertitle, 1,0);
+            Text a = new Text("Username: ");
+            editusergrid.add(a,1,1);
             TextField editusernamefield = new TextField(u.getusername());
-            editusergrid.add(editusernamefield, 1, 1);
+            editusergrid.add(editusernamefield, 2, 1);
+            Text b = new Text("Password: ");
+            editusergrid.add(b,1,2);
             TextField editpasswordfield = new TextField(u.getpassword());
-            editusergrid.add(editpasswordfield, 1, 2);
+            editusergrid.add(editpasswordfield, 2, 2);
+            Text c = new Text("First Name: ");
+            editusergrid.add(c,1,3);
             TextField editfirstnamefield = new TextField(u.getfirstname());
-            editusergrid.add(editfirstnamefield, 1, 3);
+            editusergrid.add(editfirstnamefield, 2, 3);
+            Text d = new Text("Last Name: ");
+            editusergrid.add(d,1,4);
             TextField editlastnamefield = new TextField(u.getlastname());
-            editusergrid.add(editlastnamefield, 1, 4);
+            editusergrid.add(editlastnamefield, 2, 4);
+            Text e = new Text("Email: ");
+            editusergrid.add(e,1,5);
             TextField editemailField = new TextField(u.getemail());
-            editusergrid.add(editemailField, 1, 5);
+            editusergrid.add(editemailField, 2, 5);
+            Text f = new Text("ID: ");
+            editusergrid.add(f,1,6);
             TextField editIDField = new TextField(u.getID());
-            editusergrid.add(editIDField, 1, 6);
+            editusergrid.add(editIDField, 2, 6);
             Button edituserdataButton = new Button("Edit User");
-            editusergrid.add(edituserdataButton, 3, 4);
+            editusergrid.add(edituserdataButton, 1, 7);
             final Text usernameempty = new Text();
-            editusergrid.add(usernameempty, 4, 2);
+            editusergrid.add(usernameempty, 4, 1);
             editusergrid.setHalignment(usernameempty, RIGHT);
 
         usernameempty.setId("usernameexists");
 
         final Text emptypassword = new Text();
-        editusergrid.add(emptypassword, 4, 3);
+        editusergrid.add(emptypassword, 4, 2);
         editusergrid.setHalignment(emptypassword, RIGHT);
         emptypassword.setId("usernameexists");
 
         final Text firstnameinvalid = new Text();
-        editusergrid.add(firstnameinvalid, 4, 4);
+        editusergrid.add(firstnameinvalid, 4, 3);
         editusergrid.setHalignment(firstnameinvalid, RIGHT);
         firstnameinvalid.setId("usernameexists");
         final Text lastnameinvalid = new Text();
-        editusergrid.add(lastnameinvalid, 4, 5);
+        editusergrid.add(lastnameinvalid, 4, 4);
         editusergrid.setHalignment(lastnameinvalid, RIGHT);
         lastnameinvalid.setId("usernameexists");
 
         final Text usernameexists = new Text();
-        editusergrid.add(usernameexists, 4, 2);
+        editusergrid.add(usernameexists, 4, 1);
         editusergrid.setHalignment(usernameexists, RIGHT);
         usernameexists.setId("usernameexists");
 
         final Text emailexists = new Text();
-        editusergrid.add(emailexists, 4, 6);
+        editusergrid.add(emailexists, 4, 5);
     
         editusergrid.setHalignment(emailexists, RIGHT);
         emailexists.setId("usernameexists");
 
         final Text invalidemail = new Text();
-        editusergrid.add(invalidemail, 4, 6);
+        editusergrid.add(invalidemail, 4, 5);
 
         editusergrid.setHalignment(invalidemail, RIGHT);
         invalidemail.setId("usernameexists");
 
         final Text idexists = new Text();
-        editusergrid.add(idexists, 4, 7);
+        editusergrid.add(idexists, 4, 6);
 
         editusergrid.setHalignment(idexists, RIGHT);
         idexists.setId("usernameexists");
 
         final Text idempty = new Text();
-        editusergrid.add(idempty, 4, 7);
+        editusergrid.add(idempty, 4, 6);
 
         editusergrid.setHalignment(idempty, RIGHT);
         idempty.setId("usernameexists");
@@ -207,10 +219,29 @@ public class AdminUsersPage {
         // Show the alert and wait for user response
         alert.showAndWait().ifPresent(buttonType -> {
             if (buttonType == buttonTypeYes) {
+                List<Book> books = Serialize.readAllBooks();
                 // User clicked Yes, proceed with deletion
                 System.out.println(username);
+                for(int i=0; i<u.number_of_borrowed_books(); i++) {
+                    Book b = u.getBorrowedBooks().get(i);
+                    for(User us:users) {
+                        if(us.getBorrowedBooks()!=null&&us.getBorrowedBooks().size()==1 && (us.borrowedbooks.get(0).getISBN().equals(b.getISBN()))) {
+                            us.borrowedbooks.get(0).setNumberofBooks(us.borrowedbooks.get(0).getNumberofBooks()+1);
+                    }
+                    if(us.getBorrowedBooks()!=null&&us.getBorrowedBooks().size()==2 && (us.borrowedbooks.get(0).getISBN().equals(b.getISBN()))) {
+                        us.borrowedbooks.get(0).setNumberofBooks(us.borrowedbooks.get(0).getNumberofBooks()+1);
+                }
+                if(us.getBorrowedBooks()!=null&&us.getBorrowedBooks().size()==2 && (us.borrowedbooks.get(1).getISBN().equals(b.getISBN()))) {
+                    us.borrowedbooks.get(1).setNumberofBooks(us.borrowedbooks.get(1).getNumberofBooks()+1);
+            }
+                }
+                }
+                
                 try {
+                    Serialize.writeAllBooks(books);
+                    Serialize.writeAllUsers(users);
                     Serialize.deleteuser(username);
+                    
                     System.out.println("User deleted successfully");
                 } catch (IOException e) {
                     System.out.println("Error deleting user: " + e.getMessage());
@@ -257,10 +288,10 @@ public class AdminUsersPage {
                         usernameempty.setText("Please Enter a Username");
                     }
     
-                    if(editpasswordfield.equals("")) {
+                    if(editpasswordfield.getText().equals("")) {
                         isvaliddata=false;
                         emptypassword.setFill(Color.FIREBRICK);
-                        emptypassword.setText("Please Enter a Passoword");
+                        emptypassword.setText("Please Enter a Password");
                     }
     
                     if(!(editemailField).getText().contains("@")) {
@@ -289,21 +320,12 @@ public class AdminUsersPage {
                         idempty.setText("Please Enter a Valid Id");
                         isvaliddata=false;
                     }
-                    for (User user : users) {
-                        if (user.getusername().equals(u.getusername())) {
-                            user.setUsername(editusernamefield.getText());
-                            user.setPassword(editpasswordfield.getText());
-                            user.setFirstname(editfirstnamefield.getText());
-                            user.setLastname(editlastnamefield.getText());
-                            user.setEmail(editemailField.getText());
-                            user.setId(editIDField.getText());
-                        }
-                    }
+                    
                     if(isvaliddata) {
                     for(User user:users) {
                         if(user.getusername().equals(u.getusername())) {continue;}
                         if(user.getID().equals(u.getID())) {continue;}
-                        if(user.getusername().equals(editusernamefield.getText())) {
+                        if(user.getusername().equals(editusernamefield.getText()) && !editusernamefield.getText().equals(null)) {
                             System.out.println("Username Exists");
                             usernameexists.setFill(Color.FIREBRICK);
                             usernameexists.setText("Username Exists");
@@ -334,6 +356,17 @@ public class AdminUsersPage {
                 }
                     if (isvaliddata) {
                         try {
+                            for (User user : users) {
+                                if (user.getusername().equals(u.getusername())) {
+                                    user.setUsername(editusernamefield.getText());
+                                    user.setPassword(editpasswordfield.getText());
+                                    user.setFirstname(editfirstnamefield.getText());
+                                    user.setLastname(editlastnamefield.getText());
+                                    user.setEmail(editemailField.getText());
+                                    user.setId(editIDField.getText());
+                                    break;
+                                }
+                            }
                             Serialize.writeAllUsers(users);
                             System.out.println("User edited successfully");
                         } catch (IOException e) {
