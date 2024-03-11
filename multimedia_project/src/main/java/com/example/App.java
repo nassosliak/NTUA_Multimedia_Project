@@ -118,13 +118,12 @@ GridPane.setMargin(bookContainer, new Insets(10, 10, 10, 10));
 
     float averageRating = book.averagerating();
     String avgRatingText = String.format("%.2f", averageRating);
-    Text avgRate = new Text("Average Rating: "+avgRatingText);
-    
     String totalRatingsText = String.format("%d", book.gettotalratings());
-    Text totalRatings = new Text("Total Ratings: "+totalRatingsText);
+    Text avgRate = new Text("Average Rating: "+avgRatingText+" ("+totalRatingsText+")");
+    
 
     RowIndex+=10;
-    bookVBox.getChildren().addAll(titleText, writerText, isbnText,avgRate,rating,totalRatings);
+    bookVBox.getChildren().addAll(titleText, writerText, isbnText,avgRate,rating);
                     bookContainer.getChildren().add(bookVBox);
                     Region whiteSpace = new Region();
                     whiteSpace.setMinWidth(10);
@@ -135,9 +134,9 @@ GridPane.setMargin(bookContainer, new Insets(10, 10, 10, 10));
 ScrollPane scrollPane = new ScrollPane();
 scrollPane.setContent(bookContainer);
 GridPane.setColumnSpan(scrollPane,1);
-scrollPane.setPrefWidth(200);
+scrollPane.setPrefWidth(150);
 scrollPane.setPrefHeight(500);
-GridPane.setMargin(scrollPane, new Insets(-400,600,-200,-800));
+GridPane.setMargin(scrollPane, new Insets(-400,650,-200,-800));
 grid.add(scrollPane, 6, 6);
         Scene loginscene = new Scene(grid, 1400, 700);
         loginscene.getStylesheets().add(App.class.getResource("login_styles.css").toExternalForm());
