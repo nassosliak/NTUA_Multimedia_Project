@@ -157,6 +157,7 @@ public class AdminBorrowPage {
             }
         }
         for(User us:users) {
+
             if(us.getBorrowedBooks()!=null&&us.getBorrowedBooks().size()==1 && (us.borrowedbooks.get(0).getISBN().equals(b.getISBN()))) {
                 us.borrowedbooks.get(0).setNumberofBooks(us.borrowedbooks.get(0).getNumberofBooks()+1);
         }

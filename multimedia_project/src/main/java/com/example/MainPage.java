@@ -1,4 +1,5 @@
 package com.example;
+import java.io.IOException;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.Comparator;
@@ -91,8 +92,18 @@ GridPane.setMargin(checkBoxYear, new Insets(10, 10, 10, 10));
         int rowindex_Borrow=8;
         for(int i=0; i<currentUser.number_of_borrowed_books(); i++) {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-String returnTime = currentUser.getBorrowingDates().get(i).plusDays(5).format(formatter);
-Text bbtText = new Text(currentUser.getBorrowedBooks().get(i).getTitle() + ", return time " + returnTime);
+String returnTime="0";
+try {
+    returnTime = currentUser.getBorrowingDates().get(i).plusSeconds(Serialize.readreturntime().getdate()).format(formatter);
+} catch (ClassNotFoundException e1) {
+    // TODO Auto-generated catch block
+    e1.printStackTrace();
+} catch (IOException e1) {
+    // TODO Auto-generated catch block
+    e1.printStackTrace();
+}
+String borrowTime = currentUser.getBorrowingDates().get(i).format(formatter);
+Text bbtText = new Text(currentUser.getBorrowedBooks().get(i).getTitle() + ", ISBN: "+currentUser.getBorrowedBooks().get(i).getISBN() +"\nborrowed at "+borrowTime + ",return time " + returnTime);
             //maingrid.add(bbtText, 12, rowindex_Borrow);
             rowindex_Borrow++;
             borrowedBooksContainer.getChildren().add(bbtText);
@@ -212,7 +223,6 @@ maingrid.add(scrollPane, 0, 6);
         MyBooksPage.loadmybookspage(currentUser,mybooksgrid,primaryStage,mybooksScene,loginscene,searchbar,searchbar_writer,searchbar_year,mainScene,maingrid,adminScene);
 
         //end my books page
-       
         
 signoutButton.setOnAction(new EventHandler<ActionEvent>() {
 

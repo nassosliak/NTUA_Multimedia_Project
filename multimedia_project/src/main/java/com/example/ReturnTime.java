@@ -57,10 +57,27 @@ public void run() {
                         if (currentDate.minusSeconds(returnTime.getdate()).isAfter(borrowingDate)) {
                             
 
-                            Book returnedBook = borrowedBooks.remove(i);
-                            returnedBook.setNumberofBooks(returnedBook.getNumberofBooks() + 1);
-                            borrowingDates.remove(i);
+                            Book returnedBook = borrowedBooks.get(i);
                             
+                            for(Book b:books) {
+                                if(b.getISBN().equals(returnedBook.getISBN())) {
+                                    b.setNumberofBooks(b.getNumberofBooks() + 1);
+                                    break;
+                                }
+                            }
+                            borrowedBooks.remove(i);
+                            borrowingDates.remove(i);
+                            for(User us:users) {
+                                if(us.getBorrowedBooks()!=null&&us.getBorrowedBooks().size()==1 && (us.borrowedbooks.get(0).getISBN().equals(returnedBook.getISBN()))) {
+                                    us.borrowedbooks.get(0).setNumberofBooks(us.borrowedbooks.get(0).getNumberofBooks()+1);
+                            }
+                            if(us.getBorrowedBooks()!=null&&us.getBorrowedBooks().size()==2 && (us.borrowedbooks.get(0).getISBN().equals(returnedBook.getISBN()))) {
+                                us.borrowedbooks.get(0).setNumberofBooks(us.borrowedbooks.get(0).getNumberofBooks()+1);
+                        }
+                        if(us.getBorrowedBooks()!=null&&us.getBorrowedBooks().size()==2 && (us.borrowedbooks.get(1).getISBN().equals(returnedBook.getISBN()))) {
+                            us.borrowedbooks.get(1).setNumberofBooks(us.borrowedbooks.get(1).getNumberofBooks()+1);
+                    }
+                        }
                             
                             try {
                                 Platform.runLater(() -> {
@@ -109,6 +126,6 @@ public void run() {
 
 
     public void shutdown() {
-        running = false; // Set the running flag to false to stop the thread
+        running = false;
     }
 }

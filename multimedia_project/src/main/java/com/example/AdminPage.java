@@ -325,7 +325,7 @@ public class AdminPage {
         GridPane addcategorygrid = new GridPane();
         addcategorygrid.setAlignment(Pos.CENTER);
         final Text actiontarget = new Text();
-        addcategorygrid.add(actiontarget, 2, 5);
+        addcategorygrid.add(actiontarget, 1, 5);
         addcategorygrid.setHalignment(actiontarget, RIGHT);
         actiontarget.setId("actiontarget");
         Text addnewcat = new Text("Category Management");

@@ -72,10 +72,6 @@ public class Book implements Serializable{
     public void setPublisher(String publisher) {
         Publisher=publisher;
     }
-    protected void finalize(){
-            Number_of_Books--;
-    }
-    
     public void comment(String user, String data) {
         if (bookcomments == null) {
             

@@ -2,6 +2,7 @@ package com.example;
 import static javafx.geometry.HPos.*;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 
 import javafx.application.Application;
@@ -13,9 +14,14 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -79,7 +85,60 @@ public class App extends Application {
         grid.setColumnSpan(actiontarget, 2);
         grid.setHalignment(actiontarget, RIGHT);
         actiontarget.setId("actiontarget");
+        //top 5 books
+        int RowIndex = 10;
+        int rowcounter=0;
+        MainPage mainPageInstance = new MainPage();
+        Collections.sort(books, mainPageInstance.new BookRatingComparator());
+        VBox bookContainer = new VBox();
+bookContainer.setSpacing(10);
+GridPane.setMargin(bookContainer, new Insets(10, 10, 10, 10));
+        for (Book book : books) {
+        if(rowcounter==5) break;
+        rowcounter++;
+        VBox bookVBox = new VBox();
+        BackgroundFill backgroundFill = new BackgroundFill(Color.LIGHTGRAY, null, null);
+        Background background = new Background(backgroundFill);
+        bookVBox.setBackground(background);
+        GridPane.setMargin(bookVBox, new Insets(10, 10, 10, 10));
+    bookVBox.setSpacing(5);
+        Text titleText = new Text("Title: " + book.getTitle());
+        Text writerText = new Text("Writer: " + book.getWriter());
+        
+        Text isbnText = new Text("ISBN: " + book.getISBN());
+        
+        Text numberofbooksText = new Text("Available books: " + book.getNumberofBooks());
+        
+        grid.add(titleText, 0, 0+RowIndex);
+        grid.add(writerText, 0, 1+RowIndex);
+        grid.add(isbnText, 0, 3+RowIndex);
+    Ratingfx rating = new Ratingfx(5);
+    rating.setRating((int)Math.round(book.averagerating()));
+    grid.add(rating, 1, 6 + RowIndex);
 
+    float averageRating = book.averagerating();
+    String avgRatingText = String.format("%.2f", averageRating);
+    Text avgRate = new Text("Average Rating: "+avgRatingText);
+    
+    String totalRatingsText = String.format("%d", book.gettotalratings());
+    Text totalRatings = new Text("Total Ratings: "+totalRatingsText);
+
+    RowIndex+=10;
+    bookVBox.getChildren().addAll(titleText, writerText, isbnText,avgRate,rating,totalRatings);
+                    bookContainer.getChildren().add(bookVBox);
+                    Region whiteSpace = new Region();
+                    whiteSpace.setMinWidth(10);
+                    bookContainer.getChildren().add(whiteSpace);
+            
+}
+
+ScrollPane scrollPane = new ScrollPane();
+scrollPane.setContent(bookContainer);
+GridPane.setColumnSpan(scrollPane,1);
+scrollPane.setPrefWidth(200);
+scrollPane.setPrefHeight(500);
+GridPane.setMargin(scrollPane, new Insets(-400,600,-200,-800));
+grid.add(scrollPane, 6, 6);
         Scene loginscene = new Scene(grid, 1400, 700);
         loginscene.getStylesheets().add(App.class.getResource("login_styles.css").toExternalForm());
 
